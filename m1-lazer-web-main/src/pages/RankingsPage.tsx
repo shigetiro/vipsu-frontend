@@ -8,7 +8,7 @@ import CountryRankingsList from '../components/Rankings/CountryRankingsList';
 import PaginationControls from '../components/Rankings/PaginationControls';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import GameModeSelector from '../components/UI/GameModeSelector';
-import { useAvailableCountries } from '../hooks/useAvailableCountries';
+import { allCountries } from '../utils/allCountries';
 import type {
   GameMode,
   TopUsersResponse,
@@ -32,9 +32,7 @@ const RankingsPage: React.FC = () => {
   // 使用 ref 跟踪请求，防止竞态条件
   const abortControllerRef = useRef<AbortController | null>(null);
   
-  // 获取可用国家列表
-  const { countries: availableCountries, isLoading: isLoadingCountries } = useAvailableCountries(selectedMode);
-  
+
   // Load user rankings with request cancellation
   const loadUserRankings = useCallback(async () => {
     // 取消之前的请求
@@ -201,8 +199,8 @@ const RankingsPage: React.FC = () => {
                   value={selectedCountry}
                   onChange={setSelectedCountry}
                   placeholder={t('rankings.filters.country')}
-                  countries={availableCountries}
-                  isLoading={isLoadingCountries}
+                  countries={allCountries}
+                  isLoading={false}
                 />
               </div>
             </div>

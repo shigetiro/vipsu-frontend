@@ -31,6 +31,20 @@ export const settingsPage = {
       hint: 'Supports PNG, JPEG, GIF formats, recommended size 256x256 pixels, max 5MB',
       success: 'Avatar changed successfully!'
     },
+    country: {
+      title: 'Country/Region Settings',
+      current: 'Current Country/Region',
+      change: 'Change Country/Region',
+      hint: 'Select your country or region from the list below',
+      save: 'Save',
+      saving: 'Saving...',
+      cancel: 'Cancel',
+      success: 'Country/Region changed successfully!',
+      errors: {
+        failed: 'Failed to change country/region, please try again later',
+        sameAsOld: 'New country/region is the same as current one'
+      }
+    },
     cover: {
       title: 'Cover Settings',
       label: 'Profile Cover Image',

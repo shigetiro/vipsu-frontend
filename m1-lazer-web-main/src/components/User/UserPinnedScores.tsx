@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { userAPI, scoreAPI } from '../../utils/api';
 import type { BestScore, GameMode, User } from '../../types';
@@ -8,6 +9,7 @@ import LoadingSpinner from '../UI/LoadingSpinner';
 import LazyBackgroundImage from '../UI/LazyBackgroundImage';
 import BeatmapLink from '../UI/BeatmapLink';
 import ScoreActionsMenu from '../Score/ScoreActionsMenu';
+import ScoreModsDisplay from './ScoreModsDisplay';
 import {
   DndContext,
   closestCenter,
@@ -85,28 +87,6 @@ const getRankIcon = (rank: string) => {
   return rankImageMap[rank] || rankImageMap['F'];
 };
 
-// MOD 图标组件
-const ModIcon: React.FC<{ mod: { acronym: string } }> = ({ mod }) => {
-  return (
-    <div className="w-6 h-6 flex items-center justify-center text-xs font-bold text-gray-700 dark:text-gray-300">
-      {mod.acronym}
-    </div>
-  );
-};
-
-// 模组组件
-const ModsDisplay: React.FC<{ mods: Array<{ acronym: string }> }> = ({ mods }) => {
-  if (!mods || mods.length === 0) return null;
-
-  return (
-    <div className="flex items-center gap-1">
-      {mods.map((mod, index) => (
-        <ModIcon key={index} mod={mod} />
-      ))}
-    </div>
-  );
-};
-
 // 可拖拽的成绩卡片组件
 const SortableScoreCard: React.FC<{
   score: BestScore;
@@ -152,7 +132,8 @@ const ScoreCard: React.FC<{
   canEdit?: boolean;
   onPinChange?: (scoreId: number, isPinned: boolean) => void;
   dragHandleProps?: any;
-}> = ({ score, t, profileColor, canEdit = false, onPinChange, dragHandleProps }) => {
+  className?: string;
+}> = ({ score, t, profileColor, canEdit = false, onPinChange, dragHandleProps, className = '' }) => {
   const rank = score.rank;
   const title = score.beatmapset?.title_unicode || score.beatmapset?.title || 'Unknown Title';
   const artist = score.beatmapset?.artist_unicode || score.beatmapset?.artist || 'Unknown Artist';
@@ -164,7 +145,16 @@ const ScoreCard: React.FC<{
   const isPinned = score.current_user_attributes?.pin?.is_pinned || false;
   const hasReplay = score.has_replay || false;
 
-  const beatmapUrl = score.beatmap?.url || '#';
+  // Construct beatmap URL manually if missing, to ensure redirection works
+  let beatmapUrl = score.beatmap?.url;
+  if (!beatmapUrl || beatmapUrl === '#') {
+    if (score.beatmap?.beatmapset_id && score.beatmap?.id) {
+      beatmapUrl = `/beatmapsets/${score.beatmap.beatmapset_id}#${score.beatmap.mode || 'osu'}/${score.beatmap.id}`;
+    } else {
+      beatmapUrl = '#';
+    }
+  }
+
   const coverImage = score.beatmapset?.covers?.['cover@2x'] || score.beatmapset?.covers?.cover;
 
   const hexToRgb = (hex: string): string => {
@@ -180,7 +170,7 @@ const ScoreCard: React.FC<{
   return (
     <LazyBackgroundImage 
       src={coverImage}
-      className="relative overflow-hidden border-b border-gray-100 dark:border-gray-700/50 last:border-b-0"
+      className={`relative overflow-hidden rounded-lg border border-gray-200/70 dark:border-gray-600/40 bg-card ${className}`}
     >
       {/* 渐变遮罩层 - 使用主题颜色 */}
       <div 
@@ -204,11 +194,13 @@ const ScoreCard: React.FC<{
                   </svg>
                 </div>
               )}
-              <img 
-                src={getRankIcon(rank)} 
-                alt={rank}
-                className="w-18 h-12 object-contain"
-              />
+              <div className="flex-shrink-0">
+                <img 
+                  src={getRankIcon(rank)} 
+                  alt={rank}
+                  className="w-14 h-10 object-contain"
+                />
+              </div>
             </div>
 
             <div className="flex-1 min-w-0">
@@ -236,12 +228,18 @@ const ScoreCard: React.FC<{
                   <span className="text-gray-500 dark:text-gray-400">
                     {endedAt}
                   </span>
+                  <Link
+                    to={`/scores/${score.id}`}
+                    className="text-osu-pink hover:text-osu-pink/80 transition-colors font-medium"
+                  >
+                    View score
+                  </Link>
                 </div>
               </div>
             </div>
 
             <div className="flex-shrink-0 flex items-center gap-2 mr-6">
-              <ModsDisplay mods={mods} />
+              <ScoreModsDisplay mods={mods} />
               <div className="text-sm font-bold text-cyan-600 dark:text-cyan-300 ml-2 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                 {accuracy}%
               </div>
@@ -275,11 +273,13 @@ const ScoreCard: React.FC<{
                   </svg>
                 </div>
               )}
-              <img 
-                src={getRankIcon(rank)} 
-                alt={rank}
-                className="w-16 h-10 object-contain"
-              />
+              <div className="flex-shrink-0">
+                <img 
+                  src={getRankIcon(rank)} 
+                  alt={rank}
+                  className="w-12 h-8 object-contain"
+                />
+              </div>
             </div>
 
             <div className="flex-1 min-w-0">
@@ -306,11 +306,17 @@ const ScoreCard: React.FC<{
                 <span className="text-gray-500 dark:text-gray-400">
                   {endedAt}
                 </span>
+                <Link
+                  to={`/scores/${score.id}`}
+                  className="text-osu-pink hover:text-osu-pink/80 transition-colors font-medium"
+                >
+                  View score
+                </Link>
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <ModsDisplay mods={mods} />
+                  <ScoreModsDisplay mods={mods} />
                   <div className="text-sm font-bold text-cyan-600 dark:text-cyan-300 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                     {accuracy}%
                   </div>
@@ -584,22 +590,8 @@ const UserPinnedScores: React.FC<UserPinnedScoresProps> = ({ userId, selectedMod
       </div>
       
       {scores.length === 0 ? (
-        <div className="shadow-sm overflow-hidden rounded-lg">
-          {/* 头部圆角div */}
-          <div className="bg-card h-[30px] rounded-t-lg border-x border-t border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center">
-            <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
-          </div>
-          
-          {/* 空状态提示 */}
-          <div className="bg-card border-x border-gray-200/50 dark:border-gray-600/30 py-12">
-            <div className="text-center text-gray-400 dark:text-gray-500 text-sm">
-              {t('profile.pinnedScores.empty')}
-            </div>
-          </div>
-          
-          {/* 尾部圆角div */}
-          <div className="bg-card h-[30px] rounded-b-lg border-x border-b border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center">
-          </div>
+        <div className="text-center text-gray-500 dark:text-gray-400 py-6 text-sm">
+          {t('profile.pinnedScores.empty')}
         </div>
       ) : (
         <DndContext
@@ -607,34 +599,22 @@ const UserPinnedScores: React.FC<UserPinnedScoresProps> = ({ userId, selectedMod
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <div className="shadow-sm overflow-hidden rounded-lg">
-            {/* 头部圆角div */}
-            <div className="bg-card h-[30px] rounded-t-lg border-x border-t border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center">
-              <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
-            </div>
-            
-            {/* 主要内容区域 */}
-            <div className="bg-card border-x border-gray-200/50 dark:border-gray-600/30">
-              <SortableContext
-                items={scores.map(score => score.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                {scores.map((score) => (
-                  <SortableScoreCard
-                    key={score.id} 
-                    score={score} 
-                    t={t} 
-                    profileColor={profileColor}
-                    canEdit={canEdit}
-                    onPinChange={handlePinChangeFromMenu}
-                  />
-                ))}
-              </SortableContext>
-            </div>
-            
-            {/* 尾部圆角div */}
-            <div className="bg-card h-[30px] rounded-b-lg border-x border-b border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center">
-            </div>
+          <div className="flex flex-col gap-1">
+            <SortableContext
+              items={scores.map(score => score.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {scores.map((score) => (
+                <SortableScoreCard
+                  key={score.id} 
+                  score={score} 
+                  t={t} 
+                  profileColor={profileColor}
+                  canEdit={canEdit}
+                  onPinChange={handlePinChangeFromMenu}
+                />
+              ))}
+            </SortableContext>
           </div>
         </DndContext>
       )}

@@ -317,21 +317,5 @@ const UserMostPlayedBeatmaps: React.FC<UserMostPlayedBeatmapsProps> = ({ userId,
     </div>
   );
 };
-const getDifficultyColor = (stars: number): string => {
-  if (stars < 2) return '#4CAF50'; // Green
-  if (stars < 3) return '#8BC34A'; // Light Green
-  if (stars < 4) return '#FFC107'; // Yellow
-  if (stars < 5) return '#FF9800'; // Orange
-  if (stars < 6) return '#FF5722'; // Red
-  if (stars < 6.5) return '#F44336'; // Dark Red
-  if (stars < 7) return '#E91E63'; // Pink
-  return '#9C27B0'; // Purple
-};
-
-const formatLength = (seconds: number): string => {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-};
 
 export default UserMostPlayedBeatmaps;

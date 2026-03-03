@@ -27,9 +27,23 @@ export const settingsPage = {
     avatar: {
       title: '头像设置',
       current: '当前头像',
-      change: '修改头像',
-      hint: '支持 PNG、JPEG、GIF 格式，建议尺寸 256x256 像素，最大 5MB',
-      success: '头像修改成功！'
+      change: '更换头像',
+      hint: '支持 PNG、JPEG、GIF 格式，推荐尺寸 256x256 像素，最大 5MB',
+      success: '头像更换成功！'
+    },
+    country: {
+      title: '国家/地区设置',
+      current: '当前国家/地区',
+      change: '更换国家/地区',
+      hint: '请从下面的列表中选择您的国家或地区',
+      save: '保存',
+      saving: '保存中...',
+      cancel: '取消',
+      success: '国家/地区更换成功！',
+      errors: {
+        failed: '更换国家/地区失败，请稍后再试',
+        sameAsOld: '新的国家/地区与当前相同'
+      }
     },
     cover: {
       title: '头图设置',

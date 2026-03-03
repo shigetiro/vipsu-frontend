@@ -41,4 +41,11 @@ export const beatmapPage = {
   'beatmap.urlLoadSuccess': 'Beatmap loaded successfully',
   'beatmap.urlLoadError': 'Failed to load beatmap from URL',
   'beatmap.supportedUrls': 'Supported URL formats',
+  'beatmap.listingDescription': 'Find your favorite beatmaps',
+  'beatmap.searchPlaceholder': 'Search beatmaps...',
+  'beatmap.status.any': 'Any Status',
+  'beatmap.mappedBy': 'mapped by',
+  'beatmap.noResults': 'No beatmaps found',
+  'beatmap.uploaded': 'Uploaded',
+  'beatmap.customMaps': 'Custom Maps',
 } as const;

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { scoreAPI } from '../../utils/api';
-import type { Score } from '../../types/scores';
+import type { BestScore as Score } from '../../types/scores';
 import type { Beatmap } from '../../types';
 
 interface BeatmapLeaderboardProps {
@@ -19,7 +20,6 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
   beatmapId,
   beatmap,
   limit = 50,
-  mode,
 }) => {
   const { t } = useTranslation();
   const [scores, setScores] = useState<Score[]>([]);
@@ -137,9 +137,12 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <div>
-                    <div className="font-semibold text-slate-900 dark:text-white hover:text-osu-pink transition-colors cursor-pointer">
+                    <Link
+                      to={`/users/${score.user.id}`}
+                      className="font-semibold text-slate-900 dark:text-white hover:text-osu-pink transition-colors"
+                    >
                       {score.user.username}
-                    </div>
+                    </Link>
                     <div className="text-xs text-slate-500 dark:text-slate-400">
                       {score.user.country_code}
                     </div>
@@ -147,17 +150,21 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
                 </div>
               </td>
               <td className="px-6 py-4 text-center">
-                <div
-                  className="inline-block px-3 py-1 rounded-lg font-bold text-white"
+                <Link
+                  to={`/scores/${score.id}`}
+                  className="inline-block px-3 py-1 rounded-lg font-bold text-white hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: getRankColor(score.rank) }}
                 >
                   {score.rank}
-                </div>
+                </Link>
               </td>
               <td className="px-6 py-4 text-right">
-                <div className="font-bold text-osu-pink text-base">
+                <Link
+                  to={`/scores/${score.id}`}
+                  className="font-bold text-osu-pink text-base hover:opacity-80 transition-opacity"
+                >
                   {score.pp.toFixed(2)}
-                </div>
+                </Link>
               </td>
               <td className="px-6 py-4 text-right">
                 <div className="text-sm font-semibold text-slate-900 dark:text-white">

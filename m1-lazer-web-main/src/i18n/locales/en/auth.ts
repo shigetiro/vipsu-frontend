@@ -1,7 +1,7 @@
 export const auth = {
   login: {
     title: 'Sign in',
-    subtitle: 'Sign in to your M1Lazer! account',
+    subtitle: 'Sign in to your Vipsu! account',
     username: 'Username',
     password: 'Password',
     usernamePlaceholder: 'Enter username',
@@ -13,7 +13,7 @@ export const auth = {
   },
   register: {
     title: 'Sign up',
-    subtitle: 'Create your M1Lazer! account',
+    subtitle: 'Create your Vipsu! account',
     username: 'Username',
     email: 'Email',
     password: 'Password',

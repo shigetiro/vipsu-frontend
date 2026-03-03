@@ -2,7 +2,7 @@ export const homePage = {
   hero: {
     tagline: 'A Lazer Server For You!',
     description:
-      'M1Lazer! is a brand-new osu! private server <bold>built for the lazer client</bold> <bold> by g0v0!</bold>. We support the standard / taiko / catch / mania rulesets, RX/AP pp calculation, and unlimited renames so you can play your way.',
+      'Vipsu! is a brand-new osu! private server <bold>built for the lazer client</bold> <bold> by g0v0!</bold>. We support the standard / taiko / catch / mania rulesets, RX/AP pp calculation, and unlimited renames so you can play your way.',
     statusOperational: 'All services are operational',
     statusCommunity: 'Join our Discord community for support and updates',
     joinCta: 'Join Now',
@@ -16,7 +16,7 @@ export const homePage = {
       qq: 'Stable Server',
       discord: 'Discord',
       github: 'GitHub',
-      discordTag: 'M1PPosu',
+      discordTag: 'Vipsu',
     },
   },
 
@@ -25,7 +25,7 @@ export const homePage = {
       {
         title: 'Works on every platform',
         content:
-          'M1Lazer! is designed for lazer, which means you can play on any system that supports osu! lazer without platform limitations.',
+          'Vipsu! is designed for lazer, which means you can play on any system that supports osu! lazer without platform limitations.',
         imageAlt: 'Works on every platform',
       },
       {

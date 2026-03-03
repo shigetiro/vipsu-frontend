@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSun, FiMoon, FiHome, FiTrendingUp, FiMusic, FiBell, FiUsers, FiMenu, FiX, FiSettings, FiServer, FiGlobe, FiCheck, FiLogOut } from 'react-icons/fi';
+import { FiSun, FiMoon, FiHome, FiTrendingUp, FiMusic, FiBell, FiUsers, FiMenu, FiX, FiSettings, FiServer, FiGlobe, FiCheck, FiLogOut, FiShield } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../hooks/useTheme';
 import { useAuth } from '../../hooks/useAuth';
@@ -461,14 +461,23 @@ const Navbar: React.FC = () => {
   //const location = useLocation();
 
 
-  const navItems: NavItem[] = React.useMemo(() => [
-    // 核心功能
-    { path: '/', title: t('nav.home'), icon: FiHome },
-    { path: '/rankings', title: t('nav.rankings'), icon: FiTrendingUp, requireAuth: true },
-    { path: '/beatmaps', title: t('nav.beatmaps'), icon: FiMusic, requireAuth: true },
-    { path: '/teams', title: t('nav.teams'), icon: FiUsers, requireAuth: true },
-    { path: '/how-to-join', title: t('nav.join'), icon: FiServer },
-  ], [t]);
+  const navItems: NavItem[] = React.useMemo(() => {
+    const items: NavItem[] = [
+      // 核心功能
+      { path: '/', title: t('nav.home'), icon: FiHome },
+      { path: '/rankings', title: t('nav.rankings'), icon: FiTrendingUp, requireAuth: true },
+      { path: '/beatmaps', title: t('nav.beatmaps'), icon: FiMusic, requireAuth: true },
+      { path: '/teams', title: t('nav.teams'), icon: FiUsers, requireAuth: true },
+      { path: '/how-to-join', title: t('nav.join'), icon: FiServer },
+    ];
+    
+    // Add admin link if user is admin
+    if (isAuthenticated && user?.is_admin) {
+      items.push({ path: '/admin', title: 'Admin', icon: FiShield, requireAuth: true });
+    }
+    
+    return items;
+  }, [t, isAuthenticated, user]);
 
   const filteredNavItems = React.useMemo(() => 
     navItems.filter(item => 

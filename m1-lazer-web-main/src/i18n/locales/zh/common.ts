@@ -1,6 +1,6 @@
 export const common = {
-  brandName: 'M1Lazer!',
-  brandAlt: 'M1Lazer! 标志',
+  brandName: 'Vipsu!',
+  brandAlt: 'Vipsu! 标志',
   language: {
     label: '语言',
     switch: '切换为 {{language}}',

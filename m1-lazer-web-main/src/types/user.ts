@@ -43,6 +43,14 @@ export interface UserStatistics {
   country_rank?: number | null;
 }
 
+export interface Badge {
+  awarded_at: string;
+  description: string;
+  image_url: string;
+  ['image@2x_url']?: string;
+  url?: string;
+}
+
 export interface User {
   id: number;
   username: string;
@@ -67,7 +75,7 @@ export interface User {
     raw: string;
   };
   previous_usernames: string[];
-  badges: unknown[];
+  badges: Badge[];
   is_restricted: boolean;
   beatmap_playcounts_count: number;
   playmode: string;

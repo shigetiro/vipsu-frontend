@@ -23,11 +23,11 @@ import HowToJoinPage from './pages/HowToJoinPage';
 import BeatmapPage from './pages/BeatmapPage';
 import BeatmapsPage from './pages/BeatmapsPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import ScorePage from './pages/ScorePage';
 import BBCodeTester from './components/BBCode/BBCodeTester';
 import AdminPanel from './pages/Admin/AdminPanel';
 import AdminBeatmap from './pages/Admin/AdminBeatmap';
 import AdminBeatmapRankstatus from './pages/Admin/AdminBeatmapRankstatus';
-import { useAuth } from './contexts/AuthContext';
 
 function App() {
   const { t } = useTranslation();
@@ -59,6 +59,7 @@ function App() {
             <Route path="beatmaps/:beatmapId" element={<BeatmapPage />} />
             <Route path="beatmapsets/:beatmapsetId" element={<BeatmapPage />} />
             <Route path="beatmaps" element={<BeatmapsPage />} />
+            <Route path="scores/:scoreId" element={<ScorePage />} />
             <Route path="bbcode-test" element={<BBCodeTester />} />
             {/* Admin routes - only register if user is admin */}
             {/** We'll render conditionally inside the route so that non-admins don't see these links. */}

@@ -16,6 +16,7 @@ const GAME_MODES: { value: GameMode; iconClass: string }[] = [
   { value: 'fruits', iconClass: 'fa-extra-mode-fruits' },
   { value: 'fruitsrx', iconClass: 'fa-extra-mode-fruits' },
   { value: 'mania', iconClass: 'fa-extra-mode-mania' },
+  { value: 'osuspaceruleset', iconClass: 'fa-extra-mode-space' },
 ];
 
 const DefaultModeSelector: React.FC = () => {
@@ -34,7 +35,7 @@ const DefaultModeSelector: React.FC = () => {
       const response = await preferencesAPI.getPreferences();
       const defaultMode = (response.playmode as GameMode) || 'osu';
       // 假设所有模式都可用，或者可以从其他 API 获取
-      const availableModesFromAPI: GameMode[] = ['osu', 'osurx', 'osuap', 'taiko', 'taikorx', 'fruits', 'fruitsrx', 'mania'];
+      const availableModesFromAPI: GameMode[] = ['osu', 'osurx', 'osuap', 'taiko', 'taikorx', 'fruits', 'fruitsrx', 'mania', 'osuspaceruleset'];
       
       setCurrentMode(defaultMode);
       setSelectedMode(defaultMode);
@@ -115,9 +116,17 @@ const DefaultModeSelector: React.FC = () => {
         {!isEditing ? (
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-profile-color/10 text-profile-color rounded-lg flex items-center justify-center">
-                <i className={`${GAME_MODES.find(m => m.value === currentMode)?.iconClass || 'fa-extra-mode-osu'} text-lg`}></i>
-              </div>
+                <div className="w-10 h-10 bg-profile-color/10 text-profile-color rounded-lg flex items-center justify-center">
+                  {currentMode === 'osuspaceruleset' ? (
+                    <img 
+                      src="/image/logo.png" 
+                      alt="Space icon"
+                      className="w-[1.1rem] h-[1.1rem] object-contain"
+                    />
+                  ) : (
+                    <i className={`${GAME_MODES.find(m => m.value === currentMode)?.iconClass || 'fa-extra-mode-osu'} text-lg`}></i>
+                  )}
+                </div>
               <span className="text-lg font-medium text-gray-900 dark:text-white">
                 {currentMode ? getModeName(currentMode) : 'osu!'}
               </span>
@@ -155,7 +164,16 @@ const DefaultModeSelector: React.FC = () => {
                         ? 'bg-profile-color text-white'
                         : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                     }`}>
-                      <i className={`${mode.iconClass} text-base`}></i>
+                      {mode.value === 'osuspaceruleset' ? (
+                        <img 
+                          src="/image/logo.png" 
+                          alt="Space icon"
+                          className={`w-[1rem] h-[1rem] object-contain ${selectedMode === 'osuspaceruleset' ? 'brightness(0) invert(1)' : ''}`}
+                          style={{ filter: selectedMode === 'osuspaceruleset' ? 'brightness(0) invert(1)' : 'none' }}
+                        />
+                      ) : (
+                        <i className={`${mode.iconClass} text-base`}></i>
+                      )}
                     </div>
                     <span className="text-sm font-medium text-center">
                       {getModeName(mode.value)}

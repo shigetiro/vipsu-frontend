@@ -20,7 +20,7 @@ export const privacy = {
       description: 'You can use browser privacy features (such as clearing cookies, enabling “Do Not Track”, or using privacy extensions) to reduce optional analytics and logging. However, the core authentication cookie is required for login sessions to work, and disabling it will prevent you from staying signed in.',
     },
     //learnMore: 'For more detail about how your data is handled, please review the full Privacy Policy on this page.',
-    //privacyStatement: 'M1PPosu Privacy Policy',
+    //privacyStatement: 'Vipsu Privacy Policy',
   },
   userData: {
     title: 'User Account Data',
@@ -34,12 +34,12 @@ export const privacy = {
     title: 'Your Rights',
     access: 'Access: You can view and, where available, review your account and profile information directly in the service.',
     correction: 'Correction: You can update certain profile details yourself and may contact us if something appears inaccurate or needs correction.',
-    deletion: 'Deletion: You can request permanent deletion of your account and associated personal data by emailing contact@m1pposu.dev and including your username and registered email for verification.',
+    deletion: 'Deletion: You can request permanent deletion of your account and associated personal data by message the Staff Team in Discord and including your username and registered email for verification.',
     portability: 'Portability: Where technically feasible, you may request a copy of your data in a portable format so long as it does not compromise the privacy or security of others.',
   },
   contact: {
     title: 'Contact',
-    description: 'For questions or requests about this Privacy Policy or how your data is handled, you can contact the M1PP Team at contact@m1pposu.dev or via the support channels on our discord!',
+    description: 'For questions or requests about this Privacy Policy or how your data is handled, you can contact the Vipsu Team  via the support channels on our discord!',
   },
   updates: {
     title: 'Policy Updates',

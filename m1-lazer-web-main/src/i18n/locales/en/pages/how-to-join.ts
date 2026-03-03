@@ -11,7 +11,7 @@ export const howToJoinPage = {
       "steps": {
         "title": "Steps:",
         "step1": {
-          "title": "Download M1PPosu Launcher",
+          "title": "Download Vipsu Client",
           "pcVersion": "PC Version:",
           //"androidVersion": "Android Version (4ayo??):",
           "downloadPc": "Download from GitHub Releases",

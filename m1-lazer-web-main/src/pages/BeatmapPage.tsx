@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
-import { beatmapAPI } from '../utils/api';
+import { beatmapAPI, scoreAPI } from '../utils/api';
+import { useAuth } from '../hooks/useAuth';
 import type { Beatmapset, Beatmap } from '../types';
+import type { Score } from '../types/scores';
 import { formatDuration, formatNumber } from '../utils/format';
-import { GAME_MODE_NAMES } from '../types';
+import { GAME_MODE_NAMES, GAME_MODE_GROUPS, MAIN_MODE_ICONS } from '../types';
+import type { GameMode, MainGameMode } from '../types';
 import { AudioPlayButton, AudioPlayerControls } from '../components/UI/AudioPlayer';
 import toast from 'react-hot-toast';
 
@@ -19,6 +22,21 @@ const BeatmapPage: React.FC = () => {
   const [selectedBeatmap, setSelectedBeatmap] = useState<Beatmap | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [scores, setScores] = useState<Score[]>([]);
+  const [scoresLoading, setScoresLoading] = useState(false);
+  const [selectedMode, setSelectedMode] = useState<GameMode>('osu');
+  const [openMainMode, setOpenMainMode] = useState<MainGameMode | null>(null);
+  const closeTimersRef = useRef<number | null>(null);
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    return () => {
+      if (closeTimersRef.current) {
+        clearTimeout(closeTimersRef.current);
+        closeTimersRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const fetchBeatmapData = async () => {
@@ -113,6 +131,47 @@ const BeatmapPage: React.FC = () => {
     }
   };
 
+  // 获取该谱面的排行榜（仅在 auth 加载完并且已认证时请求）
+  useEffect(() => {
+    if (!selectedBeatmap) return;
+
+    const fetchScores = async () => {
+      // 如果未认证，跳过调用受保护的 endpoint
+      if (!isAuthenticated) {
+        setScores([]);
+        return;
+      }
+
+      setScoresLoading(true);
+      try {
+      const modeToUse = (selectedMode as string) || selectedBeatmap.mode || 'osu';
+      const data = await scoreAPI.getBeatmapScores(selectedBeatmap.id, 50, modeToUse);
+      // Sort by total_score (descending) before setting state
+      const sorted = (data.scores || []).slice().sort((a: any, b: any) => ((b.total_score ?? b.pp ?? 0) - (a.total_score ?? a.pp ?? 0)));
+      setScores(sorted);
+      } catch (error) {
+        const err = error as any;
+        if (err?.response?.status === 401) {
+          toast.error(t('auth.loginRequired') || 'Bitte einloggen, um Scores zu sehen');
+        } else {
+          console.error('Failed to fetch beatmap scores:', error);
+        }
+        setScores([]);
+      } finally {
+        setScoresLoading(false);
+      }
+    };
+
+    fetchScores();
+  }, [selectedBeatmap, isAuthenticated, selectedMode, t]);
+
+  // When selectedBeatmap changes, default to the beatmap's exact mode (including RX/AP/Relax)
+  useEffect(() => {
+    if (!selectedBeatmap) return;
+    const mode = (selectedBeatmap.mode || 'osu') as GameMode;
+    setSelectedMode(mode);
+  }, [selectedBeatmap]);
+
   const formatBPM = (bpm: number) => {
     return Number.isInteger(bpm) ? bpm.toString() : bpm.toFixed(1);
   };
@@ -152,6 +211,12 @@ const BeatmapPage: React.FC = () => {
     return '#FFFFFF'; // 白色文字
   };
 
+  const isLeaderboardAvailable = useMemo(() => {
+    return ['ranked', 'approved', 'qualified', 'loved'].includes(beatmapset?.status || '');
+  }, [beatmapset]);
+
+  console.debug('Leaderboard availability:', isLeaderboardAvailable);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -186,7 +251,7 @@ const BeatmapPage: React.FC = () => {
           <div 
             className="relative h-72 overflow-hidden rounded-2xl shadow-lg"
             style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${beatmapset.covers.cover})`,
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${beatmapset.covers?.['cover@2x'] || beatmapset.covers?.cover || '/images/default-bg.jpg'})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
@@ -207,6 +272,11 @@ const BeatmapPage: React.FC = () => {
                   {beatmapset.storyboard && (
                     <span className="px-3 py-1 bg-purple-500/90 text-white rounded-full text-xs font-bold uppercase tracking-wider">
                       STORYBOARD
+                    </span>
+                  )}
+                  {beatmapset.is_local && (
+                    <span className="px-3 py-1 bg-blue-600/90 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-lg backdrop-blur-sm">
+                      {t('beatmap.uploaded') || 'Uploaded'}
                     </span>
                   )}
                 </div>
@@ -408,6 +478,252 @@ const BeatmapPage: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {/* Leaderboard / Scores */}
+            {selectedBeatmap && (
+              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-visible">
+                <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-osu-pink/10 to-transparent">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <span className="text-osu-pink">🏆</span>
+                      {t('Leaderboard') || 'Top Scores'}
+                    </h2>
+
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {(Object.keys(GAME_MODE_GROUPS) as MainGameMode[]).map((mainMode) => {
+                        const variants = GAME_MODE_GROUPS[mainMode];
+                        const anyActive = variants.includes(selectedMode);
+                        const isOpen = openMainMode === mainMode;
+
+                        return (
+                          <div
+                            key={mainMode}
+                            className="relative"
+                            onMouseEnter={() => {
+                              if (closeTimersRef.current) {
+                                clearTimeout(closeTimersRef.current);
+                                closeTimersRef.current = null;
+                              }
+                              setOpenMainMode(mainMode);
+                            }}
+                            onMouseLeave={() => {
+                              // small delay to allow pointer to move into the dropdown
+                              closeTimersRef.current = window.setTimeout(() => setOpenMainMode(null), 150) as unknown as number;
+                            }}
+                            onFocus={() => {
+                              if (closeTimersRef.current) {
+                                clearTimeout(closeTimersRef.current);
+                                closeTimersRef.current = null;
+                              }
+                              setOpenMainMode(mainMode);
+                            }}
+                            onBlur={(e) => {
+                              const related = (e as React.FocusEvent).relatedTarget as Node | null;
+                              if (!related || !(e.currentTarget as HTMLElement).contains(related)) {
+                                // delay closing slightly so clicks inside dropdown aren't lost
+                                closeTimersRef.current = window.setTimeout(() => setOpenMainMode(null), 120) as unknown as number;
+                              }
+                            }}
+                            tabIndex={0}
+                          >
+                            <button
+                              onClick={() => setSelectedMode(mainMode)}
+                              className={`relative w-10 h-10 flex items-center justify-center rounded-md text-sm font-semibold transition-colors ${
+                                anyActive
+                                  ? 'text-white shadow-md'
+                                  : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-osu-pink/10'
+                              }`}
+                              style={{ backgroundColor: anyActive ? 'var(--osu-pink)' : undefined }}
+                              aria-haspopup="true"
+                              aria-expanded={anyActive || isOpen}
+                            >
+                              {/* subtle inner texture/ring to preserve button look when variant is selected */}
+                              {anyActive && (
+                                <span
+                                  aria-hidden
+                                  className="pointer-events-none absolute inset-0 rounded-md"
+                                  style={{
+                                    background: 'linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)), radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), rgba(255,255,255,0.02) 35%, transparent 60%)',
+                                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -6px 14px rgba(0,0,0,0.08)',
+                                    zIndex: 0,
+                                  }}
+                                />
+                              )}
+                              <span className="sr-only">{GAME_MODE_NAMES[mainMode]}</span>
+                              {mainMode === 'osuspaceruleset' || (MAIN_MODE_ICONS[mainMode] && (MAIN_MODE_ICONS[mainMode].includes('.svg') || MAIN_MODE_ICONS[mainMode].includes('.png') || MAIN_MODE_ICONS[mainMode].startsWith('/'))) ? (
+                                <img 
+                                  src={mainMode === 'osuspaceruleset' ? '/image/logo.png' : MAIN_MODE_ICONS[mainMode]} 
+                                  alt={`${mainMode} icon`}
+                                  className="w-[1rem] h-[1rem] relative z-10 object-contain"
+                                  style={{ filter: anyActive ? 'brightness(0) invert(1)' : 'none' }}
+                                />
+                              ) : (
+                                <i
+                                  className={`${MAIN_MODE_ICONS[mainMode] || ''} text-base transition-colors relative z-10 ${anyActive ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </button>
+
+                            {/* Hover/focus dropdown showing the group's variants - JS-controlled visibility */}
+                            <div className={`absolute z-50 left-0 top-full ${isOpen ? 'block' : 'hidden'}`}>
+                              <div className="rounded-md shadow-lg overflow-hidden w-40">
+                                {variants.map((variant) => (
+                                  <button
+                                    key={variant}
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    onClick={() => {
+                                        if (closeTimersRef.current) {
+                                          clearTimeout(closeTimersRef.current);
+                                          closeTimersRef.current = null;
+                                        }
+                                        setSelectedMode(variant);
+                                        setOpenMainMode(null);
+                                      }}
+                                      className={`block w-full text-left px-4 py-2 text-sm transition-colors ${
+                                        selectedMode === variant
+                                          ? 'bg-osu-pink text-white'
+                                          : 'bg-slate-800/80 dark:bg-slate-700 text-slate-200 hover:bg-slate-700/60'
+                                      }`}
+                                  >
+                                    {GAME_MODE_NAMES[variant]}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                { !isAuthenticated ? (
+                  <div className="p-8 text-center">
+                    <p className="mb-4 text-slate-700 dark:text-slate-300">
+                      {t('auth.loginRequired') || 'Bitte einloggen, um Scores zu sehen'}
+                    </p>
+                    <div>
+                      <button
+                        onClick={() => navigate('/login')}
+                        className="px-4 py-2 bg-osu-pink text-white rounded-lg"
+                      >
+                        {t('auth.login') || 'Login'}
+                      </button>
+                    </div>
+                  </div>
+                ) : scoresLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-osu-pink"></div>
+                  </div>
+                ) : scores.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                          <thead className="bg-slate-50 dark:bg-slate-700/50">
+                        <tr className="border-b border-slate-200 dark:border-slate-700">
+                          <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            {t('Player') || 'Player'}
+                          </th>
+                          <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            {t('Score') || 'Score'}
+                          </th>
+                          <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            PP
+                          </th>
+                          <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            {t('Accuracy') || 'Accuracy'}
+                          </th>
+                          <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            {t('Max Combo') || 'Max Combo'}
+                          </th>
+                          <th className="px-6 py-3 text-center text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            {t('Mods') || 'Mods'}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {scores.map((score) => (
+                          <tr
+                            key={score.id}
+                            className="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-sm">
+                              <div className="flex items-center gap-3">
+                                <img
+                                  src={score.user.avatar_url}
+                                  alt={score.user.username}
+                                  className="w-8 h-8 rounded-full object-cover"
+                                />
+                                <div>
+                                  <Link
+                                    to={`/users/${score.user.id}?mode=${selectedBeatmap.mode || 'osu'}`}
+                                    className="font-semibold text-slate-900 dark:text-white hover:text-osu-pink transition-colors"
+                                  >
+                                    {score.user.username}
+                                  </Link>
+                                  <div className="text-xs text-slate-500 dark:text-slate-400">
+                                    {score.user.country_code}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <Link
+                                to={`/scores/${score.id}`}
+                                className="font-bold text-slate-900 dark:text-white hover:text-osu-pink transition-colors"
+                              >
+                                {typeof score.total_score === 'number' ? formatNumber(score.total_score) : (score.total_score ?? score.pp ?? 0)}
+                              </Link>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <Link
+                                to={`/scores/${score.id}`}
+                                className="font-bold text-osu-pink text-base hover:opacity-80 transition-opacity"
+                              >
+                                {score.pp ? score.pp.toFixed(2) : '0.00'}
+                              </Link>
+                            </td>
+                            <td className="px-6 py-4 text-right text-sm font-semibold text-slate-900 dark:text-white">
+                              {(score.accuracy * 100).toFixed(2)}%
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <div className="text-sm text-slate-600 dark:text-slate-400">
+                                {score.max_combo}/{selectedBeatmap.max_combo}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-center">
+                              <div className="flex flex-wrap gap-1 justify-center">
+                                {score.mods && score.mods.length > 0 ? (
+                                  score.mods.map((mod, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="px-2 py-1 bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded"
+                                    >
+                                      {mod.acronym}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="text-slate-500 dark:text-slate-400 text-xs">NM</span>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="text-center">
+                      <div className="text-5xl mb-3">📭</div>
+                      <p className="text-slate-600 dark:text-slate-400">
+                        {t('beatmap.noScores') || 'Noch keine Scores'}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -525,6 +841,20 @@ const BeatmapPage: React.FC = () => {
                     {t('beatmap.download')}
                   </span>
                 </a>
+              <div className="p-6 space-y-3">
+                <a
+                  href={`https://osu.gatari.pw/d/${beatmapset.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full text-center px-4 py-3 bg-osu-pink hover:bg-osu-pink/90 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    {t('Mirror Download')}
+                  </span>
+                </a>                
                 {beatmapset.preview_url && (
                   <a
                     href={beatmapset.preview_url}
@@ -553,6 +883,7 @@ const BeatmapPage: React.FC = () => {
                     {t('beatmap.viewOnOsu')}
                   </span>
                 </a>
+              </div>
               </div>
             </div>
           </div>

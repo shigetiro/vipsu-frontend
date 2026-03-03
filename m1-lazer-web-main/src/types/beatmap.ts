@@ -62,6 +62,7 @@ export interface Beatmapset {
   title_unicode: string;
   user_id: number;
   video: boolean;
+  is_local?: boolean;
   current_nominations: any;
   description: string | null;
   pack_tags: string[];
@@ -106,4 +107,13 @@ export interface Beatmapset {
   has_favourited: boolean;
   favourite_count: number;
   recent_favourites: any[];
+}
+
+export interface SearchBeatmapsetsResponse {
+  total: number;
+  beatmapsets: Beatmapset[];
+  cursor: Record<string, any> | null;
+  search: {
+    sort: string;
+  };
 }

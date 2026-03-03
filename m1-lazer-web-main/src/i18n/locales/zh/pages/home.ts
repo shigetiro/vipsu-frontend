@@ -2,7 +2,7 @@ export const homePage = {
   hero: {
     tagline: '你打造的 lazer 服务器',
     description:
-      'M1Lazer! 是一个全新的 osu! 私人服务器，<bold>专为 lazer 客户端打造</bold>，<bold>由 g0v0! 开发</bold>。我们支持 standard / taiko / catch / mania 四大模式，提供 RX/AP pp 计算与无限制改名，让你可以按照自己的方式畅玩游戏。',
+      'Vipsu! 是一个全新的 osu! 私人服务器，<bold>专为 lazer 客户端打造</bold>，<bold>由 g0v0! 开发</bold>。我们支持 standard / taiko / catch / mania 四大模式，提供 RX/AP pp 计算与无限制改名，让你可以按照自己的方式畅玩游戏。',
     statusOperational: '所有服务运行正常',
     statusCommunity: '加入我们的 Discord 社区获取支持和最新消息',
     joinCta: '立即加入',
@@ -16,7 +16,7 @@ export const homePage = {
       qq: '启动器',
       discord: 'Discord',
       github: 'GitHub',
-      discordTag: 'M1PPosu',
+      discordTag: 'Vipsu',
     },
   },
 
@@ -25,7 +25,7 @@ export const homePage = {
       {
         title: '全平台支持',
         content:
-          'M1Lazer! 专为 lazer 客户端打造，这意味着只要您的系统支持 osu! lazer，就可以畅玩 M1Lazer!，完全不会受到平台限制。',
+          'Vipsu! 专为 lazer 客户端打造，这意味着只要您的系统支持 osu! lazer，就可以畅玩 Vipsu!，完全不会受到平台限制。',
         imageAlt: '全平台支持',
       },
       {
@@ -49,7 +49,7 @@ export const homePage = {
       {
         title: '对开发者友好',
         content:
-          '我们的服务器完全遵循官方 osu! v1/v2 API 规范设计，让你可以更加方便、快速地将 bot 和各类服务接入 M1Lazer!。',
+          '我们的服务器完全遵循官方 osu! v1/v2 API 规范设计，让你可以更加方便、快速地将 bot 和各类服务接入 Vipsu!。',
         imageAlt: '对开发者友好',
       },
       {

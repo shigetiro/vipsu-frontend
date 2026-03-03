@@ -19,6 +19,9 @@ import { Tooltip } from 'react-tooltip';
 import { useAuth } from '../../hooks/useAuth';
 import { useUserPreferences } from '../../hooks/useUserPreferences';
 import { useProfileColor } from '../../contexts/ProfileColorContext';
+import Badges from './Badges';
+import Achievements from './Achievements';
+import UserMostPlayedBeatmaps from './UserMostPlayedBeatmaps';
 
 interface UserProfileLayoutProps {
   user: User;
@@ -268,9 +271,16 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
           </div>
           {/* 用户名 + 国家 + 团队旗帜 */}
           <div className="flex-1">
-            <h1 className="mt-[-12px] md:mt-[-15px] ml-0 md:ml-[-10px] text-xl md:text-3xl font-bold mb-3 md:mb-2 text-gray-900 dark:text-gray-100">
-              {user.username}
-            </h1>
+            <div className="flex items-center gap-3">
+              <h1 className="mt-[-12px] md:mt-[-15px] ml-0 md:ml-[-10px] text-xl md:text-3xl font-bold mb-3 md:mb-2 text-gray-900 dark:text-gray-100">
+                {user.username}
+              </h1>
+              {Array.isArray(user.badges) && user.badges.length > 0 && (
+                <div className="mt-[-6px]">
+                  <Badges badges={user.badges} />
+                </div>
+              )}
+            </div>
             <div className="flex mt-[-10px] items-center gap-2 md:gap-4 md:mt-[10px] md:ml-[-8px] flex-wrap">
               {/* 国旗和国家名 */}
               {user.country?.code && (
@@ -435,6 +445,54 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
         <div className="bg-card px-3 md:px-6 lg:px-8 py-3 md:py-4 border-b border-card">
           <UserRecentScores userId={user.id} selectedMode={selectedMode} user={user} />
         </div>
+
+        {/* 最常玩的谱面 */}
+        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-3 md:py-4 border-b border-card">
+          <UserMostPlayedBeatmaps userId={user.id} user={user} max={6} />
+        </div>
+
+        {/* 成就展示 */}
+        {Array.isArray(user.user_achievements) && user.user_achievements.length > 0 && (
+          <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 relative border-b border-card">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-6 bg-osu-pink rounded-full"></div>
+              <h2 className="text-base md:text-lg font-bold text-gray-900 dark:text-gray-100">Medals</h2>
+            </div>
+            {/* Achievements Content */}
+            <Achievements userAchievements={user.user_achievements} />
+          </div>
+        )}
+
+        {/* 徽章展示 */}
+        {Array.isArray(user.badges) && user.badges.length > 0 && (
+          <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 relative border-b border-card">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-6 bg-osu-pink rounded-full"></div>
+              <h2 className="text-base md:text-lg font-bold text-gray-900 dark:text-gray-100">Badges</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {user.badges.map((badge, idx) => (
+                <div key={idx} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
+                  <img
+                    src={badge['image@2x_url'] || badge.image_url}
+                    alt={badge.description}
+                    className="w-12 h-12 object-contain"
+                    title={badge.description}
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 line-clamp-2">
+                      {badge.description}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {new Date(badge.awarded_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* 施工中 */}
         <div className="p-3 md:rounded-lg h-[500px] flex flex-col justify-center" style={{ background: 'var(--bg-secondary)' }}>

@@ -227,7 +227,7 @@ const HeroSection: React.FC = () => {
             */}
 
             <a
-              href="https://discord.gg/kPK7FrCerW"
+              href="https://discord.gg/sbhxQATZPa"
               target="_blank"
               rel="noopener noreferrer"
               className="group w-full flex flex-col sm:flex-row items-center justify-center bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg text-xs transition-all duration-200 hover:scale-105 hover:shadow-lg"
@@ -242,7 +242,7 @@ const HeroSection: React.FC = () => {
             </a>
 
             <a
-              href="https://github.com/M1PPosu"
+              href="https://github.com/shigetiro/"
               target="_blank"
               rel="noopener noreferrer"
               className="group w-full flex flex-col sm:flex-row items-center justify-center bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg text-xs transition-all duration-200 hover:scale-105 hover:shadow-lg"
@@ -252,7 +252,7 @@ const HeroSection: React.FC = () => {
                 <span className="font-medium text-xs sm:text-sm">{t('hero.community.github')}</span>
               </div>
               <div className="hidden sm:flex sm:items-center sm:justify-center px-2 sm:px-3 py-1.5 sm:py-2 bg-gray-800 group-hover:bg-gray-700 dark:bg-gray-600 dark:group-hover:bg-gray-500 text-white rounded-r-lg transition-colors duration-200 whitespace-nowrap w-full">
-                <span className="font-semibold text-xs sm:text-sm text-center">M1PPosu</span>
+                <span className="font-semibold text-xs sm:text-sm text-center">Vipsu</span>
               </div>
             </a>
           </div>

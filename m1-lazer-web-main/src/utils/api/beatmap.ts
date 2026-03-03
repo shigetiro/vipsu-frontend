@@ -25,6 +25,42 @@ export const beatmapAPI = {
     }
   },
 
+  searchBeatmaps: async (params: {
+    q?: string;
+    m?: number;
+    s?: string;
+    g?: number;
+    l?: number;
+    nsfw?: boolean;
+    sort?: string;
+    is_local?: boolean;
+    cursor?: Record<string, any>;
+    page?: number;
+  }) => {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params.q) queryParams.append('q', params.q);
+      if (params.m !== undefined) queryParams.append('m', params.m.toString());
+      if (params.s) queryParams.append('s', params.s);
+      if (params.g !== undefined) queryParams.append('g', params.g.toString());
+      if (params.l !== undefined) queryParams.append('l', params.l.toString());
+      if (params.nsfw !== undefined) queryParams.append('nsfw', params.nsfw.toString());
+      if (params.is_local !== undefined) queryParams.append('is_local', params.is_local.toString());
+      if (params.sort) queryParams.append('sort', params.sort);
+      
+      if (params.cursor) {
+        Object.entries(params.cursor).forEach(([key, value]) => {
+          queryParams.append(`cursor[${key}]`, value.toString());
+        });
+      }
+
+      const response = await api.get(`/api/v2/beatmapsets/search?${queryParams.toString()}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   extractBeatmapIdFromUrl: (url: string): number | null => {
     const beatmapMatch = url.match(/\/beatmaps\/(\d+)/);
     if (beatmapMatch) {

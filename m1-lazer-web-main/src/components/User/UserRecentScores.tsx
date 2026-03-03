@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { userAPI } from '../../utils/api';
 import type { BestScore, GameMode, User } from '../../types';
@@ -6,6 +7,8 @@ import { useProfileColor } from '../../contexts/ProfileColorContext';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import LazyBackgroundImage from '../UI/LazyBackgroundImage';
 import BeatmapLink from '../UI/BeatmapLink';
+
+import ScoreModsDisplay from './ScoreModsDisplay';
 
 interface UserRecentScoresProps {
   userId: number;
@@ -63,30 +66,14 @@ const getRankIcon = (rank: string) => {
 };
 
 
-// MOD 图标组件
-const ModIcon: React.FC<{ mod: { acronym: string } }> = ({ mod }) => {
-  return (
-    <div className="w-6 h-6 flex items-center justify-center text-xs font-bold text-gray-700 dark:text-gray-300">
-      {mod.acronym}
-    </div>
-  );
-};
-
-// 模组组件
-const ModsDisplay: React.FC<{ mods: Array<{ acronym: string }> }> = ({ mods }) => {
-  if (!mods || mods.length === 0) return null;
-
-  return (
-    <div className="flex items-center gap-1">
-      {mods.map((mod, index) => (
-        <ModIcon key={index} mod={mod} />
-      ))}
-    </div>
-  );
-};
-
 // 单个成绩卡片组件 - 基于 osu! 官方设计
-const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; showPP?: boolean }> = ({ score, t, profileColor, showPP = true }) => {
+const ScoreCard: React.FC<{ 
+  score: BestScore; 
+  t: any; 
+  profileColor: string; 
+  showPP?: boolean;
+  className?: string;
+}> = ({ score, t, profileColor, showPP = true, className = '' }) => {
   // 必取字段处理
   const rank = score.rank; // 等级徽章（S/A/B/C/D/F）
   const title = score.beatmapset?.title_unicode || score.beatmapset?.title || 'Unknown Title';
@@ -98,7 +85,16 @@ const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; show
   const mods = score.mods || []; // MOD列表
   const passed = score.passed; // 是否通过
 
-  const beatmapUrl = score.beatmap?.url || '#';
+  // Construct beatmap URL manually if missing, to ensure redirection works
+  let beatmapUrl = score.beatmap?.url;
+  if (!beatmapUrl || beatmapUrl === '#') {
+    if (score.beatmap?.beatmapset_id && score.beatmap?.id) {
+      beatmapUrl = `/beatmapsets/${score.beatmap.beatmapset_id}#${score.beatmap.mode || 'osu'}/${score.beatmap.id}`;
+    } else {
+      beatmapUrl = '#';
+    }
+  }
+
   const coverImage = score.beatmapset?.covers?.['cover@2x'] || score.beatmapset?.covers?.cover;
 
   // 将主题颜色转换为 RGB 以便使用透明度
@@ -115,7 +111,7 @@ const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; show
   return (
     <LazyBackgroundImage 
       src={coverImage}
-      className="relative overflow-hidden border-b border-gray-100 dark:border-gray-700/50 last:border-b-0"
+      className={`relative overflow-hidden rounded-lg border border-gray-200/70 dark:border-gray-600/40 bg-card ${className}`}
     >
       {/* 渐变遮罩层确保文字可读性 - 使用主题颜色 */}
       <div 
@@ -141,7 +137,7 @@ const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; show
               <img 
                 src={getRankIcon(rank)} 
                 alt={rank}
-                className={`w-18 h-12 object-contain ${!passed ? 'opacity-50' : ''}`}
+                className={`w-14 h-10 object-contain ${!passed ? 'opacity-50' : ''}`}
               />
             </div>
 
@@ -178,6 +174,12 @@ const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; show
                   <span className="text-gray-500 dark:text-gray-400">
                     {endedAt}
                   </span>
+                  <Link
+                    to={`/scores/${score.id}`}
+                    className="text-osu-pink hover:text-osu-pink/80 transition-colors font-medium"
+                  >
+                    View score
+                  </Link>
                 </div>
               </div>
             </div>
@@ -185,7 +187,7 @@ const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; show
             {/* 中间成绩数据 */}
             <div className="flex-shrink-0 flex items-center gap-2 mr-6">
               {/* MOD图标 + 准确率 */}
-              <ModsDisplay mods={mods} />
+              <ScoreModsDisplay mods={mods} />
               <div className={`text-sm font-bold ml-2 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${!passed ? 'text-gray-500 dark:text-gray-500' : 'text-cyan-600 dark:text-cyan-300'}`}>
                 {accuracy}%
               </div>
@@ -193,14 +195,14 @@ const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; show
           </div>
 
           {/* 右侧性能区域 */}
-          {showPP && originalPp > 0 && (
-            <div className="absolute right-0 top-0 h-full w-20 flex items-center justify-center">
-              {/* PP 值 */}
+          <div className="absolute right-0 top-0 h-full flex items-center justify-center gap-2 pr-5">
+            {/* PP 值 */}
+            {showPP && originalPp > 0 && (
               <div className={`text-sm font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${!passed ? 'text-gray-400 dark:text-gray-500' : 'text-profile-color'}`}>
                 {originalPp} PP
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* 手机端布局 */}
@@ -211,7 +213,7 @@ const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; show
               <img 
                 src={getRankIcon(rank)} 
                 alt={rank}
-                className={`w-16 h-10 object-contain ${!passed ? 'opacity-50' : ''}`}
+                className={`w-12 h-8 object-contain ${!passed ? 'opacity-50' : ''}`}
               />
             </div>
 
@@ -247,12 +249,18 @@ const ScoreCard: React.FC<{ score: BestScore; t: any; profileColor: string; show
                 <span className="text-gray-500 dark:text-gray-400">
                   {endedAt}
                 </span>
+                <Link
+                  to={`/scores/${score.id}`}
+                  className="text-osu-pink hover:text-osu-pink/80 transition-colors font-medium"
+                >
+                  View score
+                </Link>
               </div>
 
               {/* 第三行：MOD、准确率和PP */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <ModsDisplay mods={mods} />
+                  <ScoreModsDisplay mods={mods} />
                   <div className={`text-sm font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${!passed ? 'text-gray-500 dark:text-gray-500' : 'text-cyan-600 dark:text-cyan-300'}`}>
                     {accuracy}%
                   </div>
@@ -392,45 +400,35 @@ const UserRecentScores: React.FC<UserRecentScoresProps> = ({ userId, selectedMod
           {t('profile.recentScores.noScores')}
         </div>
       ) : (
-        <div className="shadow-sm overflow-hidden rounded-lg">
-          {/* 头部圆角div */}
-          <div className="bg-card h-[30px] rounded-t-lg border-x border-t border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center">
-            <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
-          </div>
-          
-          {/* 主要内容区域 - 无圆角 */}
-          <div className="bg-card border-x border-gray-200/50 dark:border-gray-600/30">
+        <>
+          <div className="flex flex-col gap-1">
             {scores.map((score) => (
               <ScoreCard key={score.id} score={score} t={t} profileColor={profileColor} showPP={score.passed} />
             ))}
+          </div>
 
-            {hasMore && (
-              <div className="flex justify-center p-4 border-t border-gray-100 dark:border-gray-700/50">
-                <button
-                  onClick={handleLoadMore}
-                  disabled={loadingMore}
-                  className="min-w-[80px] sm:min-w-[100px] h-[32px] px-3 py-1.5 disabled:bg-gray-400 text-white rounded text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
-                  style={{ backgroundColor: loadingMore ? undefined : profileColor }}
-                  onMouseEnter={(e) => !loadingMore && (e.currentTarget.style.opacity = '0.9')}
-                  onMouseLeave={(e) => !loadingMore && (e.currentTarget.style.opacity = '1')}
-                >
-                  {loadingMore ? (
-                    <>
-                      <LoadingSpinner size="sm" />
-                      <span>{t('profile.recentScores.loading')}</span>
-                    </>
-                  ) : (
-                    <span>{t('profile.recentScores.loadMore')}</span>
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
-          
-          {/* 尾部圆角div */}
-          <div className="bg-card h-[30px] rounded-b-lg border-x border-b border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center">
-          </div>
-        </div>
+          {hasMore && (
+            <div className="flex justify-center mt-3">
+              <button
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                className="min-w-[80px] sm:min-w-[100px] h-[32px] px-3 py-1.5 disabled:bg-gray-400 text-white rounded text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
+                style={{ backgroundColor: loadingMore ? undefined : profileColor }}
+                onMouseEnter={(e) => !loadingMore && (e.currentTarget.style.opacity = '0.9')}
+                onMouseLeave={(e) => !loadingMore && (e.currentTarget.style.opacity = '1')}
+              >
+                {loadingMore ? (
+                  <>
+                    <LoadingSpinner size="sm" />
+                    <span>{t('profile.recentScores.loading')}</span>
+                  </>
+                ) : (
+                  <span>{t('profile.recentScores.loadMore')}</span>
+                )}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

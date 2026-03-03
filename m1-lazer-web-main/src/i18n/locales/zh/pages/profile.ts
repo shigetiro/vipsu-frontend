@@ -94,6 +94,10 @@ export const profilePage = {
         downloadSuccess: '回放下载成功',
       },
     },
+    mostPlayed: {
+      title: '最常游玩的谱面',
+      loadFailed: '加载最常游玩的谱面失败',
+    },
     recentScores: {
       title: '最近成绩',
       last24h: '最近24小时',

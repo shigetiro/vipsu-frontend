@@ -20,10 +20,14 @@ export interface BestScore {
     miss?: number;
     meh?: number;
     great?: number;
+    good?: number;
+    perfect?: number;
     ignore_hit?: number;
     ignore_miss?: number;
     large_bonus?: number;
     small_bonus?: number;
+    large_tick_miss?: number;
+    small_tick_hit?: number;
     large_tick_hit?: number;
     slider_tail_hit?: number;
   };
@@ -49,6 +53,7 @@ export interface BestScore {
   started_at: string | null;
   total_score: number;
   replay: boolean;
+  client_hash?: string | null;
   current_user_attributes: {
     pin: {
       is_pinned: boolean;
@@ -78,6 +83,7 @@ export interface BestScore {
     is_scoreable: boolean;
     last_updated: string;
     mode_int: number;
+    max_combo?: number;
     passcount: number;
     playcount: number;
     ranked: number;
@@ -135,4 +141,9 @@ export interface BestScore {
     percentage: number;
     pp: number;
   };
+  position?: number | null;
+  rank_country?: number | null;
+  rank_global?: number | null;
 }
+
+export type Score = BestScore;

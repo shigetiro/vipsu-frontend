@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiUser, FiCheck, FiX, FiImage, FiCamera, FiShield, FiMonitor, FiLock, FiSettings, FiKey } from 'react-icons/fi';
+import { FiUser, FiCheck, FiX, FiImage, FiCamera, FiShield, FiMonitor, FiLock, FiSettings, FiKey, FiEdit2 } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import { Navigate } from 'react-router-dom';
@@ -9,6 +9,8 @@ import { userAPI, type TOTPStatus } from '../utils/api';
 import EditableCover from '../components/UI/EditableCover';
 import Avatar from '../components/UI/Avatar';
 import AvatarUpload from '../components/UI/AvatarUpload';
+import CountrySelect from '../components/UI/CountrySelect';
+import { allCountries } from '../utils/allCountries';
 import TotpSetupModal from '../components/TOTP/TotpSetupModal';
 import TotpDisableModal from '../components/TOTP/TotpDisableModal';
 import SessionManagement from '../components/Device/SessionManagement';
@@ -19,11 +21,18 @@ import OAuthAppsSection from '../components/Settings/OAuthAppsSection';
 
 const SettingsPage: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { user, isAuthenticated, isLoading, refreshUser } = useAuth();
+  const { user, isAuthenticated, isLoading, refreshUser, updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAvatarUpload, setShowAvatarUpload] = useState(false);
+  
+  // Country editing state
+  const [isEditingCountry, setIsEditingCountry] = useState(false);
+  const [selectedCountryCode, setSelectedCountryCode] = useState('');
+  const [isUpdatingCountry, setIsUpdatingCountry] = useState(false);
+  
+  // Country data is now imported statically from allCountries
   
   // TOTP 相关状态
   const [totpStatus, setTotpStatus] = useState<TOTPStatus | null>(null);
@@ -98,6 +107,49 @@ const SettingsPage: React.FC = () => {
   const handleCancelEdit = () => {
     setIsEditing(false);
     setNewUsername('');
+  };
+
+  // Country editing functions
+  const handleStartEditCountry = () => {
+    setSelectedCountryCode(user.country_code || '');
+    setIsEditingCountry(true);
+  };
+
+  const handleCancelEditCountry = () => {
+    setIsEditingCountry(false);
+    setSelectedCountryCode('');
+  };
+
+  const handleSubmitCountry = async () => {
+    if (!selectedCountryCode) {
+      toast.error(t('settings.country.errors.failed'));
+      return;
+    }
+
+    if (selectedCountryCode === user.country_code) {
+      toast.error(t('settings.country.errors.sameAsOld'));
+      return;
+    }
+
+    setIsUpdatingCountry(true);
+    try {
+      // Use the new generic updateSelf method
+      const updatedUser = await userAPI.updateSelf({ country_code: selectedCountryCode });
+      if (updatedUser) {
+        updateUser(updatedUser);
+      } else {
+        await refreshUser();
+      }
+      toast.success(t('settings.country.success'));
+
+      setIsEditingCountry(false);
+      setSelectedCountryCode('');
+    } catch (error) {
+      console.error('修改国家/地区失败:', error);
+      toast.error(t('settings.country.errors.failed'));
+    } finally {
+      setIsUpdatingCountry(false);
+    }
   };
 
   const handleSubmitUsername = async () => {
@@ -534,21 +586,64 @@ const SettingsPage: React.FC = () => {
 
           {user.country && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t('settings.account.country')}
-              </label>
-              <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={`https://flagcdn.com/w20/${user.country.code.toLowerCase()}.png`}
-                    alt={user.country.code}
-                    className="w-5 h-auto"
-                  />
-                  <span className="text-gray-900 dark:text-white">
-                    {user.country.name}
-                  </span>
-                </div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {t('settings.account.country')}
+                </label>
+                {!isEditingCountry && (
+                  <button
+                    onClick={handleStartEditCountry}
+                    className="flex items-center gap-1 text-sm text-osu-pink hover:text-osu-pink-dark transition-colors"
+                  >
+                    <FiEdit2 className="w-3 h-3" />
+                    {t('settings.country.change')}
+                  </button>
+                )}
               </div>
+              
+              {!isEditingCountry ? (
+                <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={`https://flagcdn.com/w20/${user.country.code.toLowerCase()}.png`}
+                      alt={user.country.code}
+                      className="w-5 h-auto"
+                    />
+                    <span className="text-gray-900 dark:text-white">
+                      {user.country.name}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <CountrySelect
+                    value={selectedCountryCode}
+                    onChange={setSelectedCountryCode}
+                    placeholder={t('settings.country.hint')}
+                    countries={allCountries}
+                    isLoading={false}
+                  />
+                  
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handleSubmitCountry}
+                      disabled={isUpdatingCountry || !selectedCountryCode}
+                      className="flex items-center gap-2 btn-primary !px-4 !py-2 !text-sm !inline-flex disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FiCheck className="w-4 h-4" />
+                      {isUpdatingCountry ? t('settings.country.saving') : t('settings.country.save')}
+                    </button>
+                    <button
+                      onClick={handleCancelEditCountry}
+                      disabled={isUpdatingCountry}
+                      className="flex items-center gap-2 btn-secondary !px-4 !py-2 !text-sm !inline-flex disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FiX className="w-4 h-4" />
+                      {t('settings.country.cancel')}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

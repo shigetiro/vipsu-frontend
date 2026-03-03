@@ -181,6 +181,26 @@ export const userAPI = {
     return response.data;
   },
 
+  getMostPlayedBeatmaps: async (
+    userId: number,
+    limit: number = 6,
+    offset: number = 0
+  ) => {
+    console.log('获取用户最常游玩谱面:', { userId, limit, offset });
+
+    const params = new URLSearchParams();
+    params.append('limit', limit.toString());
+    params.append('offset', offset.toString());
+
+    const url = `/api/v2/users/${userId}/beatmapsets/most_played?${params.toString()}`;
+    const response = await api.get(url, {
+      headers: {
+        'x-api-version': '20220705',
+      },
+    });
+    return response.data;
+  },
+
   getUserPage: async (userId: number) => {
     console.log('获取用户页面内容（编辑用）:', { userId });
     const response = await api.get(`/api/private/user/page`);
@@ -316,6 +336,35 @@ export const userAPI = {
     const result = await response.json();
     console.log('修改密码响应:', result);
     return result;
+  },
+
+  // 更新用户国家/地区
+  updateSelf: async (data: { country_code?: string }) => {
+    console.log('Update user profile:', data);
+    try {
+      // Use the new generic update endpoint
+      const res = await api.patch('/api/private/me', data);
+      let resData = res.data;
+      if (!resData || typeof resData !== 'object') {
+        const me = await api.get('/api/v2/me/');
+        resData = me.data;
+      }
+      return resData;
+    } catch (error: unknown) {
+      const axiosErr = error as import('axios').AxiosError<{ detail?: string; message?: string }>;
+      const status = axiosErr.response?.status;
+      const errData = axiosErr.response?.data;
+      const message = errData?.detail || errData?.message || (status ? `HTTP ${status}` : 'Request failed');
+      console.error('Update profile failed:', errData ?? axiosErr);
+      throw new Error(message);
+    }
+  },
+
+  /**
+   * @deprecated Use updateSelf instead
+   */
+  updateCountry: async (countryCode: string) => {
+    return userAPI.updateSelf({ country_code: countryCode });
   },
 
   // TOTP 相关接口
