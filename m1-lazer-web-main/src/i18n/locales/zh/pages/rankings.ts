@@ -2,8 +2,9 @@ export const rankingsPage = {
   rankings: {
     title: '排行榜',
     tabs: {
-      users: '玩家排行',
+      users: '排行榜',
       countries: '国家排行',
+      topPlays: '最高得分',
     },
     rankingTypes: {
       performance: '表现分',

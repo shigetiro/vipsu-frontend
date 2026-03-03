@@ -2,8 +2,9 @@ export const rankingsPage = {
   rankings: {
     title: 'Rankings',
     tabs: {
-      users: 'User Rankings',
+      users: 'Leaderboard',
       countries: 'Country Rankings',
+      topPlays: 'Top Plays',
     },
     rankingTypes: {
       performance: 'Performance',

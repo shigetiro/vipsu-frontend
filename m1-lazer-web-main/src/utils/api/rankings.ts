@@ -34,4 +34,12 @@ export const rankingsAPI = {
     const response = await api.get(`/api/v2/rankings/${ruleset}/team/${sort}?${params}`);
     return response.data;
   },
+
+  getTopPlays: async (ruleset: string, page: number = 1) => {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+
+    const response = await api.get(`/api/v2/rankings/${ruleset}/top-plays?${params}`);
+    return response.data;
+  },
 };
