@@ -1,3 +1,5 @@
+import type { Badge } from './user';
+
 export interface BestScore {
   classic_total_score: number;
   preserve: boolean;
@@ -136,6 +138,11 @@ export interface BestScore {
     pm_friends_only: boolean;
     profile_colour: string | null;
     username: string;
+    is_admin?: boolean;
+    is_gmt?: boolean;
+    is_qat?: boolean;
+    is_bng?: boolean;
+    badges?: Badge[];
   };
   weight: {
     percentage: number;

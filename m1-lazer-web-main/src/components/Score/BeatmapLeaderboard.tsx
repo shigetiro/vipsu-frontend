@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { scoreAPI } from '../../utils/api';
+import UserRoleBadge from '../UI/UserRoleBadge';
 import type { BestScore as Score } from '../../types/scores';
 import type { Beatmap } from '../../types';
 
@@ -137,12 +138,20 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <div>
-                    <Link
-                      to={`/users/${score.user.id}`}
-                      className="font-semibold text-slate-900 dark:text-white hover:text-osu-pink transition-colors"
-                    >
-                      {score.user.username}
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        to={`/users/${score.user.id}`}
+                        className="font-semibold text-slate-900 dark:text-white hover:text-osu-pink transition-colors"
+                      >
+                        {score.user.username}
+                      </Link>
+                      <UserRoleBadge 
+                         isAdmin={score.user.is_admin} 
+                         isGMT={score.user.is_gmt} 
+                         isQAT={score.user.is_qat}
+                         isBNG={score.user.is_bng}
+                       />
+                    </div>
                     <div className="text-xs text-slate-500 dark:text-slate-400">
                       {score.user.country_code}
                     </div>

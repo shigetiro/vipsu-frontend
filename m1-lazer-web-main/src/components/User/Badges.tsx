@@ -1,5 +1,6 @@
 import React from 'react';
 import './Badges.css';
+import { BADGE_COLORS } from '../../utils/badgeColors';
 
 interface Badge {
   awarded_at?: string;
@@ -13,13 +14,6 @@ interface BadgesProps {
   badges?: Badge[] | any[];
   max?: number;
 }
-
-// Map badge descriptions to text color (group colour)
-const BADGE_COLORS: Record<string, string> = {
-  'Dev': '#ED8EA6',      // Pink
-  'Admin': '#60a5fa',    // Blue
-  'Streamer': '#ED8EA6'
-};
 
 const Badges: React.FC<BadgesProps> = ({ badges = [], max = 6 }) => {
   if (!Array.isArray(badges) || badges.length === 0) return null;

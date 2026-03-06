@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Avatar from '../UI/Avatar';
+import UserRoleBadge from '../UI/UserRoleBadge';
 import GameModeSelector from '../UI/GameModeSelector';
 import RankHistoryChart from '../UI/RankHistoryChart';
 import PlayerRankCard from '../User/PlayerRankCard';
@@ -275,6 +276,13 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
               <h1 className="mt-[-12px] md:mt-[-15px] ml-0 md:ml-[-10px] text-xl md:text-3xl font-bold mb-3 md:mb-2 text-gray-900 dark:text-gray-100">
                 {user.username}
               </h1>
+              <UserRoleBadge 
+                 isAdmin={user.is_admin} 
+                 isGMT={user.is_gmt} 
+                 isQAT={user.is_qat}
+                 isBNG={user.is_bng}
+                 className="mt-[-8px] md:mt-[-10px]"
+               />
               {Array.isArray(user.badges) && user.badges.length > 0 && (
                 <div className="mt-[-6px]">
                   <Badges badges={user.badges} />
