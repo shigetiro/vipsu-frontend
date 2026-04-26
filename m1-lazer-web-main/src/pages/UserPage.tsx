@@ -85,10 +85,23 @@ const UserPage: React.FC = () => {
 
   if (error || !user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+      <div 
+        className="flex flex-col items-center justify-center min-h-[60vh] text-center" 
+        style={{ background: 'var(--bg-primary)' }}
+      >
         <div className="text-6xl mb-4">😕</div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('profile.errors.userNotFound')}</h2>
-        <p className="text-gray-600">{error || t('profile.errors.checkId')}</p>
+        <h2 
+          className="text-2xl font-bold mb-2" 
+          style={{ 
+            color: 'var(--text-primary)',
+            fontFamily: 'var(--font-display)'
+          }}
+        >
+          {t('profile.errors.userNotFound')}
+        </h2>
+        <p className="" style={{ color: 'var(--text-muted)' }}>
+          {error || t('profile.errors.checkId')}
+        </p>
       </div>
     );
   }

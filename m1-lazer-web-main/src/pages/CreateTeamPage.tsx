@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft, FiSave, FiImage, FiFlag, FiUsers, FiLoader } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -158,10 +158,10 @@ const CreateTeamPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
         <div className="text-center">
-          <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
             {t('teams.create.loginRequired')}
           </h3>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-gray-500">
             {t('teams.create.loginRequired')}
           </p>
         </div>
@@ -174,7 +174,7 @@ const CreateTeamPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
         <div className="text-center">
           <FiLoader className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4" />
-          <p className="text-gray-500 dark:text-gray-400 font-medium">{t('teams.create.loading')}</p>
+          <p className="text-gray-500 font-medium">{t('teams.create.loading')}</p>
         </div>
       </div>
     );
@@ -187,7 +187,7 @@ const CreateTeamPage: React.FC = () => {
         <div className="mb-6">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
           >
             <FiArrowLeft className="mr-2" />
             {t('common.back')}
@@ -196,10 +196,10 @@ const CreateTeamPage: React.FC = () => {
 
         {/* 页面标题 */}
         <div className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
             {isEditing ? t('teams.create.editTeam') : t('teams.create.createTeam')}
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-base sm:text-lg text-gray-600">
             {isEditing ? t('teams.create.editDescription') : t('teams.create.createDescription')}
           </p>
         </div>
@@ -209,11 +209,11 @@ const CreateTeamPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* 基本信息 */}
             <div className="bg-card rounded-xl shadow-sm border border-card p-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('teams.create.basicInfo')}</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">{t('teams.create.basicInfo')}</h2>
               
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                     {t('teams.create.teamName')} {t('teams.create.required')}
                   </label>
                   <input
@@ -223,7 +223,7 @@ const CreateTeamPage: React.FC = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-card rounded-lg
-                             bg-card text-gray-900 dark:text-white
+                             bg-card text-gray-900
                              focus:ring-2 focus:ring-osu-pink focus:border-transparent"
                     placeholder={t('teams.create.teamNamePlaceholder')}
                     maxLength={50}
@@ -231,7 +231,7 @@ const CreateTeamPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="short_name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="short_name" className="block text-sm font-medium text-gray-700 mb-2">
                     {t('teams.create.teamShortName')} {t('teams.create.required')}
                   </label>
                   <input
@@ -241,12 +241,12 @@ const CreateTeamPage: React.FC = () => {
                     value={formData.short_name}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-card rounded-lg
-                             bg-card text-gray-900 dark:text-white
+                             bg-card text-gray-900
                              focus:ring-2 focus:ring-osu-pink focus:border-transparent"
                     placeholder={t('teams.create.teamShortNamePlaceholder')}
                     maxLength={10}
                   />
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-sm text-gray-500">
                     {t('teams.create.shortNameDescription')}
                   </p>
                 </div>
@@ -255,7 +255,7 @@ const CreateTeamPage: React.FC = () => {
 
             {/* 旗帜上传 */}
             <div className="bg-card rounded-xl shadow-sm border border-card p-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('teams.create.teamFlag')}</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">{t('teams.create.teamFlag')}</h2>
               
               <ImageUploadWithCrop
                 onImageSelect={handleFlagSelect}
@@ -275,7 +275,7 @@ const CreateTeamPage: React.FC = () => {
 
             {/* 封面上传 */}
             <div className="bg-card rounded-xl shadow-sm border border-card p-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('teams.create.teamCover')}</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">{t('teams.create.teamCover')}</h2>
               
               <ImageUploadWithCrop
                 onImageSelect={handleCoverSelect}
@@ -296,14 +296,14 @@ const CreateTeamPage: React.FC = () => {
             {/* 队员管理 - 仅在编辑模式下显示 */}
             {isEditing && members.length > 0 && (
               <div className="bg-card rounded-xl shadow-sm border border-card p-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                   <FiUsers className="mr-3" />
                   {t('teams.create.memberManagement')}
                 </h2>
                 
                 {/* 队长转让选择 */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
                     {t('teams.create.leaderTransfer')}
                   </label>
                   <MemberSelector
@@ -313,21 +313,21 @@ const CreateTeamPage: React.FC = () => {
                     currentLeaderId={teamDetail?.team.leader_id}
                     placeholder={t('teams.create.keepCurrentLeader')}
                   />
-                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                  <p className="mt-2 text-sm text-gray-500">
                     {t('teams.create.leaderTransferDescription')}
                   </p>
                 </div>
 
                 {/* 队员列表 */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     {t('teams.create.currentMembers', { count: members.length })}
                   </h3>
                   <div className="space-y-3">
                     {members.map(member => (
                       <div
                         key={member.id}
-                        className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
                       >
                         <div className="flex items-center gap-3">
                           <img
@@ -336,7 +336,7 @@ const CreateTeamPage: React.FC = () => {
                             className="w-8 h-8 rounded-full"
                           />
                           <div>
-                            <p className="font-medium text-gray-900 dark:text-white">
+                            <p className="font-medium text-gray-900">
                               {member.username}
                             </p>
                             {member.id === teamDetail?.team.leader_id && (
@@ -352,7 +352,7 @@ const CreateTeamPage: React.FC = () => {
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                          <span className="text-sm text-gray-500">
                             {member.country?.name || t('teams.create.unknown')}
                           </span>
                           {member.country?.code && (
@@ -375,7 +375,7 @@ const CreateTeamPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="px-6 py-3 border border-card text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                className="px-6 py-3 border border-card text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 {t('teams.create.cancel')}
               </button>

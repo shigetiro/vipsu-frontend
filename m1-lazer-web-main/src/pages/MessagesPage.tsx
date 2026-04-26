@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FiMessageCircle, 
@@ -1722,10 +1722,10 @@ const MessagesPage: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
             {t('messages.loginRequired.title')}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600">
             {t('messages.loginRequired.description')}
           </p>
         </div>
@@ -1734,7 +1734,7 @@ const MessagesPage: React.FC = () => {
   }
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] max-h-[calc(100vh-8rem)] md:max-h-[calc(100vh-4rem)] overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] max-h-[calc(100vh-8rem)] md:max-h-[calc(100vh-4rem)] overflow-hidden bg-page">
       {/* 侧边栏 */}
       <AnimatePresence>
         {showSidebar && (
@@ -1753,7 +1753,7 @@ const MessagesPage: React.FC = () => {
             <div className="p-4 border-b border-card">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                  <h1 className="text-xl font-bold text-gray-900">
                     {t('messages.sidebar.title')}
                   </h1>
                   {/* WebSocket连接状态 */}
@@ -1765,7 +1765,7 @@ const MessagesPage: React.FC = () => {
                   <button
                     onClick={() => setShowSidebar(false)}
                     aria-label={t('common.close')}
-                    className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    className="p-2 text-gray-500 hover:text-gray-700"
                   >
                     <FiX size={20} />
                   </button>
@@ -1773,15 +1773,15 @@ const MessagesPage: React.FC = () => {
               </div>
 
               {/* 标签页切换 */}
-              <div className="flex space-x-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
+              <div className="flex space-x-1 bg-surface-2 p-1 rounded-lg">
                 <button
                   onClick={() => setActiveTab('channels')}
                   className={`
                     flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-md text-sm font-medium
                     transition-all duration-200
                     ${activeTab === 'channels'
-                      ? 'bg-white dark:bg-gray-600 text-osu-pink shadow-sm'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-white text-osu-pink shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
                     }
                   `}
                 >
@@ -1794,8 +1794,8 @@ const MessagesPage: React.FC = () => {
                     flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-md text-sm font-medium
                     transition-all duration-200 relative
                     ${activeTab === 'notifications'
-                      ? 'bg-white dark:bg-gray-600 text-osu-pink shadow-sm'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-white text-osu-pink shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
                     }
                   `}
                 >
@@ -1825,7 +1825,7 @@ const MessagesPage: React.FC = () => {
                             py-1.5 px-2 rounded text-center font-medium transition-all duration-200
                             ${channelFilter === filter.key
                               ? 'bg-osu-pink text-white'
-                              : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                              : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
                             }
                           `}
                         >
@@ -1907,11 +1907,11 @@ const MessagesPage: React.FC = () => {
                   {/* 频道列表 */}
                   <div className="flex-1 overflow-y-auto">
                     {isLoading ? (
-                      <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+                      <div className="p-4 text-center text-gray-500">
                         {t('messages.sidebar.states.loading')}
                       </div>
                     ) : filteredChannels.length === 0 ? (
-                      <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+                      <div className="p-4 text-center text-gray-500">
                         {t('messages.sidebar.states.noChannels')}
                       </div>
                     ) : (
@@ -1960,7 +1960,7 @@ const MessagesPage: React.FC = () => {
                   
                   <div className="flex-1 overflow-y-auto min-h-0">
                     {notifications.length === 0 ? (
-                      <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+                      <div className="p-4 text-center text-gray-500">
                         {t('messages.sidebar.states.noNotifications')}
                       </div>
                     ) : (
@@ -2009,17 +2009,17 @@ const MessagesPage: React.FC = () => {
                               </div>
                               
                               <div className="flex-1 min-w-0">
-                                <h3 className="font-medium text-gray-900 dark:text-white">
+                                <h3 className="font-medium text-gray-900">
                                   {getNotificationTitle(notification)}
                                 </h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                <p className="text-sm text-gray-600 mt-1">
                                   {getNotificationContent(notification)}
                                 </p>
                                 
                                 {/* 显示发送者信息 */}
                                 {notification.source_user_id && hasUserInfoInCache(notification.source_user_id) && (
                                   <div className="flex items-center space-x-2 mt-2">
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                    <span className="text-xs text-gray-500">
                                       {t('messages.sidebar.from')}
                                     </span>
                                     <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded">
@@ -2032,7 +2032,7 @@ const MessagesPage: React.FC = () => {
                                   </div>
                                 )}
                                 
-                                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                <p className="text-xs text-gray-500 mt-1">
                                   {new Date(notification.created_at).toLocaleString()}
                                 </p>
                                 
@@ -2087,16 +2087,16 @@ const MessagesPage: React.FC = () => {
                 {isMobile && (
                   <button
                     onClick={() => setShowSidebar(true)}
-                    className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    className="p-2 text-gray-500 hover:text-gray-700"
                   >
                     <FiChevronLeft size={20} />
                   </button>
                 )}
                 <div>
-                  <h2 className="font-semibold text-gray-900 dark:text-white">
+                  <h2 className="font-semibold text-gray-900">
                     {selectedChannel.name}
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-gray-500">
                     {selectedChannel.type === 'PM'
                       ? t('messages.sidebar.channelTypes.private')
                       : selectedChannel.type === 'TEAM'
@@ -2160,10 +2160,10 @@ const MessagesPage: React.FC = () => {
                   <FiMessageCircle size={24} />
                 </button>
               )}
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 {t('messages.sidebar.selectPromptTitle')}
               </h3>
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-gray-500">
                 {t('messages.sidebar.selectPromptDescription')}
               </p>
             </div>

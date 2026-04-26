@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { FaDownload, FaExclamationTriangle, FaCog, FaGamepad, FaCopy, FaCheck } from 'react-icons/fa';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +47,7 @@ const HowToJoinPage: React.FC = () => {
           </div>
 
         {/* Method 1: Custom client */}
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-8">
+        <div className="glass-card rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-osu-pink text-white rounded-full flex items-center justify-center text-lg font-bold">
               1
@@ -67,7 +67,7 @@ const HowToJoinPage: React.FC = () => {
           </div>
 
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
               <FaGamepad className="text-osu-pink" />
               {t('howToJoin.method1.steps.title')}
             </h3>
@@ -77,7 +77,7 @@ const HowToJoinPage: React.FC = () => {
                   1
                 </div>
                 <div>
-                  <p className="text-gray-700 dark:text-gray-300 mb-3">
+                  <p className="text-gray-700 dark:text-gray-200 mb-3">
                     <FaDownload className="inline mr-2 text-osu-pink" />
                     {t('howToJoin.method1.steps.step1.title')}
                   </p>
@@ -86,7 +86,7 @@ const HowToJoinPage: React.FC = () => {
                   <div className="mb-4">
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('howToJoin.method1.steps.step1.pcVersion')}</p>
                     <a
-                      href="https://github.com/M1PPosu/m1pplauncher"
+                      href="https://github.com/shigetiro/osu/releases/latest/download/osulazer-win-Portable.zip"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-primary inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg"
@@ -100,7 +100,7 @@ const HowToJoinPage: React.FC = () => {
                   Android version download (temporarily disabled until we actually have an android release.)
 
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{t('howToJoin.method1.steps.step1.androidVersion')}</p>
+                    <p className="text-sm text-gray-600 mb-2">{t('howToJoin.method1.steps.step1.androidVersion')}</p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <a
                         href="https://pan.wo.cn/s/1D1e0H30675"
@@ -131,14 +131,14 @@ const HowToJoinPage: React.FC = () => {
                   2
                 </div>
                 <div>
-                  <p className="text-gray-700 dark:text-gray-300 mb-2">
+                  <p className="text-gray-700 dark:text-gray-200 mb-2">
                     {t('howToJoin.method1.steps.step2.description')}
                   </p>
-                  <div className="bg-gray-100/70 dark:bg-gray-700/70 backdrop-blur-sm p-4 rounded-lg flex items-center mb-4">
+                  <div className="bg-gray-100 dark:bg-white/5 p-4 rounded-lg flex items-center mb-4">
                     <code className="bg-osu-pink/10 dark:bg-osu-pink/20 text-osu-pink dark:text-profile-color px-2 py-1 rounded flex-1">
-                      https://lazer-api.m1pposu.dev/
+                      https://gamerherz.ddns.net/
                     </code>
-                    <CopyButton text="https://lazer-api.m1pposu.dev/" label="API URL" />
+                    <CopyButton text="https://gamerherz.ddns.net/" label="API URL" />
                   </div>
                   
                   {/* Example image */}
@@ -148,7 +148,7 @@ const HowToJoinPage: React.FC = () => {
                       <img 
                         src="/image/join_photos/1.png" 
                         alt={t('howToJoin.method1.steps.step2.imageAlt')}
-                        className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer hover:opacity-80 transition-opacity"
+                        className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-white/10 cursor-pointer hover:opacity-80 transition-opacity"
                         style={{ maxHeight: '300px' }}
                       />
                     </PhotoView>
@@ -161,7 +161,7 @@ const HowToJoinPage: React.FC = () => {
                   3
                 </div>
                 <div>
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <p className="text-gray-700 dark:text-gray-200">
                     {t('howToJoin.method1.steps.step3.description')}
                   </p>
                 </div>
@@ -171,7 +171,7 @@ const HowToJoinPage: React.FC = () => {
         </div>
 
         {/* Method 2: Authlib Injector */}
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-8">
+        <div className="glass-card rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-osu-blue text-white rounded-full flex items-center justify-center text-lg font-bold">
               2
@@ -182,7 +182,7 @@ const HowToJoinPage: React.FC = () => {
           </div>
 
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">
               {t('howToJoin.method2.suitableFor')}
             </h3>
             <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 ml-4">
@@ -193,7 +193,7 @@ const HowToJoinPage: React.FC = () => {
           </div>
 
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
               <FaCog className="text-osu-blue" />
               {t('howToJoin.method2.steps.title')}
             </h3>
@@ -203,7 +203,7 @@ const HowToJoinPage: React.FC = () => {
                   1
                 </div>
                 <div>
-                  <p className="text-gray-700 dark:text-gray-300 mb-3">
+                  <p className="text-gray-700 dark:text-gray-200 mb-3">
                     <FaDownload className="inline mr-2 text-osu-blue" />
                     {t('howToJoin.method2.steps.step1.title')}
                   </p>
@@ -224,7 +224,7 @@ const HowToJoinPage: React.FC = () => {
                   2
                 </div>
                 <div>
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <p className="text-gray-700">
                     {t('howToJoin.method2.steps.step2.description')}
                   </p>
                 </div>
@@ -235,23 +235,23 @@ const HowToJoinPage: React.FC = () => {
                   3
                 </div>
                 <div>
-                  <p className="text-gray-700 dark:text-gray-300 mb-2">
+                  <p className="text-gray-700 dark:text-gray-200 mb-2">
                     {t('howToJoin.method2.steps.step3.description')}
                   </p>
-                  <div className="bg-gray-100/70 dark:bg-gray-700/70 backdrop-blur-sm p-4 rounded-lg space-y-2">
+                  <div className="bg-gray-100 dark:bg-white/5 p-4 rounded-lg space-y-2">
                     <div className="flex items-center">
-                      <span className="font-semibold text-gray-800 dark:text-gray-200">{t('howToJoin.method2.steps.step3.apiUrl')}</span>
+                      <span className="font-semibold text-gray-800 dark:text-white">{t('howToJoin.method2.steps.step3.apiUrl')}</span>
                       <code className="bg-osu-blue/10 dark:bg-osu-blue/20 text-osu-blue dark:text-blue-300 px-2 py-1 rounded ml-2 flex-1">
-                        https://lazer-api.m1pposu.dev/
+                        https://gamerherz.ddns.net/
                       </code>
-                      <CopyButton text="https://lazer-api.m1pposu.dev/" label="Authlib API URL" />
+                      <CopyButton text="https://gamerherz.ddns.net/" label="Authlib API URL" />
                     </div>
                     <div className="flex items-center">
-                      <span className="font-semibold text-gray-800 dark:text-gray-200">{t('howToJoin.method2.steps.step3.websiteUrl')}</span>
+                      <span className="font-semibold text-gray-800 dark:text-white">{t('howToJoin.method2.steps.step3.websiteUrl')}</span>
                       <code className="bg-osu-blue/10 dark:bg-osu-blue/20 text-osu-blue dark:text-blue-300 px-2 py-1 rounded ml-2 flex-1">
-                        https://lazer.m1pposu.dev
+                        https://osuherz.ddns.net
                       </code>
-                      <CopyButton text="https://lazer.m1pposu.dev" label="Website URL" />
+                      <CopyButton text="https://osuherz.ddns.net" label="Website URL" />
                     </div>
                   </div>
                 </div>
@@ -262,7 +262,7 @@ const HowToJoinPage: React.FC = () => {
                   4
                 </div>
                 <div>
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <p className="text-gray-700 dark:text-gray-200">
                     {t('howToJoin.method2.steps.step4.description')}
                   </p>
                 </div>

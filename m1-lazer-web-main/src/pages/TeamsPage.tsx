@@ -21,45 +21,39 @@ const TeamsPage: React.FC = () => {
   const [selectedMode, setSelectedMode] = useState<GameMode>('osu');
   const [rankingType, setRankingType] = useState<RankingType>('performance');
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   const [teamRankings, setTeamRankings] = useState<TeamRankingsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  
-  // 加载战队排行榜
+
   const loadTeamRankings = async () => {
     setIsLoading(true);
     try {
       const response = await rankingsAPI.getTeamRankings(
-        selectedMode, 
-        rankingType, 
+        selectedMode,
+        rankingType,
         currentPage
       );
       setTeamRankings(response);
     } catch (error) {
       handleApiError(error);
-      console.error('加载战队排行榜失败:', error);
+      console.error('Failed to load team rankings:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 重置分页并加载数据
   const resetAndLoad = () => {
     setCurrentPage(1);
     loadTeamRankings();
-    // 滚动到顶部
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // 模式改变时重置并加载数据
   useEffect(() => {
     resetAndLoad();
   }, [selectedMode, rankingType]);
 
-  // 分页改变时加载数据
   useEffect(() => {
     loadTeamRankings();
-    // 滚动到顶部
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
 
@@ -68,46 +62,48 @@ const TeamsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6 sm:py-8">
-        {/* 页面标题 */}
+    <div className="min-h-screen bg-gradient-to-br from-[#0f0f14] via-[#14141a] to-[#1a1a22]">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* Page Header */}
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                <span className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-osu-pink/20 text-osu-pink">
+                  <i className="fa fa-users text-xl" />
+                </span>
                 {t('teams.title')}
               </h1>
-              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
+              <p className="text-sm sm:text-base text-slate-500">
                 {t('teams.description')}
               </p>
             </div>
-            
+
             {isAuthenticated && (
               user?.team ? (
-                // 检查用户是否是队长
                 user.id === user.team.leader_id ? (
                   <Link
                     to={`/teams/${user.team.id}/edit`}
-                    className="inline-flex items-center px-4 py-2 bg-osu-pink text-white rounded-lg hover:bg-osu-pink/90 transition-colors self-start sm:self-auto"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-osu-pink text-white font-medium transition-all hover:shadow-lg hover:shadow-osu-pink/30 hover:-translate-y-0.5"
                   >
-                    <FiEdit className="mr-2" />
+                    <FiEdit />
                     {t('teams.editTeam')}
                   </Link>
                 ) : (
                   <Link
-                      to={`/teams/${user.team.id}`}
-                      className="inline-flex items-center px-4 py-2 bg-osu-pink text-white rounded-lg hover:bg-osu-pink/80 transition-colors self-start sm:self-auto"
-                    >
-                    <FiEye className="mr-2" />
+                    to={`/teams/${user.team.id}`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-osu-pink text-white font-medium transition-all hover:shadow-lg hover:shadow-osu-pink/30 hover:-translate-y-0.5"
+                  >
+                    <FiEye />
                     {t('teams.viewTeam')}
                   </Link>
                 )
               ) : (
                 <Link
                   to="/teams/create"
-                  className="inline-flex items-center px-4 py-2 bg-osu-pink text-white rounded-lg hover:bg-osu-pink/90 transition-colors self-start sm:self-auto"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-osu-pink text-white font-medium transition-all hover:shadow-lg hover:shadow-osu-pink/30 hover:-translate-y-0.5"
                 >
-                  <FiPlus className="mr-2" />
+                  <FiPlus />
                   {t('teams.createTeam')}
                 </Link>
               )
@@ -115,36 +111,39 @@ const TeamsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* 控制面板：模式选择 + 筛选选项 */}
-        <div className="flex flex-col xl:flex-row xl:items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
-          
-          {/* 游戏模式选择 */}
-          <div className="bg-card rounded-lg shadow-sm border-card p-2">
-            <GameModeSelector
-              selectedMode={selectedMode}
-              onModeChange={setSelectedMode}
-              variant="compact"
-              className=""
-            />
-          </div>
-
-          {/* 筛选选项 */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 xl:flex-1">
-            <div className="w-full sm:w-48">
-              <RankingTypeSelector
-                value={rankingType}
-                onChange={setRankingType}
+        {/* Control Panel */}
+        <div className="rounded-xl border border-white/5 bg-slate-900/30 p-4 sm:p-5 mb-6">
+          <div className="flex flex-col xl:flex-row xl:items-center gap-4 sm:gap-6">
+            {/* Game Mode Selection */}
+            <div className="rounded-lg border border-white/5 bg-slate-800/50 p-2">
+              <GameModeSelector
+                selectedMode={selectedMode}
+                onModeChange={setSelectedMode}
+                variant="compact"
               />
+            </div>
+
+            {/* Filter Options */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 xl:flex-1">
+              <div className="w-full sm:w-48">
+                <RankingTypeSelector
+                  value={rankingType}
+                  onChange={setRankingType}
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* 排行榜内容 */}
-        <div className="-mx-4 sm:mx-0 sm:bg-card sm:rounded-xl sm:shadow-sm sm:border-card sm:p-6">
+        {/* Rankings Content */}
+        <div className="rounded-xl border border-white/5 bg-slate-900/30 overflow-hidden">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-16 px-4 sm:px-0">
-              <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-gray-500 dark:text-gray-400 font-medium">{t('teams.loadingTeams')}</p>
+            <div className="flex flex-col items-center justify-center py-16 px-4">
+              <div className="relative mb-4">
+                <div className="absolute inset-0 bg-osu-pink blur-xl opacity-20" />
+                <LoadingSpinner size="lg" className="text-osu-pink relative" />
+              </div>
+              <p className="text-slate-500 font-medium">{t('teams.loadingTeams')}</p>
             </div>
           ) : (
             <TeamRankingsList
@@ -155,13 +154,15 @@ const TeamsPage: React.FC = () => {
             />
           )}
 
-          {/* 分页 */}
+          {/* Pagination */}
           {!isLoading && (
-            <PaginationControls
-              total={teamRankings?.total || 0}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            />
+            <div className="border-t border-white/5 px-4 py-4 sm:px-6">
+              <PaginationControls
+                total={teamRankings?.total || 0}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+              />
+            </div>
           )}
         </div>
       </div>

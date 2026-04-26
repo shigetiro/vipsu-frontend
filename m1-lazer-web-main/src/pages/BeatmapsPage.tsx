@@ -62,18 +62,17 @@ const SORT_OPTIONS = [
 const BeatmapsPage: React.FC = () => {
   const { t } = useTranslation();
   const { profileColor } = useProfileColor();
-  
-  // State
+
   const [selectedMode, setSelectedMode] = useState<GameMode>('osu');
   const [searchQuery, setSearchQuery] = useState('');
   const [status, setStatus] = useState<string>('ranked');
   const [isLocalOnly, setIsLocalOnly] = useState(false);
   const [genre, setGenre] = useState<number>(0);
   const [language, setLanguage] = useState<number>(0);
-  const [nsfw, setNsfw] = useState(true); // Default to showing NSFW content if allowed, or filtered? Usually true means show. API might be 'nsfw' param.
+  const [nsfw, setNsfw] = useState(true);
   const [sort, setSort] = useState('relevance_desc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  
+
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [beatmapsets, setBeatmapsets] = useState<Beatmapset[]>([]);
@@ -111,11 +110,10 @@ const BeatmapsPage: React.FC = () => {
       }
 
       const currentCursor = reset ? undefined : cursor;
-      
-      // Don't fetch if no cursor and not resetting (end of list)
+
       if (!reset && !cursor) {
-          setLoadingMore(false);
-          return;
+        setLoadingMore(false);
+        return;
       }
 
       const response = await beatmapAPI.searchBeatmaps({
@@ -156,14 +154,13 @@ const BeatmapsPage: React.FC = () => {
     }
   }, [t, selectedMode, searchQuery, status, genre, language, nsfw, sort, isLocalOnly, cursor]);
 
-  // Initial fetch and on filter change
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchBeatmaps(true);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [selectedMode, searchQuery, status, genre, language, nsfw, sort, isLocalOnly]); // Dependencies that trigger a reset
+  }, [selectedMode, searchQuery, status, genre, language, nsfw, sort, isLocalOnly]);
 
   const handleLoadMore = () => {
     if (!loading && !loadingMore && cursor) {
@@ -172,271 +169,284 @@ const BeatmapsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20" style={{ background: 'var(--bg-primary)' }}>
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
-        
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            {t('nav.beatmaps')}
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            {t('beatmap.listingDescription') || 'Find your favorite beatmaps'}
-          </p>
-        </div>
-
-        {/* Controls Container */}
-        <div className="flex flex-col gap-4 mb-8">
-            
-            {/* Search Bar & Primary Filters */}
-            <div className="flex flex-col lg:flex-row gap-4">
-                <div className="flex-1 relative">
-                    <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                        type="text"
-                        placeholder={t('beatmap.searchPlaceholder') || 'Search beatmaps...'}
-                        className="w-full bg-card border-card rounded-xl pl-12 pr-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    {searchQuery && (
-                        <button 
-                            onClick={() => setSearchQuery('')}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                        >
-                            <FaTimes />
-                        </button>
-                    )}
-                </div>
-                
-                <div className="flex gap-2 overflow-x-auto pb-2 lg:pb-0">
-                    <div className="bg-card rounded-xl p-1 shadow-sm border-card whitespace-nowrap flex gap-1">
-                        {[
-                            { id: 'osu', label: 'osu!' },
-                            { id: 'taiko', label: 'Taiko' },
-                            { id: 'fruits', label: 'Catch' },
-                            { id: 'mania', label: 'Mania' },
-                            { id: 'osuspaceruleset', label: 'Space' }
-                        ].map((mode) => {
-                            const isSelected = selectedMode === mode.id || 
-                                (mode.id === 'taiko' && selectedMode === 'taikorx') || 
-                                (mode.id === 'fruits' && selectedMode === 'fruitsrx') ||
-                                (mode.id === 'osu' && ['osurx', 'osuap'].includes(selectedMode));
-
-                            return (
-                                <button
-                                    key={mode.id}
-                                    onClick={() => setSelectedMode(mode.id as GameMode)}
-                                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                                        isSelected
-                                            ? 'bg-pink-500 text-white shadow-md' 
-                                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                                    }`}
-                                >
-                                    {mode.label}
-                                </button>
-                            );
-                        })}
-                    </div>
-                    
-                    <button
-                        onClick={() => setShowFilters(!showFilters)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all whitespace-nowrap ${
-                            showFilters 
-                                ? 'bg-pink-500 text-white border-pink-500' 
-                                : 'bg-card border-card text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
-                        }`}
-                    >
-                        <FaFilter />
-                        <span>Filters</span>
-                    </button>
-                </div>
-            </div>
-
-            {/* Advanced Filters */}
-            <AnimatePresence>
-                {showFilters && (
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden"
-                    >
-                        <div className="bg-card rounded-xl p-6 shadow-sm border-card space-y-6">
-                            
-                            {/* Filter Groups */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                
-                                {/* Status */}
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Status</label>
-                                    <select
-                                        className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-pink-500"
-                                        value={status}
-                                        onChange={(e) => setStatus(e.target.value)}
-                                    >
-                                        <option value="any">Any</option>
-                                        <option value="ranked">Ranked</option>
-                                        <option value="qualified">Qualified</option>
-                                        <option value="loved">Loved</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="wip">WIP</option>
-                                        <option value="graveyard">Graveyard</option>
-                                    </select>
-                                </div>
-
-                                {/* Genre */}
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Genre</label>
-                                    <select
-                                        className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-pink-500"
-                                        value={genre}
-                                        onChange={(e) => setGenre(Number(e.target.value))}
-                                    >
-                                        {GENRES.map(g => (
-                                            <option key={g.id} value={g.id}>{g.label}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {/* Language */}
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Language</label>
-                                    <select
-                                        className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-pink-500"
-                                        value={language}
-                                        onChange={(e) => setLanguage(Number(e.target.value))}
-                                    >
-                                        {LANGUAGES.map(l => (
-                                            <option key={l.id} value={l.id}>{l.label}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {/* Sort */}
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Sort By</label>
-                                    <div className="relative">
-                                        <select
-                                            className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-pink-500 appearance-none"
-                                            value={sort}
-                                            onChange={(e) => setSort(e.target.value)}
-                                        >
-                                            {SORT_OPTIONS.map(o => (
-                                                <option key={o.value} value={o.value}>{o.label}</option>
-                                            ))}
-                                        </select>
-                                        <FaSort className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Toggles */}
-                            <div className="flex flex-wrap gap-6 pt-4 border-t border-gray-100 dark:border-gray-800">
-                                <label className="flex items-center gap-2 cursor-pointer group">
-                                    <div className={`w-10 h-6 rounded-full p-1 transition-colors ${nsfw ? 'bg-pink-500' : 'bg-gray-300 dark:bg-gray-700'}`}>
-                                        <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${nsfw ? 'translate-x-4' : ''}`} />
-                                    </div>
-                                    <input type="checkbox" className="hidden" checked={nsfw} onChange={(e) => setNsfw(e.target.checked)} />
-                                    <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-pink-500 transition-colors">NSFW Content</span>
-                                </label>
-
-                                <label className="flex items-center gap-2 cursor-pointer group">
-                                    <div className={`w-10 h-6 rounded-full p-1 transition-colors ${isLocalOnly ? 'bg-pink-500' : 'bg-gray-300 dark:bg-gray-700'}`}>
-                                        <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${isLocalOnly ? 'translate-x-4' : ''}`} />
-                                    </div>
-                                    <input type="checkbox" className="hidden" checked={isLocalOnly} onChange={(e) => setIsLocalOnly(e.target.checked)} />
-                                    <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-pink-500 transition-colors">Local/Custom Maps</span>
-                                </label>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Results Header */}
-            <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                    Found <span className="font-bold text-gray-900 dark:text-white">{total}</span> beatmapsets
-                </div>
-                
-                <div className="flex bg-card rounded-lg p-1 border-card">
-                    <button
-                        onClick={() => setViewMode('grid')}
-                        className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-pink-500 text-white shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
-                    >
-                        <FaThLarge />
-                    </button>
-                    <button
-                        onClick={() => setViewMode('list')}
-                        className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-pink-500 text-white shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
-                    >
-                        <FaList />
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        {/* Content */}
-        {loading && beatmapsets.length === 0 ? (
-          <div className="flex justify-center py-20">
-            <LoadingSpinner size="lg" />
+    <div className="min-h-screen pb-12">
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center gap-4 mb-3">
+          <span className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-osu-pink/20 text-osu-pink">
+            <i className="fa fa-music text-xl" />
+          </span>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
+              {t('nav.beatmaps')}
+            </h1>
+            <p className="text-sm text-slate-500">
+              {t('beatmap.listingDescription') || 'Find your favorite beatmaps'}
+            </p>
           </div>
-        ) : error ? (
-          <div className="text-center py-20 text-red-500 bg-card rounded-xl p-8 border-card">
-            <p className="text-xl font-bold mb-2">Oops!</p>
-            <p>{error}</p>
-            <button 
-                onClick={() => fetchBeatmaps(true)}
-                className="mt-4 px-6 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+        </div>
+      </div>
+
+      {/* Controls Container */}
+      <div className="rounded-xl border border-white/5 bg-slate-900/30 p-4 sm:p-5 mb-6 space-y-4">
+
+        {/* Search Bar & Primary Filters */}
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex-1 relative">
+            <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              placeholder={t('beatmap.searchPlaceholder') || 'Search beatmaps...'}
+              className="w-full bg-slate-800/50 border border-white/5 rounded-xl pl-12 pr-10 py-3 text-white placeholder-slate-500 focus:ring-2 focus:ring-osu-pink focus:border-transparent outline-none transition-all"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+              >
+                <FaTimes />
+              </button>
+            )}
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-2 lg:pb-0">
+            <div className="flex items-center gap-1 bg-slate-800/50 rounded-xl p-1.5 border border-white/5">
+              {[
+                { id: 'osu', label: 'osu!' },
+                { id: 'taiko', label: 'Taiko' },
+                { id: 'fruits', label: 'Catch' },
+                { id: 'mania', label: 'Mania' },
+                { id: 'osuspaceruleset', label: 'Space' }
+              ].map((mode) => {
+                const isSelected = selectedMode === mode.id ||
+                  (mode.id === 'taiko' && selectedMode === 'taikorx') ||
+                  (mode.id === 'fruits' && selectedMode === 'fruitsrx') ||
+                  (mode.id === 'osu' && ['osurx', 'osuap'].includes(selectedMode));
+
+                return (
+                  <button
+                    key={mode.id}
+                    onClick={() => setSelectedMode(mode.id as GameMode)}
+                    className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-200 ${
+                      isSelected
+                        ? 'bg-osu-pink text-white shadow-lg shadow-osu-pink/30'
+                        : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    {mode.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                showFilters
+                  ? 'bg-osu-pink text-white border-osu-pink shadow-lg shadow-osu-pink/20'
+                  : 'bg-slate-800/50 border-white/5 text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
             >
-                Try Again
+              <FaFilter />
+              <span>Filters</span>
             </button>
           </div>
-        ) : (
-          <>
-            <div className={`grid gap-6 ${
-                viewMode === 'grid' 
-                    ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4' 
-                    : 'grid-cols-1'
-            }`}>
-              {beatmapsets.map((set) => (
-                <div key={`${set.id}-${set.status}`} className={viewMode === 'list' ? 'h-40' : 'h-full'}>
-                    <BeatmapCard beatmapset={set} themeColor={profileColor} />
-                </div>
-              ))}
-            </div>
-            
-            {beatmapsets.length === 0 && !loading && (
-              <div className="text-center py-20 text-gray-500 bg-card rounded-xl border-card">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No beatmaps found</h3>
-                <p>Try adjusting your filters or search query.</p>
-              </div>
-            )}
+        </div>
 
-            {/* Load More */}
-            {cursor && (
-                <div className="mt-12 text-center">
-                    <button
-                        onClick={handleLoadMore}
-                        disabled={loadingMore}
-                        className="px-8 py-3 bg-card border border-gray-200 dark:border-gray-700 hover:border-pink-500 text-gray-700 dark:text-gray-200 rounded-xl font-medium transition-all hover:shadow-lg hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+        {/* Advanced Filters */}
+        <AnimatePresence>
+          {showFilters && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="rounded-xl border border-white/5 bg-slate-800/30 p-5 space-y-5">
+
+                {/* Filter Groups */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                  {/* Status */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Status</label>
+                    <select
+                      className="w-full bg-slate-800/50 border border-white/5 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all appearance-none cursor-pointer"
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
                     >
-                        {loadingMore ? (
-                            <div className="flex items-center gap-2">
-                                <LoadingSpinner size="sm" />
-                                <span>Loading more...</span>
-                            </div>
-                        ) : (
-                            'Load More Beatmaps'
-                        )}
-                    </button>
+                      <option value="any">Any</option>
+                      <option value="ranked">Ranked</option>
+                      <option value="qualified">Qualified</option>
+                      <option value="loved">Loved</option>
+                      <option value="pending">Pending</option>
+                      <option value="wip">WIP</option>
+                      <option value="graveyard">Graveyard</option>
+                    </select>
+                  </div>
+
+                  {/* Genre */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Genre</label>
+                    <select
+                      className="w-full bg-slate-800/50 border border-white/5 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all appearance-none cursor-pointer"
+                      value={genre}
+                      onChange={(e) => setGenre(Number(e.target.value))}
+                    >
+                      {GENRES.map(g => (
+                        <option key={g.id} value={g.id}>{g.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Language */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Language</label>
+                    <select
+                      className="w-full bg-slate-800/50 border border-white/5 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all appearance-none cursor-pointer"
+                      value={language}
+                      onChange={(e) => setLanguage(Number(e.target.value))}
+                    >
+                      {LANGUAGES.map(l => (
+                        <option key={l.id} value={l.id}>{l.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Sort */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sort By</label>
+                    <div className="relative">
+                      <select
+                        className="w-full bg-slate-800/50 border border-white/5 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all appearance-none cursor-pointer pr-10"
+                        value={sort}
+                        onChange={(e) => setSort(e.target.value)}
+                      >
+                        {SORT_OPTIONS.map(o => (
+                          <option key={o.value} value={o.value}>{o.label}</option>
+                        ))}
+                      </select>
+                      <FaSort className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 pointer-events-none" />
+                    </div>
+                  </div>
                 </div>
-            )}
-          </>
-        )}
+
+                {/* Toggles */}
+                <div className="flex flex-wrap gap-6 pt-4 border-t border-white/5">
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`w-11 h-6 rounded-full p-1 transition-all ${nsfw ? 'bg-osu-pink' : 'bg-slate-700'}`}>
+                      <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${nsfw ? 'translate-x-5' : ''}`} />
+                    </div>
+                    <input type="checkbox" className="hidden" checked={nsfw} onChange={(e) => setNsfw(e.target.checked)} />
+                    <span className="text-sm text-slate-400 group-hover:text-white transition-colors">NSFW Content</span>
+                  </label>
+
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`w-11 h-6 rounded-full p-1 transition-all ${isLocalOnly ? 'bg-osu-pink' : 'bg-slate-700'}`}>
+                      <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${isLocalOnly ? 'translate-x-5' : ''}`} />
+                    </div>
+                    <input type="checkbox" className="hidden" checked={isLocalOnly} onChange={(e) => setIsLocalOnly(e.target.checked)} />
+                    <span className="text-sm text-slate-400 group-hover:text-white transition-colors">Local/Custom Maps</span>
+                  </label>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Results Header */}
+        <div className="flex items-center justify-between pt-2">
+          <div className="text-sm text-slate-500">
+            Found <span className="font-bold text-white">{total}</span> beatmapsets
+          </div>
+
+          <div className="flex items-center gap-1 bg-slate-800/50 rounded-xl p-1 border border-white/5">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded-lg transition-all duration-200 ${viewMode === 'grid' ? 'bg-osu-pink text-white shadow-lg shadow-osu-pink/30' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+            >
+              <FaThLarge />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded-lg transition-all duration-200 ${viewMode === 'list' ? 'bg-osu-pink text-white shadow-lg shadow-osu-pink/30' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+            >
+              <FaList />
+            </button>
+          </div>
+        </div>
       </div>
+
+      {/* Content */}
+      {loading && beatmapsets.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20">
+          <div className="relative mb-4">
+            <div className="absolute inset-0 bg-osu-pink blur-xl opacity-20" />
+            <LoadingSpinner size="lg" className="text-osu-pink relative" />
+          </div>
+          <p className="text-slate-500 font-medium">Loading beatmaps...</p>
+        </div>
+      ) : error ? (
+        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-8 text-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-red-500/20 flex items-center justify-center">
+            <i className="fa fa-exclamation-triangle text-2xl text-red-400" />
+          </div>
+          <p className="text-xl font-bold text-white mb-2">Oops!</p>
+          <p className="text-slate-400 mb-6">{error}</p>
+          <button
+            onClick={() => fetchBeatmaps(true)}
+            className="px-6 py-2.5 bg-osu-pink hover:bg-osu-pink/90 text-white rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-osu-pink/30"
+          >
+            Try Again
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className={`grid gap-5 ${
+            viewMode === 'grid'
+              ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+              : 'grid-cols-1'
+          }`}>
+            {beatmapsets.map((set) => (
+              <div key={`${set.id}-${set.status}`} className={viewMode === 'list' ? 'h-40' : 'h-full'}>
+                <BeatmapCard beatmapset={set} themeColor={profileColor} />
+              </div>
+            ))}
+          </div>
+
+          {beatmapsets.length === 0 && !loading && (
+            <div className="text-center py-20 rounded-xl border border-white/5 bg-slate-900/30">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-slate-800/50 flex items-center justify-center">
+                <i className="fa fa-search text-3xl text-slate-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">No beatmaps found</h3>
+              <p className="text-slate-500">Try adjusting your filters or search query.</p>
+            </div>
+          )}
+
+          {/* Load More */}
+          {cursor && (
+            <div className="mt-10 text-center">
+              <button
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                className="px-8 py-3 bg-slate-800/50 border border-white/10 hover:border-osu-pink/50 text-slate-300 hover:text-white rounded-xl font-medium transition-all hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              >
+                {loadingMore ? (
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 border-2 border-osu-pink rounded-full animate-spin border-t-transparent" />
+                    <span>Loading more...</span>
+                  </div>
+                ) : (
+                  'Load More Beatmaps'
+                )}
+              </button>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

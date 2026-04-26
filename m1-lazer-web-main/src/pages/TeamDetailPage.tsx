@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { FiArrowLeft, FiLoader, FiUsers, FiCalendar, FiAward } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -78,7 +78,7 @@ const TeamDetailPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
         <div className="text-center">
           <FiLoader className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4" />
-          <p className="text-gray-500 dark:text-gray-400 font-medium">{t('teams.detail.loading')}</p>
+          <p className="text-gray-500 font-medium">{t('teams.detail.loading')}</p>
         </div>
       </div>
     );
@@ -89,10 +89,10 @@ const TeamDetailPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
         <div className="text-center">
           <FiUsers className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
             {t('teams.detail.notFound')}
           </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-6">
+          <p className="text-gray-500 mb-6">
             {t('teams.detail.notFoundDescription')}
           </p>
           <Link
@@ -118,7 +118,7 @@ const TeamDetailPage: React.FC = () => {
         <div className="mb-6">
           <Link
             to="/teams"
-            className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
           >
             <FiArrowLeft className="mr-2" />
             {t('teams.detail.backToTeams')}
@@ -144,7 +144,7 @@ const TeamDetailPage: React.FC = () => {
           <div className="relative px-4 sm:px-6 py-6 sm:bg-card sm:rounded-b-xl">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               {/* 战队旗帜 - 2:1 比例 (240:120) */}
-              <div className="w-32 h-16 sm:w-40 sm:h-20 rounded-xl overflow-hidden border-4 border-white dark:border-gray-800 bg-gray-100 dark:bg-gray-700 flex-shrink-0 -mt-12 sm:-mt-16">
+              <div className="w-32 h-16 sm:w-40 sm:h-20 rounded-xl overflow-hidden border-4 border-white bg-surface-2 flex-shrink-0 -mt-12 sm:-mt-16">
                 <img
                   src={team.flag_url}
                   alt={`${team.name} flag`}
@@ -159,18 +159,18 @@ const TeamDetailPage: React.FC = () => {
               <div className="flex-1">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
                       {team.name}
                     </h1>
                     {team.short_name !== team.name && (
-                      <p className="text-lg text-gray-600 dark:text-gray-400">
+                      <p className="text-lg text-gray-600">
                         {team.short_name}
                       </p>
                     )}
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
                       <div className="flex items-center gap-1">
                         <FiCalendar className="w-4 h-4" />
                         <span>{t('teams.detail.createdAt', { date: formatDate(team.created_at) })}</span>
@@ -201,7 +201,7 @@ const TeamDetailPage: React.FC = () => {
           <div className="sm:bg-card sm:rounded-xl sm:shadow-sm sm:border sm:border-card sm:p-6 mb-8">
             <div className="flex items-center gap-3 mb-4 px-4 sm:px-0">
               <FiAward className="w-5 h-5 text-yellow-500" />
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('teams.detail.captain')}</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('teams.detail.captain')}</h2>
             </div>
             <div className="-mx-4 sm:-mx-6 sm:border sm:border-card overflow-hidden">
               <TeamDetailUserCard
@@ -222,8 +222,8 @@ const TeamDetailPage: React.FC = () => {
           <div className="sm:bg-card sm:rounded-xl sm:shadow-sm sm:border sm:border-card sm:p-6">
             <div className="flex items-center gap-3 mb-6 px-4 sm:px-0">
               <FiUsers className="w-5 h-5 text-blue-500" />
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('teams.detail.teamMembers')}</h2>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <h2 className="text-xl font-bold text-gray-900">{t('teams.detail.teamMembers')}</h2>
+              <span className="text-sm text-gray-500">
                 {t('teams.detail.memberCount', { count: nonLeaderMembers.length })}
               </span>
             </div>

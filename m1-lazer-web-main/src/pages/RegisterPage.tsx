@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import type { RegisterForm } from '../types';
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'; // Test key by default
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
 
 const RegisterPage: React.FC = () => {
   const { register, isLoading, isAuthenticated } = useAuth();
@@ -25,7 +25,6 @@ const RegisterPage: React.FC = () => {
   const [turnstileToken, setTurnstileToken] = useState<string>('');
   const turnstileRef = useRef<any>(null);
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/profile');
@@ -87,7 +86,6 @@ const RegisterPage: React.FC = () => {
     if (success) {
       navigate('/profile');
     } else {
-      // Refresh turnstile on error
       if (turnstileRef.current) {
         turnstileRef.current.reset();
       }
@@ -111,8 +109,7 @@ const RegisterPage: React.FC = () => {
       ...prev,
       [name]: value,
     }));
-    
-    // Clear error when user starts typing
+
     if (errors[name as keyof RegisterForm]) {
       setErrors(prev => ({
         ...prev,
@@ -122,41 +119,52 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-gray-900 flex justify-center px-4 sm:px-6 lg:px-8 overflow-auto pt-8 sm:pt-12 lg:pt-0 lg:items-center">
-      <div className="max-w-md w-full space-y-3 pb-4 lg:pb-0">
+    <div className="min-h-screen flex justify-center px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 bg-gradient-to-br from-[#0f0f14] via-[#14141a] to-[#1a1a22]">
+      <div className="fixed inset-0 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(ellipse at 30% 20%, rgba(255,0,102,0.06) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, rgba(139,125,222,0.05) 0%, transparent 50%)
+          `,
+        }}
+      />
+      <div className="max-w-md w-full space-y-5 pb-4 relative z-10">
+        {/* Header */}
         <div className="text-center">
-          <div className="w-12 h-12 mx-auto flex items-center justify-center mb-2">
+          <div className="w-14 h-14 mx-auto flex items-center justify-center mb-4 rounded-2xl bg-osu-pink/10 border border-white/10">
             <img
               src="/image/logos/logo.svg"
               alt={t('common.brandAlt')}
-              className="w-12 h-12 object-contain"
+              className="w-9 h-9 object-contain"
             />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold tracking-tight text-white">
             {t('auth.register.title')}
           </h2>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-1.5 text-sm text-slate-500">
             {t('auth.register.subtitle')}
           </p>
         </div>
 
-        <div className="sm:bg-white sm:dark:bg-gray-800 sm:py-4 sm:px-6 sm:shadow-sm sm:rounded-lg sm:border sm:border-gray-200 sm:dark:border-gray-700 py-2">
+        {/* Form Card */}
+        <div className="rounded-2xl py-6 px-6 space-y-4 border border-white/10 bg-black/20 backdrop-blur-xl">
           <form className="space-y-3" onSubmit={handleSubmit}>
+            {/* Username */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="username" className="block text-sm font-medium text-slate-400 mb-1">
                 {t('auth.register.username')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiUser className="h-5 w-5 text-gray-400" />
+                  <FiUser className="h-4 w-4 text-slate-500" />
                 </div>
                 <input
                   id="username"
                   name="username"
                   type="text"
                   required
-                  className={`w-full px-3 py-2 pl-10 border rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent ${
-                    errors.username ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                  className={`w-full px-3 py-2.5 pl-10 border rounded-xl shadow-sm bg-slate-800/50 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all ${
+                    errors.username ? 'border-red-500/50' : 'border-white/10'
                   }`}
                   placeholder={t('auth.register.usernamePlaceholder')}
                   value={formData.username}
@@ -165,25 +173,26 @@ const RegisterPage: React.FC = () => {
                 />
               </div>
               {errors.username && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.username}</p>
+                <p className="mt-1 text-xs text-red-400">{errors.username}</p>
               )}
             </div>
 
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-1">
                 {t('auth.register.email')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiMail className="h-5 w-5 text-gray-400" />
+                  <FiMail className="h-4 w-4 text-slate-500" />
                 </div>
                 <input
                   id="email"
                   name="email"
                   type="email"
                   required
-                  className={`w-full px-3 py-2 pl-10 border rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent ${
-                    errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                  className={`w-full px-3 py-2.5 pl-10 border rounded-xl shadow-sm bg-slate-800/50 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all ${
+                    errors.email ? 'border-red-500/50' : 'border-white/10'
                   }`}
                   placeholder={t('auth.register.emailPlaceholder')}
                   value={formData.email}
@@ -192,25 +201,26 @@ const RegisterPage: React.FC = () => {
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>
+                <p className="mt-1 text-xs text-red-400">{errors.email}</p>
               )}
             </div>
 
+            {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-400 mb-1">
                 {t('auth.register.password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="h-5 w-5 text-gray-400" />
+                  <FiLock className="h-4 w-4 text-slate-500" />
                 </div>
                 <input
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
-                  className={`w-full px-3 py-2 pl-10 pr-10 border rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent ${
-                    errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                  className={`w-full px-3 py-2.5 pl-10 pr-10 border rounded-xl shadow-sm bg-slate-800/50 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all ${
+                    errors.password ? 'border-red-500/50' : 'border-white/10'
                   }`}
                   placeholder={t('auth.register.passwordPlaceholder')}
                   value={formData.password}
@@ -219,36 +229,37 @@ const RegisterPage: React.FC = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-gray-600 dark:hover:text-gray-300"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-osu-pink transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <FiEyeOff className="h-5 w-5 text-gray-400" />
+                    <FiEyeOff className="h-4 w-4" />
                   ) : (
-                    <FiEye className="h-5 w-5 text-gray-400" />
+                    <FiEye className="h-4 w-4" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.password}</p>
+                <p className="mt-1 text-xs text-red-400">{errors.password}</p>
               )}
             </div>
 
+            {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-400 mb-1">
                 {t('auth.register.confirmPassword')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="h-5 w-5 text-gray-400" />
+                  <FiLock className="h-5 w-5 text-slate-500" />
                 </div>
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
                   required
-                  className={`w-full px-3 py-2 pl-10 pr-10 border rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                  className={`w-full px-3 py-2.5 pl-10 pr-10 border rounded-xl shadow-sm bg-slate-800/50 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all ${
+                    errors.confirmPassword ? 'border-red-500/50' : 'border-white/10'
                   }`}
                   placeholder={t('auth.register.confirmPasswordPlaceholder')}
                   value={formData.confirmPassword}
@@ -257,26 +268,27 @@ const RegisterPage: React.FC = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-gray-600 dark:hover:text-gray-300"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-osu-pink transition-colors"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
-                    <FiEyeOff className="h-5 w-5 text-gray-400" />
+                    <FiEyeOff className="h-5 w-5" />
                   ) : (
-                    <FiEye className="h-5 w-5 text-gray-400" />
+                    <FiEye className="h-5 w-5" />
                   )}
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.confirmPassword}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.confirmPassword}</p>
               )}
             </div>
 
-            <div>
+            {/* Submit Button */}
+            <div className="pt-2">
               <button
                 type="submit"
                 disabled={isLoading || !turnstileToken}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-osu-pink hover:bg-osu-pink/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-osu-pink disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-xl shadow-lg text-sm font-medium text-white bg-osu-pink hover:bg-osu-pink/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-osu-pink disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-osu-pink/30 hover:-translate-y-0.5"
               >
                 {isLoading ? (
                   <LoadingSpinner size="sm" />
@@ -286,7 +298,8 @@ const RegisterPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="flex justify-center">
+            {/* Turnstile */}
+            <div className="flex justify-center pt-2">
               <Turnstile
                 ref={turnstileRef}
                 siteKey={TURNSTILE_SITE_KEY}
@@ -294,18 +307,19 @@ const RegisterPage: React.FC = () => {
                 onError={handleTurnstileError}
                 onExpire={handleTurnstileError}
                 options={{
-                  theme: 'auto',
+                  theme: 'dark',
                   size: 'normal',
                 }}
               />
             </div>
 
-            <div className="text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+            {/* Login Link */}
+            <div className="text-center pt-2">
+              <p className="text-sm text-slate-500">
                 {t('auth.register.hasAccount')}{' '}
                 <Link
                   to="/login"
-                  className="font-medium text-osu-pink hover:text-osu-pink/80 dark:text-osu-pink dark:hover:text-osu-pink/80"
+                  className="font-medium text-osu-pink hover:text-pink-400 transition-colors"
                 >
                   {t('auth.register.loginNow')}
                 </Link>
@@ -314,8 +328,9 @@ const RegisterPage: React.FC = () => {
           </form>
         </div>
 
+        {/* Agreement */}
         <div className="text-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-xs text-slate-600">
             {t('common.registerAgreement')}
           </p>
         </div>

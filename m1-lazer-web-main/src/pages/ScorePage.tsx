@@ -191,7 +191,7 @@ const ScorePage: React.FC = () => {
         </button>
 
         <section
-          className="relative overflow-hidden rounded-2xl torii-liquid"
+          className="relative overflow-hidden rounded-2xl glass-card"
           style={{
             backgroundImage: heroBackground,
             backgroundSize: 'cover',
@@ -292,7 +292,7 @@ const ScorePage: React.FC = () => {
         </section>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <section className="xl:col-span-1 rounded-2xl overflow-hidden torii-liquid">
+          <section className="xl:col-span-1 rounded-2xl overflow-hidden glass-card">
             <div className="px-5 py-4 border-b border-white/10">
               <h2 className="text-lg font-semibold text-white">Player</h2>
             </div>
@@ -326,38 +326,38 @@ const ScorePage: React.FC = () => {
             </div>
           </section>
 
-          <section className="xl:col-span-2 rounded-2xl overflow-hidden torii-liquid">
+          <section className="xl:col-span-2 rounded-2xl overflow-hidden glass-card">
             <div className="px-5 py-4 border-b border-white/10">
               <h2 className="text-lg font-semibold text-white">Performance</h2>
             </div>
             <div className="p-5 space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="rounded-xl torii-liquid-soft px-4 py-4 border border-cyan-400/25">
+                <div className="rounded-xl glass-card px-4 py-4 border border-cyan-400/25">
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">Accuracy</p>
                   <p className="text-3xl font-semibold text-cyan-300">{accuracy}%</p>
                 </div>
-                <div className="rounded-xl torii-liquid-soft px-4 py-4 border border-emerald-400/25">
+                <div className="rounded-xl glass-card px-4 py-4 border border-emerald-400/25">
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">PP</p>
                   <p className="text-3xl font-semibold text-emerald-300">{pp}</p>
                 </div>
-                <div className="rounded-xl torii-liquid-soft px-4 py-4 border border-white/15">
+                <div className="rounded-xl glass-card px-4 py-4 border border-white/15">
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">Max Combo</p>
                   <p className="text-3xl font-semibold text-white">{comboText}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="rounded-xl torii-liquid-soft px-4 py-3 border border-white/15">
+                <div className="rounded-xl glass-card px-4 py-3 border border-white/15">
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">Total Score</p>
                   <p className="text-xl font-semibold text-white">{scoreValue}</p>
                 </div>
-                <div className="rounded-xl torii-liquid-soft px-4 py-3 border border-white/15">
+                <div className="rounded-xl glass-card px-4 py-3 border border-white/15">
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">Global Rank</p>
                   <p className="text-xl font-semibold text-white">
                     {globalRank ? `#${globalRank.toLocaleString()}` : '-'}
                   </p>
                 </div>
-                <div className="rounded-xl torii-liquid-soft px-4 py-3 border border-white/15">
+                <div className="rounded-xl glass-card px-4 py-3 border border-white/15">
                   <p className="text-[11px] uppercase tracking-wide text-slate-400">Country Rank</p>
                   <p className="text-xl font-semibold text-white">
                     {countryRank ? `#${countryRank.toLocaleString()}` : '-'}
@@ -365,13 +365,13 @@ const ScorePage: React.FC = () => {
                 </div>
               </div>
 
-              <details className="rounded-xl border border-white/15 torii-liquid-soft">
+              <details className="rounded-xl border border-white/15 glass-card">
                 <summary className="px-4 py-3 text-sm text-slate-200 cursor-pointer select-none">
                   Hit breakdown (optional details)
                 </summary>
                 <div className="px-4 pb-4 pt-1 grid grid-cols-2 md:grid-cols-4 gap-3">
                   {hitStats.map((stat) => (
-                    <div key={stat.label} className="rounded-xl torii-liquid-soft px-4 py-3 border border-white/10">
+                    <div key={stat.label} className="rounded-xl glass-card px-4 py-3 border border-white/10">
                       <p className="text-[11px] uppercase tracking-wide text-slate-400">{stat.label}</p>
                       <p className="text-xl font-semibold text-white">{stat.value.toLocaleString()}</p>
                     </div>
