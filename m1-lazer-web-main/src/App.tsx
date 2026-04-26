@@ -15,6 +15,7 @@ import ProfilePage from './pages/ProfilePage';
 import UserPage from './pages/UserPage';
 import SettingsPage from './pages/SettingsPage';
 import RankingsPage from './pages/RankingsPage';
+import TopPlaysPage from './pages/TopPlaysPage';
 import TeamsPage from './pages/TeamsPage';
 import TeamDetailPage from './pages/TeamDetailPage';
 import CreateTeamPage from './pages/CreateTeamPage';
@@ -49,6 +50,7 @@ function App() {
             <Route path="users/:userId" element={<UserPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="rankings" element={<RankingsPage />} />
+            <Route path="rankings/top-plays" element={<TopPlaysPage />} />
             <Route path="teams" element={<TeamsPage />} />
             <Route path="teams/create" element={<CreateTeamPage />} />
             <Route path="teams/:teamId" element={<TeamDetailPage />} />

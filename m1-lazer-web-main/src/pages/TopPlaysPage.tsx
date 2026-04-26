@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { rankingsAPI, handleApiError } from '../utils/api';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
@@ -70,10 +70,10 @@ const TopPlaysPage: React.FC = () => {
     <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6 sm:py-8">
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
             {t('rankings.tabs.topPlays')}
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-base sm:text-lg text-gray-600">
             {t('nav.rankings')}
           </p>
         </div>
@@ -92,7 +92,7 @@ const TopPlaysPage: React.FC = () => {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-16 px-4 sm:px-0">
               <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-gray-500 dark:text-gray-400 font-medium">{t('common.loading')}</p>
+              <p className="text-gray-500 font-medium">{t('common.loading')}</p>
             </div>
           ) : topPlays && topPlays.length > 0 ? (
             <div className="flex flex-col gap-1">
@@ -107,7 +107,7 @@ const TopPlaysPage: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-20">
-              <p className="text-gray-500 dark:text-gray-400">{t('rankings.errors.noData')}</p>
+              <p className="text-gray-500">{t('rankings.errors.noData')}</p>
             </div>
           )}
 
