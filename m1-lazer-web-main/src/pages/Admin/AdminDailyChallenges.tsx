@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { adminAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 
@@ -170,7 +170,7 @@ const AdminDailyChallenges: React.FC = () => {
   return (
     <div>
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Daily Challenges</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Daily Challenges</h2>
         <div className="flex gap-2">
           <button
             onClick={async () => {
@@ -206,7 +206,7 @@ const AdminDailyChallenges: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {challenges.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-dashed border-gray-300 dark:border-gray-600">
+            <div className="text-center py-8 text-gray-500 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-dashed border-gray-300">
               No daily challenges scheduled
             </div>
           ) : (
@@ -216,7 +216,7 @@ const AdminDailyChallenges: React.FC = () => {
                 className={`bg-card rounded-lg p-4 border ${
                   challenge.date === today 
                     ? 'border-osu-pink ring-1 ring-osu-pink/20' 
-                    : 'border-gray-200 dark:border-gray-700'
+                    : 'border-gray-200'
                 }`}
               >
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -224,19 +224,19 @@ const AdminDailyChallenges: React.FC = () => {
                     <div className={`px-3 py-1 rounded text-sm font-bold ${
                       challenge.date === today 
                         ? 'bg-osu-pink text-white' 
-                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                        : 'bg-gray-100 text-gray-600'
                     }`}>
                       {challenge.date}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                      <h3 className="font-semibold text-gray-900">
                         {challenge.beatmap ? (
                           `${challenge.beatmap.artist} - ${challenge.beatmap.title} [${challenge.beatmap.version}]`
                         ) : (
                           `Beatmap ID: ${challenge.beatmap_id}`
                         )}
                       </h3>
-                      <div className="mt-1 flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                      <div className="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
                         <span>Ruleset: {challenge.ruleset_id === 0 ? 'osu!' : challenge.ruleset_id === 1 ? 'osu!taiko' : challenge.ruleset_id === 2 ? 'osu!catch' : 'osu!mania'}</span>
                         {(() => {
                           try {
@@ -282,15 +282,15 @@ const AdminDailyChallenges: React.FC = () => {
 
       {(showCreateModal || editingChallenge) && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-200">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-2xl font-bold text-gray-900">
                   {editingChallenge ? 'Edit Daily Challenge' : 'Add Daily Challenge'}
                 </h2>
                 <button
                   onClick={closeModal}
-                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -307,7 +307,7 @@ const AdminDailyChallenges: React.FC = () => {
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
                     required
                     disabled={!!editingChallenge}
                   />
@@ -322,7 +322,7 @@ const AdminDailyChallenges: React.FC = () => {
                       type="number"
                       value={formData.beatmap_id}
                       onChange={(e) => setFormData({ ...formData, beatmap_id: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
                       required
                       placeholder="e.g. 123456"
                     />
@@ -334,7 +334,7 @@ const AdminDailyChallenges: React.FC = () => {
                     <select
                       value={formData.ruleset_id}
                       onChange={(e) => setFormData({ ...formData, ruleset_id: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
                       required
                     >
                       <option value="0">osu!</option>
@@ -349,7 +349,7 @@ const AdminDailyChallenges: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Required Mods
                   </label>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-200">
                     {AVAILABLE_MODS.map((mod) => (
                       <label key={mod.acronym} className="flex items-center gap-2 cursor-pointer group">
                         <input
@@ -363,7 +363,7 @@ const AdminDailyChallenges: React.FC = () => {
                           }}
                           className="w-4 h-4 rounded border-gray-300 text-osu-pink focus:ring-osu-pink"
                         />
-                        <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors">
+                        <span className="text-sm text-gray-600 group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors">
                           {mod.acronym}
                         </span>
                       </label>
@@ -375,7 +375,7 @@ const AdminDailyChallenges: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Allowed Mods
                   </label>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-200">
                     {AVAILABLE_MODS.map((mod) => (
                       <label key={mod.acronym} className="flex items-center gap-2 cursor-pointer group">
                         <input
@@ -389,7 +389,7 @@ const AdminDailyChallenges: React.FC = () => {
                           }}
                           className="w-4 h-4 rounded border-gray-300 text-osu-pink focus:ring-osu-pink"
                         />
-                        <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors">
+                        <span className="text-sm text-gray-600 group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors">
                           {mod.acronym}
                         </span>
                       </label>
@@ -406,7 +406,7 @@ const AdminDailyChallenges: React.FC = () => {
                       type="number"
                       value={formData.max_attempts}
                       onChange={(e) => setFormData({ ...formData, max_attempts: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
                       placeholder="Optional"
                     />
                   </div>
@@ -418,7 +418,7 @@ const AdminDailyChallenges: React.FC = () => {
                       type="number"
                       value={formData.time_limit}
                       onChange={(e) => setFormData({ ...formData, time_limit: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-osu-pink/20 focus:border-osu-pink outline-none"
                       placeholder="Optional"
                     />
                   </div>
@@ -428,7 +428,7 @@ const AdminDailyChallenges: React.FC = () => {
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
+                    className="px-6 py-2 border border-gray-300 dark:border-white/20 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors font-medium"
                   >
                     Cancel
                   </button>
