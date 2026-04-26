@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiEdit, FiTrash2, FiUserPlus, FiLogOut, FiMoreHorizontal } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -116,14 +116,14 @@ const TeamActions: React.FC<Props> = ({ team, members, onTeamUpdate }) => {
             <div className="relative">
               <button
                 onClick={() => setShowActions(!showActions)}
-                className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                className="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <FiMoreHorizontal className="w-5 h-5" />
               </button>
 
               {/* 下拉菜单 */}
               {showActions && (
-                <div className="absolute left-auto right-0 top-full mt-2 w-48 bg-card border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-[9999]">
+                <div className="absolute left-auto right-0 top-full mt-2 w-48 bg-card border border-gray-200 rounded-lg shadow-xl z-[9999]">
                   <div className="py-1">
                     <button
                       onClick={() => {

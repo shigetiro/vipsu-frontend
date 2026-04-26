@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { FiUserX, FiMoreHorizontal } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import { teamsAPI, handleApiError } from '../../utils/api';
@@ -52,7 +52,7 @@ const MemberActions: React.FC<Props> = ({ member, team, onMemberRemoved }) => {
 
       {showActions && (
         <>
-          <div className="absolute right-0 top-full mt-1 w-32 bg-card border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+          <div className="absolute right-0 top-full mt-1 w-32 bg-card border border-gray-200 rounded-lg shadow-lg z-50">
             <div className="py-1">
               <button
                 onClick={handleKickMember}
