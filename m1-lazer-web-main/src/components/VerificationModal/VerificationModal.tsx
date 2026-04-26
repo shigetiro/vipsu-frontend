@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Mail, Smartphone, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -165,10 +165,10 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
                     {getIcon()}
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <h2 className="text-xl font-semibold text-gray-900">
                       {getTitle()}
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="text-sm text-gray-600 mt-1">
                       {getDescription()}
                     </p>
                   </div>
@@ -178,7 +178,7 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
               {/* 验证表单 */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="verification-code" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="verification-code" className="block text-sm font-medium text-gray-700 mb-2">
                     {method === 'totp' ? t('verification.enterTotpCode') : t('verification.enterMailCode')}
                   </label>
                   <input
@@ -190,7 +190,7 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
                       setCode(value);
                     }}
                     placeholder={t('verification.codeHint', { length: getCodeLength() })}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-center text-lg tracking-[0.3em] bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-lg tracking-[0.3em] bg-white text-gray-900 focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-colors"
                     maxLength={getCodeLength()}
                     disabled={isLoading}
                     autoFocus
@@ -230,7 +230,7 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
               </form>
 
               {/* 分割线 */}
-              <div className="my-6 border-t border-gray-200 dark:border-gray-700"></div>
+              <div className="my-6 border-t border-gray-200"></div>
 
               {/* 操作按钮 */}
               <div className="space-y-3">
@@ -246,7 +246,7 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
                   <button
                     onClick={handleResendCode}
                     disabled={resendLoading || isLoading}
-                    className="w-full text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm font-medium py-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                    className="w-full text-gray-600 hover:text-gray-800 text-sm font-medium py-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
                   >
                     {resendLoading ? (
                       <>
@@ -261,8 +261,8 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
               </div>
 
               {/* 安全提示 */}
-              <div className="mt-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+              <div className="mt-6 p-3 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500 text-center">
                   {t('verification.securityNotice')}
                 </p>
               </div>
