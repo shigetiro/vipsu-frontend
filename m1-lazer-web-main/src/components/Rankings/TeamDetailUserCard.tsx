@@ -1,8 +1,9 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import LazyBackgroundImage from '../UI/LazyBackgroundImage';
 import LazyAvatar from '../UI/LazyAvatar';
 import LazyFlag from '../UI/LazyFlag';
+import UserRoleBadge from '../UI/UserRoleBadge';
 import { GAME_MODE_COLORS } from '../../types';
 import type { UserRanking, GameMode, RankingType } from '../../types';
 
@@ -26,7 +27,7 @@ const TeamDetailUserCard: React.FC<Props> = ({ ranking, selectedMode, rankingTyp
   if (!coverUrl) {
     // 没有背景图片时，使用普通 div 和默认背景
     return (
-      <div className="relative overflow-hidden transition-colors duration-200 sm:bg-white sm:dark:bg-gray-800 sm:hover:bg-gray-50 sm:dark:hover:bg-gray-800/50">
+      <div className="relative overflow-hidden transition-all duration-300 glass-card">
         <div className="relative flex items-center gap-3 sm:gap-4 px-4 py-3">
           {/* 用户头像 */}
           <Link to={`/users/${ranking.user.id}?mode=${selectedMode}`} className="flex-shrink-0">
@@ -40,12 +41,20 @@ const TeamDetailUserCard: React.FC<Props> = ({ ranking, selectedMode, rankingTyp
 
           {/* 用户信息 */}
           <div className="flex-1 min-w-0">
-            <Link
-              to={`/users/${ranking.user.id}?mode=${selectedMode}`}
-              className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate block"
-            >
-              {ranking.user.username}
-            </Link>
+            <div className="flex items-center gap-2 mb-0.5">
+              <Link
+                to={`/users/${ranking.user.id}?mode=${selectedMode}`}
+                className="font-semibold text-sm sm:text-base text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate"
+              >
+                {ranking.user.username}
+              </Link>
+              <UserRoleBadge 
+                 isAdmin={ranking.user.is_admin} 
+                 isGMT={ranking.user.is_gmt} 
+                 isQAT={ranking.user.is_qat}
+                 isBNG={ranking.user.is_bng}
+               />
+            </div>
             <div className="flex items-center gap-1 mt-0.5">
               {ranking.user.country_code && (
                 <LazyFlag
@@ -55,7 +64,7 @@ const TeamDetailUserCard: React.FC<Props> = ({ ranking, selectedMode, rankingTyp
                   title={ranking.user.country?.name || ranking.user.country_code}
                 />
               )}
-              <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
+              <span className="text-xs text-gray-500 truncate">
                 {ranking.user.country?.name || ranking.user.country_code}
               </span>
             </div>
@@ -74,11 +83,11 @@ const TeamDetailUserCard: React.FC<Props> = ({ ranking, selectedMode, rankingTyp
     );
   }
 
-  // 有背景图片时，使用 LazyBackgroundImage
+  // 有背景图片时，使用 LazyBackgroundImage with glassmorphism
   return (
     <LazyBackgroundImage 
       src={coverUrl} 
-      className="overflow-hidden transition-colors duration-200 sm:hover:bg-gray-50 sm:dark:hover:bg-gray-800/50"
+      className="overflow-hidden transition-all duration-300 glass-card-hover rounded-2xl hover:translate-y-[-2px]"
     >
       {/* 背景遮罩层 */}
       <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/85 to-white/80 dark:from-gray-900/90 dark:via-gray-900/85 dark:to-gray-900/80 sm:hover:from-white/85 sm:hover:via-white/80 sm:hover:to-white/75 sm:dark:hover:from-gray-900/85 sm:dark:hover:via-gray-900/80 sm:dark:hover:to-gray-900/75 transition-all duration-300" />
@@ -96,12 +105,20 @@ const TeamDetailUserCard: React.FC<Props> = ({ ranking, selectedMode, rankingTyp
 
         {/* 用户信息 */}
         <div className="flex-1 min-w-0">
-          <Link
-            to={`/users/${ranking.user.id}?mode=${selectedMode}`}
-            className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate block"
-          >
-            {ranking.user.username}
-          </Link>
+          <div className="flex items-center gap-2 mb-0.5">
+            <Link
+              to={`/users/${ranking.user.id}?mode=${selectedMode}`}
+              className="font-semibold text-sm sm:text-base text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate"
+            >
+              {ranking.user.username}
+            </Link>
+            <UserRoleBadge 
+               isAdmin={ranking.user.is_admin} 
+               isGMT={ranking.user.is_gmt} 
+               isQAT={ranking.user.is_qat}
+               isBNG={ranking.user.is_bng}
+             />
+          </div>
           <div className="flex items-center gap-1 mt-0.5">
             {ranking.user.country_code && (
               <LazyFlag
@@ -111,7 +128,7 @@ const TeamDetailUserCard: React.FC<Props> = ({ ranking, selectedMode, rankingTyp
                 title={ranking.user.country?.name || ranking.user.country_code}
               />
             )}
-            <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
+            <span className="text-xs text-gray-500 truncate">
               {ranking.user.country?.name || ranking.user.country_code}
             </span>
           </div>
