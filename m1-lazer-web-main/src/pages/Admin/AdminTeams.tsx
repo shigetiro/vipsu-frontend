@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { adminAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import type { Team } from '../../types';
@@ -40,7 +40,7 @@ const AdminTeams: React.FC = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Team Management</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Team Management</h2>
         <button
           onClick={loadTeams}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -56,14 +56,14 @@ const AdminTeams: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {teams.length === 0 ? (
-            <div className="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
+            <div className="col-span-full text-center py-8 text-gray-500">
               No teams found
             </div>
           ) : (
             teams.map((team) => (
               <div
                 key={team.id}
-                className="bg-gray-50 dark:bg-slate-700/50 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600"
+                className="bg-gray-50 dark:bg-slate-700/50 rounded-lg overflow-hidden border border-gray-200"
               >
                 {team.cover_url && (
                   <div className="h-32 bg-cover bg-center" style={{ backgroundImage: `url(${team.cover_url})` }} />
@@ -78,11 +78,11 @@ const AdminTeams: React.FC = () => {
                       />
                     )}
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{team.name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{team.short_name}</p>
+                      <h3 className="font-semibold text-gray-900">{team.name}</h3>
+                      <p className="text-sm text-gray-600">{team.short_name}</p>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                  <div className="text-xs text-gray-500 mb-4">
                     Created: {new Date(team.created_at).toLocaleDateString()}
                   </div>
                   <div className="flex items-center justify-end gap-2">
