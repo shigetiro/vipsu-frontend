@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { User } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
@@ -68,14 +68,14 @@ const UserPageDisplay: React.FC<UserPageDisplayProps> = ({
             {/* 标题在左上角 */}
             <div className="flex items-center gap-3 mb-8">
               <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+              <h3 className="text-xl font-bold text-gray-900">
                 {t('profile.userPage.title')}
               </h3>
             </div>
             
             {/* 中心内容 */}
             <div className="flex-1 flex flex-col items-center justify-center text-center">
-              <p className="text-gray-600 dark:text-gray-400 mb-8">
+              <p className="text-gray-600 mb-8">
                 {t('profile.userPage.noContent')}
               </p>
               <button
@@ -96,7 +96,7 @@ const UserPageDisplay: React.FC<UserPageDisplayProps> = ({
             {/* 标题在左上角 */}
             <div className="flex items-center gap-3 mb-12">
               <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+              <h3 className="text-xl font-bold text-gray-900">
                 {t('profile.userPage.title')}
               </h3>
             </div>
@@ -104,10 +104,10 @@ const UserPageDisplay: React.FC<UserPageDisplayProps> = ({
             {/* 中心内容 */}
             <div className="flex-1 flex flex-col items-center justify-center text-center">
               <FaUser className="w-16 h-16 text-gray-400 mx-auto mb-6" />
-              <h4 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+              <h4 className="text-lg font-medium text-gray-900 mb-3">
                 {user.username} {t('profile.userPage.noContent')}
               </h4>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600">
                 {t('profile.userPage.noContent')}
               </p>
             </div>
@@ -132,7 +132,7 @@ const UserPageDisplay: React.FC<UserPageDisplayProps> = ({
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
           <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          <h3 className="text-xl font-bold text-gray-900">
             {t('profile.userPage.title')}
           </h3>
         </div>
@@ -159,7 +159,7 @@ const UserPageDisplay: React.FC<UserPageDisplayProps> = ({
             // 如果没有HTML但有原始内容，使用本地BBCode解析器
             <div dangerouslySetInnerHTML={{ __html: parseBBCode(String(userPage.raw || '')).html }} />
           ) : (
-            <div className="text-gray-500 dark:text-gray-400 italic">
+            <div className="text-gray-500 italic">
               {t('profile.userPage.processing')}
             </div>
           )}

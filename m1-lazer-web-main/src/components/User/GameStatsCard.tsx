@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import TextSkeleton from '../UI/TextSkeleton';
 import type { UserStatistics } from '../../types';
@@ -14,7 +14,7 @@ const GameStatsCard: React.FC<GameStatsCardProps> = ({ statistics, isUpdatingMod
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay }}
-    className="bg-card rounded-2xl shadow-lg p-4"
+    className="glass-card rounded-2xl p-4"
   >
     <div className="grid grid-cols-2 gap-4">
       <div className="text-center">
@@ -25,7 +25,7 @@ const GameStatsCard: React.FC<GameStatsCardProps> = ({ statistics, isUpdatingMod
             statistics.play_count?.toLocaleString() || '0'
           )}
         </p>
-        <p className="text-sm text-gray-600 dark:text-gray-400">游戏次数</p>
+        <p className="text-sm text-gray-600">游戏次数</p>
       </div>
       <div className="text-center">
         <p className="text-lg font-bold text-gray-900 dark:text白">
@@ -35,7 +35,7 @@ const GameStatsCard: React.FC<GameStatsCardProps> = ({ statistics, isUpdatingMod
             statistics.total_score?.toLocaleString() || '0'
           )}
         </p>
-        <p className="text-sm text-gray-600 dark:text-gray-400">总分</p>
+        <p className="text-sm text-gray-600">总分</p>
       </div>
       <div className="text-center">
         <p className="text-lg font-bold text-gray-900 dark:text白">
@@ -45,7 +45,7 @@ const GameStatsCard: React.FC<GameStatsCardProps> = ({ statistics, isUpdatingMod
             statistics.ranked_score?.toLocaleString() || '0'
           )}
         </p>
-        <p className="text-sm text-gray-600 dark:text-gray-400">排名分数</p>
+        <p className="text-sm text-gray-600">排名分数</p>
       </div>
       <div className="text-center">
         <p className="text-lg font-bold text-gray-900 dark:text白">
@@ -59,7 +59,7 @@ const GameStatsCard: React.FC<GameStatsCardProps> = ({ statistics, isUpdatingMod
             `${Math.round((statistics.play_time || 0) / 3600).toLocaleString()}h`
           )}
         </p>
-        <p className="text-sm text-gray-600 dark:text-gray-400">游戏时间</p>
+        <p className="text-sm text-gray-600">游戏时间</p>
       </div>
     </div>
   </motion.div>

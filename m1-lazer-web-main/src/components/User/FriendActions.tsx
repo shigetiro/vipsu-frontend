@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+﻿import React, { useMemo, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import {
   FiUserPlus,
@@ -311,9 +311,9 @@ const FriendActions: React.FC<FriendActionsProps> = ({
           whileHover={{ scale: !isSelf && !loading && !isActionLoading ? 1.02 : 1 }}
           whileTap={{ scale: !isSelf && !loading && !isActionLoading ? 0.98 : 1 }}
           className={`
-            bg-gray-100 dark:bg-gray-800 
+            bg-surface-2 
             px-3 py-2 rounded-full flex items-center gap-2 text-sm
-            text-gray-700 dark:text-gray-300
+            text-gray-700
             disabled:opacity-50 disabled:cursor-not-allowed select-none
             transition-all duration-200
             cursor-default
@@ -343,10 +343,10 @@ const FriendActions: React.FC<FriendActionsProps> = ({
         whileTap={{ scale: !isActionLoading ? 0.98 : 1 }}
         {...getReferenceProps()}
         className={`
-          bg-gray-100 dark:bg-gray-800 
-          hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer
+          bg-surface-2 
+          hover:bg-gray-200 cursor-pointer
           px-3 py-2 rounded-full flex items-center gap-2 text-sm
-          text-gray-700 dark:text-gray-300
+          text-gray-700
           transition-all duration-200
           focus:outline-none focus:ring-2 focus:ring-blue-500/20
           disabled:opacity-50 disabled:cursor-not-allowed
@@ -402,7 +402,7 @@ const FriendActions: React.FC<FriendActionsProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -5 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="mt-10 w-48 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 py-1 overflow-hidden focus:outline-none z-[9999]"
+            className="mt-10 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-1 overflow-hidden focus:outline-none z-[9999]"
           >
             {menuItems.map((item) => (
               <button
@@ -425,9 +425,9 @@ const FriendActions: React.FC<FriendActionsProps> = ({
                 className={`
                   w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm font-medium
                   transition-all duration-200
-                  hover:bg-gray-100 dark:hover:bg-gray-800
+                  hover:bg-gray-100
                   disabled:opacity-50 disabled:cursor-not-allowed
-                  ${item.className || 'text-gray-700 dark:text-gray-300'}
+                  ${item.className || 'text-gray-700'}
                 `}
               >
                 {isActionLoading ? (

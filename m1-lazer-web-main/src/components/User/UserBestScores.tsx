@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { userAPI } from '../../utils/api';
@@ -119,7 +119,7 @@ const ScoreCard: React.FC<{
   return (
     <LazyBackgroundImage 
       src={coverImage}
-      className={`relative overflow-hidden rounded-lg border border-gray-200/70 dark:border-gray-600/40 bg-card ${className}`}
+      className={`relative overflow-hidden rounded-xl bg-card glass-card transition-all duration-300 ${className}`}
     >
       {/* 渐变遮罩层确保文字可读性 - 使用主题颜色 */}
       <div 
@@ -128,9 +128,9 @@ const ScoreCard: React.FC<{
           background: `linear-gradient(to right, rgba(${themeRgb}, 0.15) 0%, rgba(${themeRgb}, 0.08) 50%, rgba(${themeRgb}, 0.03) 100%)`
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/75 to-white/60 dark:from-gray-800/90 dark:via-gray-800/75 dark:to-gray-800/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-surface-2/90 via-surface-2/75 to-surface-2/60" />
       
-      <div className="relative bg-transparent hover:bg-white/20 dark:hover:bg-gray-800/20 transition-colors duration-150 group">
+      <div className="relative bg-transparent glass-card-hover rounded-xl transition-all duration-300">
         {/* 桌面端布局 */}
         <div className="hidden sm:block">
           {/* 主要内容区域 */}
@@ -151,15 +151,15 @@ const ScoreCard: React.FC<{
                 <div className="flex items-baseline gap-1 text-sm leading-tight">
                   <BeatmapLink
                     beatmapUrl={beatmapUrl}
-                    className="font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
+                    className="font-semibold text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
                     title={title}
                   >
                     {title}
                   </BeatmapLink>
-                  <span className="text-gray-600 dark:text-gray-400 text-xs flex-shrink-0">
+                  <span className="text-gray-600 text-xs flex-shrink-0">
                     {t('profile.bestScores.by')}
                   </span>
-                  <span className="text-gray-600 dark:text-gray-400 text-xs truncate">
+                  <span className="text-gray-600 text-xs truncate">
                     {artist}
                   </span>
                 </div>
@@ -169,7 +169,7 @@ const ScoreCard: React.FC<{
                   <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                     {version}
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400">
+                  <span className="text-gray-500">
                     {endedAt}
                   </span>
                   <Link
@@ -229,15 +229,15 @@ const ScoreCard: React.FC<{
               <div className="flex items-baseline gap-1 text-sm leading-tight mb-1">
                 <BeatmapLink
                   beatmapUrl={beatmapUrl}
-                  className="font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
+                  className="font-semibold text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
                   title={title}
                 >
                   {title}
                 </BeatmapLink>
-                <span className="text-gray-600 dark:text-gray-400 text-xs flex-shrink-0">
+                <span className="text-gray-600 text-xs flex-shrink-0">
                   {t('profile.bestScores.by')}
                 </span>
-                <span className="text-gray-600 dark:text-gray-400 text-xs truncate">
+                <span className="text-gray-600 text-xs truncate">
                   {artist}
                 </span>
               </div>
@@ -247,7 +247,7 @@ const ScoreCard: React.FC<{
                 <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                   {version}
                 </span>
-                <span className="text-gray-500 dark:text-gray-400">
+                <span className="text-gray-500">
                   {endedAt}
                 </span>
                 <Link
@@ -451,15 +451,23 @@ const UserBestScores: React.FC<UserBestScoresProps> = ({ userId, selectedMode, u
   if (loading) {
     return (
       <div className={`${className}`}>
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-              {t('profile.bestScores.title')}
-            </h3>
-          </div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">
+            {t('profile.bestScores.title')}
+          </h3>
         </div>
-        <LoadingSpinner size="md" />
+        <div className="glass-card rounded-2xl overflow-hidden animate-pulse">
+          <div className="bg-transparent h-[20px] rounded-t-xl flex items-center justify-center">
+            <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          </div>
+          <div className="bg-transparent space-y-3 p-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-12 bg-slate-200 dark:bg-slate-700 rounded" />
+            ))}
+          </div>
+          <div className="bg-transparent h-[20px] rounded-b-xl flex items-center justify-center" />
+        </div>
       </div>
     );
   }
@@ -467,15 +475,13 @@ const UserBestScores: React.FC<UserBestScoresProps> = ({ userId, selectedMode, u
   if (error) {
     return (
       <div className={`${className}`}>
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-              {t('profile.bestScores.title')}
-            </h3>
-          </div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">
+            {t('profile.bestScores.title')}
+          </h3>
         </div>
-        <div className="text-center text-red-500 dark:text-red-400 text-sm">
+        <div className="text-center text-red-500 dark:text-red-400 text-sm py-6">
           {error}
         </div>
       </div>
@@ -484,38 +490,53 @@ const UserBestScores: React.FC<UserBestScoresProps> = ({ userId, selectedMode, u
 
   return (
     <div className={`${className}`}>
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            {t('profile.bestScores.title')}
-          </h3>
-          {user?.scores_best_count && (
-            <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
-              ({user.scores_best_count})
-            </span>
-          )}
-        </div>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
+        <h3 className="text-xl font-bold text-[var(--text-primary)]">
+          {t('profile.bestScores.title')}
+        </h3>
+        {user?.scores_best_count && (
+          <span className="text-sm text-[var(--text-muted)] ml-2">
+            ({user.scores_best_count})
+          </span>
+        )}
       </div>
       
       {scores.length === 0 ? (
-        <div className="text-center text-gray-500 dark:text-gray-400 py-6 text-sm">
-          {t('profile.bestScores.noScores')}
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="bg-transparent h-[20px] rounded-t-xl flex items-center justify-center">
+            <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          </div>
+          <div className="text-center text-[var(--text-muted)] py-6 text-sm">
+            {t('profile.bestScores.noScores')}
+          </div>
+          <div className="bg-transparent h-[20px] rounded-b-xl flex items-center justify-center" />
         </div>
       ) : (
         <>
-          <div className="flex flex-col gap-1">
-            {scores.map((score) => (
-              <ScoreCard
-                key={score.id}
-                score={score}
-                t={t}
-                profileColor={profileColor}
-                canEdit={canEdit}
-                onPinChange={handlePinChange}
-                onPinnedListChange={onPinnedListRefresh}
-              />
-            ))}
+          <div className="glass-card rounded-2xl overflow-hidden">
+            {/* Top decorative bar */}
+            <div className="bg-transparent h-[20px] rounded-t-xl flex items-center justify-center">
+              <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
+            </div>
+
+            {/* Scores list */}
+            <div className="bg-transparent flex flex-col gap-1">
+              {scores.map((score) => (
+                <ScoreCard
+                  key={score.id}
+                  score={score}
+                  t={t}
+                  profileColor={profileColor}
+                  canEdit={canEdit}
+                  onPinChange={handlePinChange}
+                  onPinnedListChange={onPinnedListRefresh}
+                />
+              ))}
+            </div>
+
+            {/* Bottom decorative bar */}
+            <div className="bg-transparent h-[20px] rounded-b-xl flex items-center justify-center" />
           </div>
 
           {hasMore && (
@@ -523,10 +544,8 @@ const UserBestScores: React.FC<UserBestScoresProps> = ({ userId, selectedMode, u
               <button
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="min-w-[80px] sm:min-w-[100px] h-[32px] px-3 py-1.5 disabled:bg-gray-400 text-white rounded text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
+                className="min-w-[80px] sm:min-w-[100px] h-[32px] px-3 py-1.5 disabled:bg-gray-400 text-white rounded-lg text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 hover:opacity-90"
                 style={{ backgroundColor: loadingMore ? undefined : profileColor }}
-                onMouseEnter={(e) => !loadingMore && (e.currentTarget.style.opacity = '0.9')}
-                onMouseLeave={(e) => !loadingMore && (e.currentTarget.style.opacity = '1')}
               >
                 {loadingMore ? (
                   <>

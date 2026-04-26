@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { Tooltip } from 'react-tooltip';
 
 interface UserAchievement {
@@ -101,7 +101,7 @@ const AchievementMedal: React.FC<{
   return (
     <div className="relative">
       <button
-        className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg transition-all duration-200 cursor-help overflow-hidden ${
+        className={`w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-lg transition-all duration-200 cursor-help overflow-hidden ${
           achieved
             ? 'hover:scale-110 filter drop-shadow-md hover:drop-shadow-lg'
             : 'opacity-40 grayscale hover:opacity-60'
@@ -153,8 +153,8 @@ const Achievements: React.FC<AchievementsProps> = ({ userAchievements = [] }) =>
       {/* Latest Section */}
       {latestAchieved.length > 0 && (
         <div>
-          <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3">Latest</h3>
-          <div className="flex flex-wrap gap-3">
+          <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3">Latest</h3>
+          <div className="flex flex-wrap gap-2">
             {latestAchieved.map((ach: any, idx: number) => (
               <AchievementMedal
                 key={`latest-${idx}`}
@@ -174,7 +174,7 @@ const Achievements: React.FC<AchievementsProps> = ({ userAchievements = [] }) =>
             <h4 className="text-xs font-bold uppercase text-gray-700 dark:text-gray-300 tracking-wide">
               {category}
             </h4>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {ids.map((id) => (
                 <AchievementMedal
                   key={`${category}-${id}`}

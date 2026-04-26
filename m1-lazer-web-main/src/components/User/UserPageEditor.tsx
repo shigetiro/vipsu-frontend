@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { userAPI } from '../../utils/api';
 import type { UserPage, User } from '../../types';
@@ -138,7 +138,7 @@ const UserPageEditor: React.FC<UserPageEditorProps> = ({
       <div className={`bg-card rounded-lg shadow-lg p-6 ${className}`}>
         <div className="flex items-center justify-center py-12">
           <LoadingSpinner size="lg" />
-          <span className="ml-3 text-gray-600 dark:text-gray-400">{t('profile.userPage.loadingEditor')}</span>
+          <span className="ml-3 text-gray-600">{t('profile.userPage.loadingEditor')}</span>
         </div>
       </div>
     );
@@ -149,10 +149,10 @@ const UserPageEditor: React.FC<UserPageEditorProps> = ({
       <div className={`bg-card rounded-lg shadow-lg p-6 ${className}`}>
         <div className="text-center py-12">
           <FaEdit className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
             {t('profile.userPage.cannotEditPage')}
           </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-gray-600 mb-6">
             {error}
           </p>
           {onClose && (
@@ -171,14 +171,14 @@ const UserPageEditor: React.FC<UserPageEditorProps> = ({
   return (
     <div className={`bg-card rounded-lg shadow-lg overflow-hidden ${className}`}>
       {/* 头部 */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center gap-3">
           <FaEdit className="w-5 h-5 text-profile-color" />
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h2 className="text-lg font-semibold text-gray-900">
               {t('profile.userPage.editPageTitle')}
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600">
               {t('profile.userPage.editPageSubtitle', { username: user.username })}
             </p>
           </div>
@@ -197,7 +197,7 @@ const UserPageEditor: React.FC<UserPageEditorProps> = ({
             className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title={t('profile.userPage.cancelEditTooltip')}
           >
-            <FaTimes className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            <FaTimes className="w-4 h-4 text-gray-600" />
           </button>
         </div>
       </div>
@@ -231,8 +231,8 @@ const UserPageEditor: React.FC<UserPageEditorProps> = ({
       </div>
 
       {/* 底部操作栏 */}
-      <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
-        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+      <div className="flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50/30">
+        <div className="flex items-center gap-4 text-sm text-gray-600">
           <span>字数: {content.length}/60000</span>
           <span>•</span>
           <span>{t('profile.userPage.supportsBBCode')}</span>
@@ -244,7 +244,7 @@ const UserPageEditor: React.FC<UserPageEditorProps> = ({
           <button
             onClick={handleCancel}
             disabled={saving}
-            className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {t('profile.userPage.cancel')}
           </button>

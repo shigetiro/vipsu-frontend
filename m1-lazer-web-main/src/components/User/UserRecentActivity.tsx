@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { userAPI } from '../../utils/api';
 import type { UserActivity } from '../../types';
@@ -147,7 +147,7 @@ const getActivityDescription = (activity: UserActivity, t: any) => {
           >
             {activity.beatmap?.title}
           </BeatmapLink>
-          <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{t('profile.activities.types.rankLost.suffix')}</span>
+          <span className="text-xs sm:text-sm text-gray-500">{t('profile.activities.types.rankLost.suffix')}</span>
         </div>
       );
     case 'achievement':
@@ -278,15 +278,23 @@ const UserRecentActivity: React.FC<UserRecentActivityProps> = ({ userId, classNa
   if (loading) {
     return (
       <div className={`${className}`}>
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-              {t('profile.activities.title')}
-            </h3>
-          </div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">
+            {t('profile.activities.title')}
+          </h3>
         </div>
-        <LoadingSpinner size="md" />
+        <div className="glass-card rounded-2xl overflow-hidden animate-pulse">
+          <div className="bg-transparent h-[20px] rounded-t-xl flex items-center justify-center">
+            <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          </div>
+          <div className="bg-transparent space-y-3 p-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-12 bg-slate-200 dark:bg-slate-700 rounded" />
+            ))}
+          </div>
+          <div className="bg-transparent h-[20px] rounded-b-xl flex items-center justify-center" />
+        </div>
       </div>
     );
   }
@@ -294,15 +302,13 @@ const UserRecentActivity: React.FC<UserRecentActivityProps> = ({ userId, classNa
   if (error) {
     return (
       <div className={`${className}`}>
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-              {t('profile.activities.title')}
-            </h3>
-          </div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">
+            {t('profile.activities.title')}
+          </h3>
         </div>
-        <div className="text-center text-red-500 dark:text-red-400 text-sm">
+        <div className="text-center text-red-500 dark:text-red-400 text-sm py-6">
           {error}
         </div>
       </div>
@@ -311,82 +317,95 @@ const UserRecentActivity: React.FC<UserRecentActivityProps> = ({ userId, classNa
 
   return (
     <div className={`${className}`}>
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-1 h-6 bg-osu-pink rounded-full"></div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            {t('profile.activities.title')}
-          </h3>
-        </div>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
+        <h3 className="text-xl font-bold text-[var(--text-primary)]">
+          {t('profile.activities.title')}
+        </h3>
       </div>
       
       {activities.length === 0 ? (
-        <div className="text-center text-gray-500 dark:text-gray-400 py-6 text-sm">
-          {t('profile.activities.noActivities')}
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="bg-transparent h-[20px] rounded-t-xl flex items-center justify-center">
+            <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          </div>
+          <div className="text-center text-[var(--text-muted)] py-6 text-sm">
+            {t('profile.activities.noActivities')}
+          </div>
+          <div className="bg-transparent h-[20px] rounded-b-xl flex items-center justify-center" />
         </div>
       ) : (
-        <div className="space-y-2">
-          {activities.map((activity) => (
-            <div 
-              key={activity.id} 
-              className="flex items-start gap-2 p-2 rounded border border-gray-200/50 dark:border-gray-600/30"
-            >
-              <div className="flex-shrink-0 mt-0.5">
-                {getActivityIcon(activity.type)}
-              </div>
-              
-              <div className="flex-grow min-w-0">
-                <div className="text-gray-900 dark:text-gray-100">
-                  {getActivityDescription(activity, t)}
+        <div className="glass-card rounded-2xl overflow-hidden">
+          {/* Top decorative bar */}
+          <div className="bg-transparent h-[20px] rounded-t-xl flex items-center justify-center">
+            <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
+          </div>
+
+          {/* Activities list */}
+          <div className="bg-transparent space-y-2 p-4">
+            {activities.map((activity) => (
+              <div 
+                key={activity.id} 
+                className="flex items-start gap-2 p-2 rounded-lg hover:bg-[var(--surface-2)] transition-colors"
+              >
+                <div className="flex-shrink-0 mt-0.5">
+                  {getActivityIcon(activity.type)}
                 </div>
-                {/* 手机端时间显示在描述下方 */}
-                <div className="flex items-center gap-2 mt-1 sm:hidden">
+                
+                <div className="flex-grow min-w-0">
+                  <div className="text-[var(--text-primary)]">
+                    {getActivityDescription(activity, t)}
+                  </div>
+                  {/* 手机端时间显示在描述下方 */}
+                  <div className="flex items-center gap-2 mt-1 sm:hidden">
+                    {activity.mode && (
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
+                        {activity.mode}
+                      </span>
+                    )}
+                    <div className="text-xs text-[var(--text-muted)]">
+                      {formatTimeAgo(activity.createdAt, t)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 桌面端时间显示在右侧 */}
+                <div className="flex-shrink-0 items-center gap-2 hidden sm:flex">
                   {activity.mode && (
                     <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
                       {activity.mode}
                     </span>
                   )}
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="text-xs text-[var(--text-muted)]">
                     {formatTimeAgo(activity.createdAt, t)}
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
 
-              {/* 桌面端时间显示在右侧 */}
-              <div className="flex-shrink-0 items-center gap-2 hidden sm:flex">
-                {activity.mode && (
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
-                    {activity.mode}
-                  </span>
-                )}
-                <div className="text-xs text-gray-500 dark:text-gray-400">
-                  {formatTimeAgo(activity.createdAt, t)}
-                </div>
-              </div>
-            </div>
-          ))}
+          {/* Bottom decorative bar */}
+          <div className="bg-transparent h-[20px] rounded-b-xl flex items-center justify-center" />
+        </div>
+      )}
 
-          {hasMore && (
-            <div className="flex justify-center pt-2">
-              <button
-                onClick={handleLoadMore}
-                disabled={loadingMore}
-                className="min-w-[80px] sm:min-w-[100px] h-[32px] px-3 py-1.5 disabled:bg-gray-400 text-white rounded text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5"
-                style={{ backgroundColor: loadingMore ? undefined : profileColor }}
-                onMouseEnter={(e) => !loadingMore && (e.currentTarget.style.opacity = '0.9')}
-                onMouseLeave={(e) => !loadingMore && (e.currentTarget.style.opacity = '1')}
-              >
-                {loadingMore ? (
-                  <>
-                    <LoadingSpinner size="sm" />
-                    <span>加载中...</span>
-                  </>
-                ) : (
-                  <span>{t('profile.activities.loadMore')}</span>
-                )}
-              </button>
-            </div>
-          )}
+      {hasMore && (
+        <div className="flex justify-center pt-2">
+          <button
+            onClick={handleLoadMore}
+            disabled={loadingMore}
+            className="min-w-[80px] sm:min-w-[100px] h-[32px] px-3 py-1.5 disabled:bg-gray-400 text-white rounded-lg text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 hover:opacity-90"
+            style={{ backgroundColor: loadingMore ? undefined : profileColor }}
+          >
+            {loadingMore ? (
+              <>
+                <LoadingSpinner size="sm" />
+                <span>加载中...</span>
+              </>
+            ) : (
+              <span>{t('profile.activities.loadMore')}</span>
+            )}
+          </button>
         </div>
       )}
     </div>

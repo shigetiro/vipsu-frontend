@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaTimes, FaSave } from 'react-icons/fa';
 import type { User } from '../../types';
@@ -169,8 +169,8 @@ const UserPageEditModal: React.FC<UserPageEditModalProps> = ({
         onMouseUp={handleModalContentMouseUp}
       >
         {/* 头部 */}
-        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-200 flex-shrink-0">
+          <h2 className="text-xl font-semibold text-gray-900">
             {t('profile.userPage.editTitle')}
           </h2>
           <button
@@ -193,11 +193,11 @@ const UserPageEditModal: React.FC<UserPageEditModalProps> = ({
         </div>
 
         {/* 底部按钮 */}
-        <div className="flex items-center justify-end gap-3 p-4 md:p-6 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+        <div className="flex items-center justify-end gap-3 p-4 md:p-6 border-t border-gray-200 flex-shrink-0">
           <button
             onClick={handleCancel}
             disabled={isSaving}
-            className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors disabled:opacity-50"
           >
             {t('profile.userPage.cancel')}
           </button>

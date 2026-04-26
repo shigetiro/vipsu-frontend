@@ -1,4 +1,4 @@
-import { FaBell } from "react-icons/fa";
+﻿import { FaBell } from "react-icons/fa";
 import FriendActions from "./FriendActions";
 import { useFriendRelationship } from "../../hooks/useFriendRelationship";
 import { useAuth } from "../../contexts/AuthContext";
@@ -26,10 +26,10 @@ export default function FriendStats({ user, selfId }: { user: User; selfId?: num
     console.log('Missing user IDs:', { resolvedSelfId, userId: user?.id });
     return (
       <div className="flex gap-3">
-        <div className="bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-full flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+        <div className="bg-gray-100 px-4 py-2 rounded-full flex items-center gap-2 text-sm text-gray-700">
           <span>加载中...</span>
         </div>
-        <div className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-2 rounded-full flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 friend-button-shadow">
+        <div className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full flex items-center gap-2 text-sm text-gray-700 friend-button-shadow">
           <FaBell className="w-4 h-4" />
           <span>{user.unread_pm_count ?? 0}</span>
         </div>
@@ -60,7 +60,7 @@ export default function FriendStats({ user, selfId }: { user: User; selfId?: num
         followerCount={user.follower_count ?? 0}
         isSelf={finalIsSelf}
       />
-      <div className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-2 rounded-full flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 friend-button-shadow">
+      <div className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full flex items-center gap-2 text-sm text-gray-700 friend-button-shadow">
         <FaBell className="w-4 h-4" />
         <span>{user.unread_pm_count ?? 0}</span>
       </div>

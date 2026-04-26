@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
 
@@ -109,8 +109,8 @@ const BBCodeHelpModal: React.FC<BBCodeHelpModalProps> = ({ isOpen, onClose }) =>
     >
       <div className="bg-card rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* 头部 */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900">
             BBCode 标签帮助
           </h2>
           <button
@@ -124,28 +124,28 @@ const BBCodeHelpModal: React.FC<BBCodeHelpModalProps> = ({ isOpen, onClose }) =>
         {/* 内容 */}
         <div className="p-6 overflow-y-auto flex-1">
           <div className="space-y-6">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <div className="text-sm text-gray-600 mb-4">
               {t('profile.userPage.bbcodeDescription')}
             </div>
 
             {bbcodeTags.map((category, categoryIndex) => (
-              <div key={categoryIndex} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+              <div key={categoryIndex} className="border border-gray-200 rounded-lg p-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-3">
                   {category.category}
                 </h3>
                 <div className="space-y-3">
                   {category.tags.map((tag, tagIndex) => (
-                    <div key={tagIndex} className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-gray-50 dark:bg-gray-700/30 rounded">
+                    <div key={tagIndex} className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-gray-50/30 rounded">
                       <div>
-                        <div className="text-sm font-mono text-gray-800 dark:text-gray-200 mb-1">
+                        <div className="text-sm font-mono text-gray-800 mb-1">
                           {tag.tag}
                         </div>
-                        <div className="text-xs text-gray-600 dark:text-gray-400">
+                        <div className="text-xs text-gray-600">
                           {tag.description}
                         </div>
                       </div>
-                      <div className="text-sm text-gray-700 dark:text-gray-300">
-                        <div className="text-xs text-gray-500 dark:text-gray-500 mb-1">效果预览:</div>
+                      <div className="text-sm text-gray-700">
+                        <div className="text-xs text-gray-500 mb-1">效果预览:</div>
                         <div className="whitespace-pre-line">{tag.example}</div>
                       </div>
                     </div>
@@ -170,7 +170,7 @@ const BBCodeHelpModal: React.FC<BBCodeHelpModalProps> = ({ isOpen, onClose }) =>
         </div>
 
         {/* 底部 */}
-        <div className="flex justify-end p-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end p-6 border-t border-gray-200">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-osu-pink hover:opacity-90 text-white rounded-lg transition-colors"

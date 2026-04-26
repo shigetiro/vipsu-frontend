@@ -23,12 +23,13 @@ import { useProfileColor } from '../../contexts/ProfileColorContext';
 import Badges from './Badges';
 import Achievements from './Achievements';
 import UserMostPlayedBeatmaps from './UserMostPlayedBeatmaps';
+import { cn } from '../../utils/cn';
 
 interface UserProfileLayoutProps {
   user: User;
   selectedMode: GameMode;
   onModeChange: (mode: GameMode) => void;
-  onUserUpdate?: (user: User) => void; // 添加用户更新回调
+  onUserUpdate?: (user: User) => void;
 }
 
 const formatPlayTime = (seconds: number | undefined): string => {
@@ -49,11 +50,8 @@ const CoverImage: React.FC<{ src?: string; alt?: string; isExpanded: boolean }> 
   const [inView, setInView] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-  //const [isUpdatingMode, setIsUpdatingMode] = useState(false);
 
-  // 默认背景图
   const defaultCover = '/image/backgrounds/layered-waves-haikei.svg';
-  // 如果没有提供 src 或加载失败，使用默认背景
   const displaySrc = (!src || error) ? defaultCover : src;
 
   useEffect(() => {
@@ -77,14 +75,12 @@ const CoverImage: React.FC<{ src?: string; alt?: string; isExpanded: boolean }> 
     return () => io.disconnect();
   }, []);
 
-  // 动态高度：展开时显示，收起时不显示
-  const heightClass = isExpanded 
-    ? 'h-[180px] md:h-[288px]' 
+  const heightClass = isExpanded
+    ? 'h-[180px] md:h-[288px]'
     : 'h-0';
 
   return (
     <div ref={ref} className={`relative w-full overflow-hidden transition-all duration-300 ${heightClass}`}>
-      {/* 骨架 or 渐变背景兜底 */}
       <div className="absolute inset-0 cover-bg">
         <div className="h-full w-full" style={{ background: 'transparent' }} />
       </div>
@@ -98,7 +94,6 @@ const CoverImage: React.FC<{ src?: string; alt?: string; isExpanded: boolean }> 
           className={`absolute inset-0 w-full h-full object-cover transition duration-500 ${loaded ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
           onLoad={() => setLoaded(true)}
           onError={() => {
-            // 如果不是默认图片才设置错误状态
             if (displaySrc !== defaultCover) {
               setError(true);
             }
@@ -106,7 +101,6 @@ const CoverImage: React.FC<{ src?: string; alt?: string; isExpanded: boolean }> 
         />
       )}
 
-      {/* 黑色顶层渐变，保证文字可读 */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
     </div>
   );
@@ -117,8 +111,7 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
   const { refreshUser, user: currentUser } = useAuth();
   const { preferences, updatePreference } = useUserPreferences();
   const { profileColor, setProfileColorLocal, resetProfileColor } = useProfileColor();
-  
-  // 用于跨组件刷新的 ref
+
   const pinnedScoresRefreshRef = useRef<(() => void) | null>(null);
   const bestScoresRefreshRef = useRef<(() => void) | null>(null);
   const pinActionRef = useRef<{
@@ -128,7 +121,7 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
   const bestScoresActionRef = useRef<{
     updatePinStatus: (scoreId: number, isPinned: boolean) => void;
   } | null>(null);
-  
+
   const stats = user.statistics;
   const gradeCounts = stats?.grade_counts ?? { ssh: 0, ss: 0, sh: 0, s: 0, a: 0 };
   const levelProgress = stats?.level?.progress ?? 0;
@@ -149,67 +142,25 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
     coverUrlRaw === "https://assets.ppy.sh/user-profile-covers/default.jpeg"
       ? "/image/backgrounds/bgcover.jpg"
       : coverUrlRaw;
-  const [isUpdatingMode] = useState(false);
 
-  // 检查是否可以编辑（仅自己的页面）
   const canEdit = currentUser?.id === user.id;
+  const isCoverExpanded = preferences?.profile_cover_expanded ?? false;
+  const [isUpdatingMode, setIsUpdatingMode] = useState(false);
 
-  // 进入用户资料页时，按查看的用户配色应用，离开时还原
-  useEffect(() => {
-    // 优先从本地存储获取颜色，避免 API 延迟导致的闪烁
-    const getViewedUserColor = () => {
-      // 如果是查看自己的页面，使用当前已保存的颜色（本地存储优先）
-      if (currentUser?.id === user.id) {
-        try {
-          const storedColor = localStorage.getItem('user_profile_color');
-          if (storedColor) return storedColor;
-        } catch (e) {
-          console.error('Failed to read from localStorage:', e);
-        }
-      }
-      // 查看他人页面或本地无存储时，使用用户的 profile_colour
-      // 确保颜色值以 # 开头
-      const rawColor = user.profile_colour || 'ED8EA6';
-      return rawColor.startsWith('#') ? rawColor : `#${rawColor}`;
-    };
+  const handleAvatarUpdate = async (avatarData: any) => {
+    if (!canEdit) return;
 
-    const viewedColor = getViewedUserColor();
-    setProfileColorLocal(viewedColor);
-    
-    return () => {
-      resetProfileColor();
-    };
-  }, [user.profile_colour, user.id, currentUser?.id, setProfileColorLocal, resetProfileColor]);
-
-  // 头图展开状态 - 确保有明确的初始值
-  const [isCoverExpanded, setIsCoverExpanded] = useState(() => {
-    return preferences.profile_cover_expanded ?? false;
-  });
-
-  // 当偏好设置加载完成时，更新本地状态
-  useEffect(() => {
-    // 只在偏好设置实际存在时更新
-    if (preferences.profile_cover_expanded !== undefined) {
-      setIsCoverExpanded(preferences.profile_cover_expanded);
-    }
-  }, [preferences.profile_cover_expanded]);
-
-  // 处理头像更新
-  const handleAvatarUpdate = async (newAvatarUrl: string) => {
-    console.log('头像更新成功，延迟刷新用户信息:', newAvatarUrl);
-    // 延迟刷新用户信息，确保服务器端已经处理完成
-    setTimeout(async () => {
-      console.log('执行延迟刷新用户信息');
+    try {
       await refreshUser();
-    }, 3000); // 延迟3秒，给服务器更多时间处理
+      onUserUpdate?.(user);
+    } catch (error) {
+      console.error('Failed to update avatar:', error);
+    }
   };
 
-  // 处理头图展开/收起
   const handleToggleCover = async () => {
     const newExpandedState = !isCoverExpanded;
-    setIsCoverExpanded(newExpandedState);
-    
-    // 仅在当前用户查看自己的页面时保存偏好设置
+
     if (canEdit) {
       await updatePreference('profile_cover_expanded', newExpandedState);
     }
@@ -219,7 +170,6 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
     <main className="max-w-7xl mx-auto px-0 md:px-4 lg:px-6 py-4 md:py-6">
       {/* 主卡片 */}
       <div className="bg-card md:main-card-shadow md:rounded-t-2xl md:rounded-b-2xl overflow-hidden md:border md:border-card">
-        
         {/* 受限用户提示 - 仅管理员可见 */}
         {user.is_restricted && currentUser?.is_admin && (
           <div className="px-3 md:px-6 pt-4">
@@ -235,7 +185,6 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
               <div className="text-base md:text-lg font-bold">{t('profile.info.title')}</div>
             </div>
             <div className="flex items-center gap-2 md:gap-3">
-              {/* 右侧模式按钮们（来自你的 GameModeSelector） */}
               <GameModeSelector
                 selectedMode={selectedMode}
                 onModeChange={onModeChange}
@@ -251,101 +200,111 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
           </div>
         </div>
 
-        {/* 头像与基本信息条 */}
-        <div className="bg-transparent md:bg-card px-3 md:px-8 py-4 md:py-6 flex items-center gap-4 md:gap-6 border-b border-card relative">
-          {/* 头像：渐变边 + 阴影，左下沉覆盖 - 展开时有负边距下沉效果，收起时无负边距 */}
-          <div className={isCoverExpanded ? "-mt-12" : "mt-0"}>
-            <Avatar
-              userId={user.id}
-              username={user.username}
-              avatarUrl={user.avatar_url}
-              size="xl"
-              shape="rounded"
-              editable={false}
-              className={
-                isCoverExpanded 
-                  ? "mt-[10px] md:mt-[1px] md:!w-32 md:!h-32 md:!min-w-32 md:!min-h-32 transition-all duration-300" 
-                  : "mt-[10px] md:mt-[1px] md:!w-24 md:!h-24 md:!min-w-24 md:!min-h-24 transition-all duration-300"
-              }
-              onAvatarUpdate={handleAvatarUpdate}
-            />
-          </div>
-          {/* 用户名 + 国家 + 团队旗帜 */}
-          <div className="flex-1">
-            <div className="flex items-center gap-3">
-              <h1 className="mt-[-12px] md:mt-[-15px] ml-0 md:ml-[-10px] text-xl md:text-3xl font-bold mb-3 md:mb-2 text-gray-900 dark:text-gray-100">
-                {user.username}
-              </h1>
-              <UserRoleBadge 
-                 isAdmin={user.is_admin} 
-                 isGMT={user.is_gmt} 
-                 isQAT={user.is_qat}
-                 isBNG={user.is_bng}
-                 className="mt-[-8px] md:mt-[-10px]"
-               />
-              {Array.isArray(user.badges) && user.badges.length > 0 && (
-                <div className="mt-[-6px]">
-                  <Badges badges={user.badges} />
-                </div>
-              )}
+        {/* 头像与基本信息条 - 现代布局无负边距 */}
+        <div className="relative md:bg-card px-3 md:px-8 py-4 md:py-6 border-b border-card">
+          <div className="flex items-end md:items-start gap-4 md:gap-6">
+            {/* 头像容器 */}
+            <div className={cn(
+              'flex-shrink-0 flex md:block items-end',
+              isCoverExpanded ? 'md:-mt-8' : 'md:mt-0',
+              isCoverExpanded ? 'md:mb-2' : 'md:mb-0'
+            )}>
+              <div className={cn(
+                'transition-all duration-300',
+                isCoverExpanded ? 'scale-105' : 'scale-100',
+                isCoverExpanded ? 'md:!w-28 md:!h-28' : 'md:!w-24 md:!h-24'
+              )}>
+                <Avatar
+                  userId={user.id}
+                  username={user.username}
+                  avatarUrl={user.avatar_url}
+                  size="xl"
+                  shape="rounded"
+                  editable={false}
+                  className="ring-4 md:ring-2 ring-card"
+                  onAvatarUpdate={handleAvatarUpdate}
+                />
+              </div>
             </div>
-            <div className="flex mt-[-10px] items-center gap-2 md:gap-4 md:mt-[10px] md:ml-[-8px] flex-wrap">
-              {/* 国旗和国家名 */}
-              {user.country?.code && (
-                <div className="flex items-center gap-2">
-                  <img
-                    src={`/image/flag/${user.country.code.toLowerCase()}.svg`}
-                    alt={user.country.name}
-                    className="h-[20px] md:h-[25px] w-auto rounded-sm object-contain cursor-help"
-                    loading="lazy"
-                    decoding="async"
-                    data-tooltip-id="country-tooltip"
-                    data-tooltip-content={user.country?.name || '国家'}
-                  />
-                  <span className="text-gray-600 dark:text-gray-300 text-sm md:text-base">
-                    {user.country?.code || '国家'}
-                  </span>
-                </div>
-              )}
 
-              {/* 团队旗帜和名称 */}
-              {user.team && (
-                <div className="flex items-center gap-2">
-                  <img
-                    src={user.team.flag_url}
-                    alt="团队旗帜"
-                    className="h-[20px] md:h-[25px] w-auto rounded-sm object-contain cursor-help"
-                    loading="lazy"
-                    decoding="async"
-                    data-tooltip-id="team-tooltip"
-                    data-tooltip-content={user.team.name}
-                  />
-                  <span className="text-gray-600 dark:text-gray-300 text-sm md:text-base">
-                    {user.team.short_name || user.team.name}
-                  </span>
-                </div>
-              )}
+            {/* 用户信息 */}
+            <div className="flex-1 min-w-0">
+              {/* 顶部行：用户名 + 徽章 */}
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
+                <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-text-primary truncate">
+                  {user.username}
+                </h1>
+                <UserRoleBadge
+                  isAdmin={user.is_admin}
+                  isGMT={user.is_gmt}
+                  isQAT={user.is_qat}
+                  isBNG={user.is_bng}
+                  className="lg:ml-2"
+                />
+                {Array.isArray(user.badges) && user.badges.length > 0 && (
+                  <div className="flex-shrink-0">
+                    <Badges badges={user.badges} />
+                  </div>
+                )}
+              </div>
+
+              {/* 底部信息行：国家 + 团队 */}
+              <div className="flex flex-wrap items-center gap-3 md:gap-4">
+                {/* 国旗和国家名 */}
+                {user.country?.code && (
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={`/image/flag/${user.country.code.toLowerCase()}.svg`}
+                      alt={user.country.name}
+                      className="h-5 md:h-6 w-auto rounded-sm object-contain cursor-help"
+                      loading="lazy"
+                      decoding="async"
+                      data-tooltip-id="country-tooltip"
+                      data-tooltip-content={user.country?.name || '国家'}
+                    />
+                    <span className="text-sm md:text-base text-text-secondary">
+                      {user.country?.name}
+                    </span>
+                  </div>
+                )}
+
+                {/* 团队旗帜和名称 */}
+                {user.team && (
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={user.team.flag_url}
+                      alt="团队旗帜"
+                      className="h-5 md:h-6 w-auto rounded-sm object-contain cursor-help"
+                      loading="lazy"
+                      decoding="async"
+                      data-tooltip-id="team-tooltip"
+                      data-tooltip-content={user.team.name}
+                    />
+                    <span className="text-sm md:text-base text-text-secondary">
+                      {user.team.short_name || user.team.name}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* 展开/收起按钮 - 移到右侧 */}
-          <button 
-            onClick={handleToggleCover}
-            className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 grid place-items-center text-sm md:text-base hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex-shrink-0" 
-            aria-label={isCoverExpanded ? t('profile.userPage.collapseCover') : t('profile.userPage.expandCover')}
-            data-tooltip-id="cover-toggle-tooltip"
-            data-tooltip-content={isCoverExpanded ? t('profile.userPage.collapseCover') : t('profile.userPage.expandCover')}
-          >
-            {isCoverExpanded ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
+            {/* 展开/收起按钮 */}
+            <button
+              onClick={handleToggleCover}
+              className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-surface-2 text-gray-700 grid place-items-center text-sm md:text-base hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex-shrink-0"
+              aria-label={isCoverExpanded ? t('profile.userPage.collapseCover') : t('profile.userPage.expandCover')}
+              data-tooltip-id="cover-toggle-tooltip"
+              data-tooltip-content={isCoverExpanded ? t('profile.userPage.collapseCover') : t('profile.userPage.expandCover')}
+            >
+              {isCoverExpanded ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
           </div>
+        </div>
 
         {/* Tooltips */}
         <Tooltip id="country-tooltip" />
         <Tooltip id="team-tooltip" />
         <Tooltip id="cover-toggle-tooltip" />
-
-
 
         {/* 中部：左 3/4（排名+折线+信息），右 1/4（统计） */}
         <div className="bg-transparent md:bg-card px-3 md:px-6 py-4 border-b border-card">
@@ -353,19 +312,19 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
             {/* 左侧 3/4 */}
             <div className="flex-[3] flex flex-col gap-3">
               {/* 排名 */}
-              <div className="flex gap-8 p-3 md:rounded-lg md:rank-card-shadow mb-[20px] ml-0 md:ml-[-10px]">
+              <div className="flex gap-8 p-3 md:rounded-lg md:rank-card-shadow mb-4">
                 <div className="text-center">
-                  <div className="text-gray-500 dark:text-gray-400 mb-[-5px] mb-1 text-[12px]">{t('profile.info.globalRank')}</div>
-                  <div className="font-bold text-primary text-[20px]">#{stats?.global_rank ?? '—'}</div>
+                  <div className="text-gray-500 mb-1 text-xs">{t('profile.info.globalRank')}</div>
+                  <div className="font-bold text-primary text-xl">#{stats?.global_rank ?? '—'}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-gray-500 dark:text-gray-400 mb-[-5px] text-[12px]">{t('profile.info.countryRank')}</div>
-                  <div className="font-bold text-primary text-[20px]">#{stats?.country_rank ?? '—'}</div>
+                  <div className="text-gray-500 mb-1 text-xs">{t('profile.info.countryRank')}</div>
+                  <div className="font-bold text-primary text-xl">#{stats?.country_rank ?? '—'}</div>
                 </div>
               </div>
 
               {/* 折线图 */}
-              <div className="w-full mt-[-45px]">
+              <div className="w-full">
                 <RankHistoryChart
                   rankHistory={user.rank_history}
                   isUpdatingMode={isUpdatingMode}
@@ -376,7 +335,7 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
               </div>
 
               {/* 附加信息（PP / 游戏时间 / 成绩徽章） */}
-              <div className="w-full mt-[-55px]">
+              <div className="w-full">
                 <PlayerRankCard
                   stats={stats}
                   playTime={playTime}
@@ -397,38 +356,24 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
 
         {/* 好友/消息 + 等级进度 */}
         <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 relative border-b border-card">
-          <div className="flex items-center justify-between relative">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-8">
+            <div className="flex-1">
               <FriendStats user={user} />
-            <div className="flex items-center gap-4">
-              {/* 进度条 */}
+            </div>
+            <div className="flex-1">
               <LevelProgress
                 levelCurrent={levelCurrent}
                 levelProgress={levelProgress}
-                className="flex-1"
-                tint={profileColor}
               />
             </div>
           </div>
         </div>
 
-        {/* 个人页面 */}
-        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-3 md:py-4 border-b border-card">
-          <UserPageDisplay
-            user={user}
-            onUserUpdate={onUserUpdate}
-          />
-        </div>
-
-        {/* 用户最近活动 */}
-        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-3 md:py-4 border-b border-card">
-          <UserRecentActivity userId={user.id} />
-        </div>
-
-        {/* 用户置顶成绩 */}
-        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-3 md:py-4 border-b border-card">
-          <UserPinnedScores 
-            userId={user.id} 
-            selectedMode={selectedMode} 
+        {/* 成绩部分 */}
+        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 border-b border-card">
+          <UserPinnedScores
+            userId={user.id}
+            selectedMode={selectedMode}
             user={user}
             refreshRef={pinnedScoresRefreshRef}
             onPinActionRef={pinActionRef}
@@ -436,82 +381,62 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
           />
         </div>
 
-        {/* 用户最佳成绩 */}
-        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-3 md:py-4 border-b border-card">
-          <UserBestScores 
-            userId={user.id} 
-            selectedMode={selectedMode} 
+        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 border-b border-card">
+          <UserBestScores
+            userId={user.id}
+            selectedMode={selectedMode}
             user={user}
             refreshRef={bestScoresRefreshRef}
-            onPinnedListRefresh={() => pinnedScoresRefreshRef.current?.()}
             pinActionRef={pinActionRef}
-            bestScoresActionRef={bestScoresActionRef}
           />
         </div>
 
-        {/* 用户最近成绩 */}
-        <div className="bg-card px-3 md:px-6 lg:px-8 py-3 md:py-4 border-b border-card">
-          <UserRecentScores userId={user.id} selectedMode={selectedMode} user={user} />
+        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 border-b border-card">
+          <UserRecentScores
+            userId={user.id}
+            selectedMode={selectedMode}
+          />
         </div>
 
-        {/* 最常玩的谱面 */}
-        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-3 md:py-4 border-b border-card">
-          <UserMostPlayedBeatmaps userId={user.id} user={user} max={6} />
+        {/* 最近活动 */}
+        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 border-b border-card">
+          <UserRecentActivity
+            userId={user.id}
+          />
         </div>
 
-        {/* 成就展示 */}
-        {Array.isArray(user.user_achievements) && user.user_achievements.length > 0 && (
-          <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 relative border-b border-card">
-            {/* Header */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-6 bg-osu-pink rounded-full"></div>
-              <h2 className="text-base md:text-lg font-bold text-gray-900 dark:text-gray-100">Medals</h2>
-            </div>
-            {/* Achievements Content */}
-            <Achievements userAchievements={user.user_achievements} />
-          </div>
-        )}
+        {/* 最常游玩的谱面 */}
+        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 border-b border-card">
+          <UserMostPlayedBeatmaps
+            userId={user.id}
+            user={user}
+          />
+        </div>
 
-        {/* 徽章展示 */}
-        {Array.isArray(user.badges) && user.badges.length > 0 && (
-          <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 relative border-b border-card">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-6 bg-osu-pink rounded-full"></div>
-              <h2 className="text-base md:text-lg font-bold text-gray-900 dark:text-gray-100">Badges</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {user.badges.map((badge, idx) => (
-                <div key={idx} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                  <img
-                    src={badge['image@2x_url'] || badge.image_url}
-                    alt={badge.description}
-                    className="w-12 h-12 object-contain"
-                    title={badge.description}
-                  />
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 line-clamp-2">
-                      {badge.description}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(badge.awarded_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-              ))}
+        {/* 成就 */}
+        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 border-b border-card">
+          <Achievements
+            userAchievements={user_achievements}
+          />
+        </div>
+
+        {/* 用户页面 */}
+        <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6">
+          <UserPageDisplay
+            user={user}
+            onUserUpdate={onUserUpdate}
+          />
+        </div>
+
+        {/* 管理员工具 */}
+        {canEdit && (
+          <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <FaTools />
+              <span>{t('profile.userPage.editProfile')}</span>
             </div>
           </div>
         )}
-
-        {/* 施工中 */}
-        <div className="p-3 md:rounded-lg h-[500px] flex flex-col justify-center" style={{ background: 'var(--bg-secondary)' }}>
-          <div className="flex justify-center items-center h-full">
-            <p className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-              <FaTools className="text-lg" />
-              {t('profile.info.underConstruction')}
-            </p>
-          </div>
-        </div>
-
       </div>
     </main>
   );

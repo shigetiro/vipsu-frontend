@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+﻿import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { BBCodeValidationResponse } from '../../types';
 import { 
@@ -283,16 +283,16 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
       {/* 标题栏 */}
       {title && (
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <h2 className="text-lg font-semibold text-gray-900">
             {title}
           </h2>
         </div>
       )}
       
       {/* 编辑器容器 */}
-      <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-card">
+      <div className="border border-gray-300 rounded-lg overflow-hidden bg-card">
         {/* 工具栏 */}
-      <div className="flex items-center justify-between p-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+      <div className="flex items-center justify-between p-2 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center gap-1 flex-wrap">
           {/* 基础格式化工具 */}
           <div className="flex items-center gap-1">
@@ -305,13 +305,13 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
                 className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title={tool.tooltip}
               >
-                <tool.icon className="w-3 h-3 text-gray-600 dark:text-gray-300" />
+                <tool.icon className="w-3 h-3 text-gray-600" />
               </button>
             ))}
           </div>
           
           {/* 分隔线 */}
-          <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+          <div className="w-px h-6 bg-gray-300 mx-1" />
           
           {/* 内容插入工具 */}
           <div className="flex items-center gap-1">
@@ -324,13 +324,13 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
                 className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title={tool.tooltip}
               >
-                <tool.icon className="w-3 h-3 text-gray-600 dark:text-gray-300" />
+                <tool.icon className="w-3 h-3 text-gray-600" />
               </button>
             ))}
           </div>
           
           {/* 分隔线 */}
-          <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+          <div className="w-px h-6 bg-gray-300 mx-1" />
           
           {/* 结构化内容工具 */}
           <div className="flex items-center gap-1">
@@ -343,13 +343,13 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
                 className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title={tool.tooltip}
               >
-                <tool.icon className="w-3 h-3 text-gray-600 dark:text-gray-300" />
+                <tool.icon className="w-3 h-3 text-gray-600" />
               </button>
             ))}
           </div>
           
           {/* 分隔线 */}
-          <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+          <div className="w-px h-6 bg-gray-300 mx-1" />
           
           {/* 快速颜色选择 */}
           <div className="flex items-center gap-1">
@@ -359,7 +359,7 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
                 type="button"
                 onClick={(e) => handleToolClick(e, () => insertColor(color))}
                 disabled={disabled}
-                className="w-6 h-6 rounded border border-gray-300 dark:border-gray-600 hover:scale-110 transition-transform disabled:cursor-not-allowed"
+                className="w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform disabled:cursor-not-allowed"
                 style={{ backgroundColor: color }}
                 title={`${color} ${t('profile.bbcodeEditor.colors.text')}`}
               />
@@ -367,13 +367,13 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
           </div>
           
           {/* 分隔线 */}
-          <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+          <div className="w-px h-6 bg-gray-300 mx-1" />
           
           {/* 字体大小 */}
           <select
             onChange={(e) => e.target.value && insertSize(parseInt(e.target.value))}
             disabled={disabled}
-            className="text-xs px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 disabled:opacity-50"
+            className="text-xs px-2 py-1 border border-gray-300 rounded bg-white text-gray-900 disabled:opacity-50"
             defaultValue=""
           >
             <option value="" disabled>{t('profile.bbcodeEditor.fontSize.label')}</option>
@@ -386,7 +386,7 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
 
         {/* 预览切换和字数统计 */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500 dark:text-gray-400">
+          <span className="text-xs text-gray-500">
             {value.length}/{maxLength}
           </span>
           
@@ -430,7 +430,7 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
             {validationLoading ? (
               <div className="flex items-center justify-center py-8">
                 <LoadingSpinner size="sm" />
-                <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">{t('profile.bbcodeEditor.preview.generating')}</span>
+                <span className="ml-2 text-sm text-gray-500">{t('profile.bbcodeEditor.preview.generating')}</span>
               </div>
             ) : validationError ? (
               <div className="text-center py-8 text-red-500 dark:text-red-400 text-sm">
@@ -442,7 +442,7 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
                 className="prose prose-sm dark:prose-invert max-w-none"
               />
             ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
+              <div className="text-center py-8 text-gray-500 text-sm">
                 {value.trim() ? t('profile.bbcodeEditor.preview.generateFailed') : t('profile.bbcodeEditor.preview.noContent')}
               </div>
             )}
@@ -457,7 +457,7 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
             placeholder={defaultPlaceholder}
             disabled={disabled}
             maxLength={maxLength}
-            className="w-full p-4 min-h-[300px] h-[50vh] resize-none bg-transparent border-none outline-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-mono text-sm leading-relaxed disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full p-4 min-h-[300px] h-[50vh] resize-none bg-transparent border-none outline-none text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 font-mono text-sm leading-relaxed disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ lineHeight: '1.6' }}
           />
         )}
@@ -487,7 +487,7 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
 
       {/* 验证错误列表 */}
       {validationResult && !validationResult.valid && validationResult.errors.length > 0 && (
-        <div className="border-t border-gray-200 dark:border-gray-700 p-3 bg-red-50 dark:bg-red-900/10">
+        <div className="border-t border-gray-200 p-3 bg-red-50 dark:bg-red-900/10">
           <div className="text-sm font-medium text-red-700 dark:text-red-300 mb-2">
             {t('profile.bbcodeEditor.validation.syntaxErrors')}:
           </div>
@@ -502,9 +502,9 @@ const BBCodeEditor: React.FC<BBCodeEditorProps> = ({
       )}
 
       {/* 帮助文本 - 更紧凑的设计 */}
-      <div className="border-t border-gray-200 dark:border-gray-700 px-2 py-1 bg-gray-50 dark:bg-gray-700/30">
-        <details className="text-xs text-gray-600 dark:text-gray-400">
-          <summary className="cursor-pointer hover:text-gray-800 dark:hover:text-gray-200 py-1">
+      <div className="border-t border-gray-200 px-2 py-1 bg-gray-50/30">
+        <details className="text-xs text-gray-600">
+          <summary className="cursor-pointer hover:text-gray-800 py-1">
             {t('profile.bbcodeEditor.help.title')}
           </summary>
           <div className="mt-1 pb-1 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-0.5 text-xs">

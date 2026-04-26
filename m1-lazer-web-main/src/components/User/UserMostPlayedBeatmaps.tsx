@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'react-tooltip';
 import { useProfileColor } from '../../contexts/ProfileColorContext';
@@ -90,7 +90,7 @@ const BeatmapCard: React.FC<BeatmapCardProps> = ({ item, idx, profileColor }) =>
   return (
     <LazyBackgroundImage
       src={coverUrl}
-      className="relative overflow-hidden border-b border-gray-100 dark:border-gray-700/50 last:border-b-0"
+      className="relative overflow-hidden glass-card rounded-xl transition-all duration-300"
     >
       {/* Gradient overlay for readability with theme color */}
       <div
@@ -99,9 +99,9 @@ const BeatmapCard: React.FC<BeatmapCardProps> = ({ item, idx, profileColor }) =>
           background: `linear-gradient(to right, rgba(${themeRgb}, 0.15) 0%, rgba(${themeRgb}, 0.08) 50%, rgba(${themeRgb}, 0.03) 100%)`
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/75 to-white/60 dark:from-gray-800/90 dark:via-gray-800/75 dark:to-gray-800/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-surface-2/90 via-surface-2/75 to-surface-2/60" />
 
-      <div className="relative bg-transparent hover:bg-white/20 dark:hover:bg-gray-800/20 transition-colors duration-150 group">
+      <div className="relative glass-card-hover rounded-xl">
         {/* Desktop layout */}
         <div className="hidden sm:block">
           <div className="flex items-center h-12 pl-5 pr-24">
@@ -112,17 +112,17 @@ const BeatmapCard: React.FC<BeatmapCardProps> = ({ item, idx, profileColor }) =>
                 <div className="flex items-baseline gap-1 text-sm leading-tight">
                   <a
                     href={`/beatmapsets/${bsId}#osu/${bmId}`}
-                    className="font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
+                    className="font-semibold text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
                     title={title}
                     data-tooltip-id={tooltipId}
                     data-tooltip-content={count ? `Played ${count} times` : undefined}
                   >
                     {title}
                   </a>
-                  <span className="text-gray-600 dark:text-gray-400 text-xs flex-shrink-0">
+                  <span className="text-gray-600 text-xs flex-shrink-0">
                     {t('profile.bestScores.by') || 'by'}
                   </span>
-                  <span className="text-gray-600 dark:text-gray-400 text-xs truncate">
+                  <span className="text-gray-600 text-xs truncate">
                     {artist}
                   </span>
                 </div>
@@ -132,7 +132,7 @@ const BeatmapCard: React.FC<BeatmapCardProps> = ({ item, idx, profileColor }) =>
                   <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                     {version}
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400">
+                  <span className="text-gray-500">
                     {difficultyRating.toFixed(2)}★
                   </span>
                 </div>
@@ -158,17 +158,17 @@ const BeatmapCard: React.FC<BeatmapCardProps> = ({ item, idx, profileColor }) =>
             <div className="flex items-baseline gap-1 text-sm leading-tight mb-1">
               <a
                 href={`/beatmapsets/${bsId}#osu/${bmId}`}
-                className="font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
+                className="font-semibold text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
                 title={title}
                 data-tooltip-id={tooltipId}
                 data-tooltip-content={count ? `Played ${count} times` : undefined}
               >
                 {title}
               </a>
-              <span className="text-gray-600 dark:text-gray-400 text-xs flex-shrink-0">
+              <span className="text-gray-600 text-xs flex-shrink-0">
                 {t('profile.bestScores.by') || 'by'}
               </span>
-              <span className="text-gray-600 dark:text-gray-400 text-xs truncate">
+              <span className="text-gray-600 text-xs truncate">
                 {artist}
               </span>
             </div>
@@ -179,7 +179,7 @@ const BeatmapCard: React.FC<BeatmapCardProps> = ({ item, idx, profileColor }) =>
                 <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                   {version}
                 </span>
-                <span className="text-gray-500 dark:text-gray-400">
+                <span className="text-gray-500">
                   {difficultyRating.toFixed(2)}★
                 </span>
               </div>
@@ -254,20 +254,20 @@ const UserMostPlayedBeatmaps: React.FC<UserMostPlayedBeatmapsProps> = ({ userId,
       <div className={`${className}`}>
         <div className="flex items-center gap-3 mb-6">
           <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          <h3 className="text-xl font-bold text-gray-900">
             {t('profile.mostPlayed.title') || 'Most Played Beatmaps'} {totalCount > 0 ? `(${totalCount.toLocaleString()})` : ''}
           </h3>
         </div>
-        <div className="shadow-sm overflow-hidden rounded-lg">
-          <div className="bg-card h-[30px] rounded-t-lg border-x border-t border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center">
+        <div className="glass-card rounded-2xl overflow-hidden animate-pulse">
+          <div className="bg-transparent h-[20px] rounded-t-xl flex items-center justify-center">
             <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
           </div>
-          <div className="bg-card border-x border-gray-200/50 dark:border-gray-600/30 animate-pulse space-y-3 p-4">
+          <div className="bg-transparent space-y-3 p-4">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="h-12 bg-slate-200 dark:bg-slate-700 rounded" />
             ))}
           </div>
-          <div className="bg-card h-[30px] rounded-b-lg border-x border-b border-gray-200/50 dark:border-gray-600/30" />
+          <div className="bg-transparent h-[20px] rounded-b-xl flex items-center justify-center" />
         </div>
       </div>
     );
@@ -278,11 +278,11 @@ const UserMostPlayedBeatmaps: React.FC<UserMostPlayedBeatmapsProps> = ({ userId,
       <div className={`${className}`}>
         <div className="flex items-center gap-3 mb-6">
           <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          <h3 className="text-xl font-bold text-gray-900">
             {t('profile.mostPlayed.title') || 'Most Played Beatmaps'} {totalCount > 0 ? `(${totalCount.toLocaleString()})` : ''}
           </h3>
         </div>
-        <div className="text-center text-gray-500 dark:text-gray-400 py-6 text-sm">
+        <div className="text-center text-gray-500 py-6 text-sm">
           {error || 'No most played beatmaps data available'}
         </div>
       </div>
@@ -293,26 +293,26 @@ const UserMostPlayedBeatmaps: React.FC<UserMostPlayedBeatmapsProps> = ({ userId,
     <div className={`${className}`}>
       <div className="flex items-center gap-3 mb-6">
         <div className="w-1 h-6 rounded-full" style={{ backgroundColor: profileColor }}></div>
-        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+        <h3 className="text-xl font-bold text-[var(--text-primary)]">
           {t('Most Played Beatmaps') || 'Most Played Beatmaps'} {totalCount > 0 ? `(${totalCount.toLocaleString()})` : ''}
         </h3>
       </div>
 
-      <div className="shadow-sm overflow-hidden rounded-lg">
+      <div className="glass-card rounded-2xl overflow-hidden">
         {/* Top decorative bar */}
-        <div className="bg-card h-[30px] rounded-t-lg border-x border-t border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center">
+        <div className="bg-transparent h-[20px] rounded-t-xl flex items-center justify-center">
           <div className="w-16 h-1 rounded-full" style={{ backgroundColor: profileColor }}></div>
         </div>
 
         {/* Beatmaps list */}
-        <div className="bg-card border-x border-gray-200/50 dark:border-gray-600/30">
+        <div className="bg-transparent">
           {beatmaps.map((item, idx) => (
             <BeatmapCard key={`${(item as any).beatmap?.id ?? idx}-${idx}`} item={item} idx={idx} profileColor={profileColor} />
           ))}
         </div>
 
         {/* Bottom decorative bar */}
-        <div className="bg-card h-[30px] rounded-b-lg border-x border-b border-gray-200/50 dark:border-gray-600/30 flex items-center justify-center" />
+        <div className="bg-transparent h-[20px] rounded-b-xl flex items-center justify-center" />
       </div>
     </div>
   );
