@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useTranslation, Trans } from 'react-i18next';
@@ -52,11 +52,11 @@ const HeroSection: React.FC = () => {
               </h1>
             </div>
 
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-semibold text-gray-700 dark:text-gray-200 mb-4 sm:mb-5 md:mb-6 leading-tight max-w-4xl mx-auto">
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-semibold text-gray-700 mb-4 sm:mb-5 md:mb-6 leading-tight max-w-4xl mx-auto">
               {t('hero.tagline')}
             </h2>
 
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed px-2">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
               <Trans
                 i18nKey="hero.description"
                 components={{
@@ -129,7 +129,7 @@ const HeroSection: React.FC = () => {
                       <FaGithub className="mb-1 sm:mb-0 sm:mr-2 text-base sm:text-lg w-4 h-4 sm:w-5 sm:h-5" />
                       <span className="font-medium text-xs sm:text-sm">{t('hero.community.github')}</span>
                     </div>
-                    <div className="hidden sm:block px-2 sm:px-3 py-1.5 sm:py-2 bg-gray-800 group-hover:bg-gray-700 dark:bg-gray-600 dark:group-hover:bg-gray-500 text-white rounded-r-lg transition-colors duration-200 whitespace-nowrap w-full">
+                    <div className="hidden sm:block px-2 sm:px-3 py-1.5 sm:py-2 bg-gray-800 group-hover:bg-gray-700 dark:group-hover:bg-gray-500 text-white rounded-r-lg transition-colors duration-200 whitespace-nowrap w-full">
                       <span className="font-semibold text-xs sm:text-sm">M1PPosu</span>
                     </div>
                   </a>
@@ -198,7 +198,7 @@ const HeroSection: React.FC = () => {
       {/* Second page: feature carousel */}
       <section className="relative min-h-screen flex items-center py-8 sm:py-12 md:py-20 lg:py-32 z-10">
         {/* Solid background to cover the fixed first-page background */}
-        <div className="absolute inset-0 bg-white dark:bg-gray-900 z-0"></div>
+        <div className="absolute inset-0 bg-white z-0"></div>
         {/* Gradient decoration layer */}
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50/30 to-gray-100/30 dark:from-gray-800/30 dark:to-gray-700/30 z-0"></div>
         
@@ -211,10 +211,10 @@ const HeroSection: React.FC = () => {
             className="mt-8 sm:mt-12 md:mt-16 relative w-full"
           >
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
-              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
                 <span className="gradient-text">{t('hero.featuresTitle')}</span>
               </h3>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
                 {t('hero.featuresSubtitle')}
               </p>
             </div>
@@ -261,8 +261,8 @@ const HeroSection: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="px-4 max-w-lg mx-auto"
             >
-              <div className="p-3 sm:p-4 lg:p-6 bg-white/70 dark:bg-gray-800/70 border border-pink-200/50 dark:border-pink-700/50 rounded-2xl inline-block backdrop-blur-sm shadow-lg">
-                <p className="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 flex flex-col sm:flex-row items-center justify-center">
+              <div className="p-3 sm:p-4 lg:p-6 bg-white/70/70 border border-pink-200/50 dark:border-pink-700/50 rounded-2xl inline-block backdrop-blur-sm shadow-lg">
+                <p className="text-sm sm:text-base lg:text-lg text-gray-700 flex flex-col sm:flex-row items-center justify-center">
                   Welcome back, <span className="font-semibold text-pink-600 dark:text-pink-400 sm:ml-1">{user.username}</span>!
                 </p>
               </div>
