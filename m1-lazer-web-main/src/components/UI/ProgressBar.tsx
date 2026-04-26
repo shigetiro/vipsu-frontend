@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 
 interface ProgressBarProps {
@@ -39,7 +39,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <div className={`w-full ${className}`}>
       <motion.div 
-        className={`w-full bg-gray-200 dark:bg-gray-700 rounded-full ${height} overflow-hidden shadow-inner`}
+        className={`w-full bg-gray-200 rounded-full ${height} overflow-hidden shadow-inner`}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
@@ -74,7 +74,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       
       {showLabel && (
         <motion.div 
-          className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mt-2"
+          className="flex justify-between text-sm text-gray-500 mt-2"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.2 }}

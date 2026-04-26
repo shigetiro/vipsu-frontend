@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 
 interface LazyBackgroundImageProps {
   src?: string;
@@ -69,7 +69,7 @@ const LazyBackgroundImage: React.FC<LazyBackgroundImageProps> = ({
     return 'none';
   })();
 
-  const backgroundOpacity = showBackground && isLoaded && !hasError ? 1 : 0;
+  const backgroundOpacity = showBackground && isLoaded && !hasError ? 0.4 : 0;
 
   return (
     <div ref={elementRef} className={`relative ${className}`}>
@@ -87,7 +87,7 @@ const LazyBackgroundImage: React.FC<LazyBackgroundImageProps> = ({
       />
       
       {/* 内容层 - 立即显示 */}
-      <div className="relative">
+      <div className="relative h-full">
         {children}
       </div>
     </div>

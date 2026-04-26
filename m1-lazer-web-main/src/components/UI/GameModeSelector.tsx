@@ -183,6 +183,7 @@ const GameModeSelector: React.FC<GameModeSelectorProps> = ({
     const taikoRef = useRef<HTMLButtonElement>(null);
     const fruitsRef = useRef<HTMLButtonElement>(null);
     const maniaRef = useRef<HTMLButtonElement>(null);
+    const spaceRef = useRef<HTMLButtonElement>(null);
 
     const getButtonRef = (mainMode: MainGameMode) => {
       switch (mainMode) {
@@ -190,6 +191,7 @@ const GameModeSelector: React.FC<GameModeSelectorProps> = ({
         case 'taiko': return taikoRef;
         case 'fruits': return fruitsRef;
         case 'mania': return maniaRef;
+        case 'osuspaceruleset': return spaceRef;
       }
     };
 
@@ -239,10 +241,18 @@ const GameModeSelector: React.FC<GameModeSelectorProps> = ({
                     animate={{ x: shouldExpand ? -6 : 0 }}
                     transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
                   >
-                    <i 
-                      className={`${MAIN_MODE_ICONS[mainMode]} text-xl transition-colors duration-200`}
-                      style={{ color: isActive ? 'white' : 'currentColor' }}
-                    />
+                    {mainMode === 'osuspaceruleset' || (MAIN_MODE_ICONS[mainMode] && (MAIN_MODE_ICONS[mainMode].includes('.svg') || MAIN_MODE_ICONS[mainMode].includes('.png') || MAIN_MODE_ICONS[mainMode].startsWith('/'))) ? (
+                      <img 
+                        src={mainMode === 'osuspaceruleset' ? '/image/logo.png' : MAIN_MODE_ICONS[mainMode]} 
+                        alt={`${mainMode} icon`}
+                        className="w-[1.1rem] h-[1.1rem] object-contain"
+                        style={{ filter: isActive ? 'brightness(0) invert(1)' : 'none' }}
+                      />
+                    ) : (
+                      <i 
+                        className={`text-lg transition-colors duration-200 ${MAIN_MODE_ICONS[mainMode] || ''}`}
+                      />
+                    )}
                   </motion.div>
 
                   {/* 箭头指示器 */}
@@ -298,8 +308,8 @@ const GameModeSelector: React.FC<GameModeSelectorProps> = ({
 
   // 完整版本
   const allModes: GameMode[] = mainModesOnly 
-    ? ['osu', 'taiko', 'fruits', 'mania']
-    : ['osu', 'taiko', 'fruits', 'mania', 'osurx', 'osuap', 'taikorx', 'fruitsrx'];
+    ? ['osu', 'taiko', 'fruits', 'mania', 'osuspaceruleset']
+    : ['osu', 'taiko', 'fruits', 'mania', 'osuspaceruleset', 'osurx', 'osuap', 'taikorx', 'fruitsrx'];
 
   return (
     <div className={`grid grid-cols-2 md:grid-cols-4 ${mainModesOnly ? 'lg:grid-cols-4' : 'lg:grid-cols-8'} gap-3 ${className}`}>
@@ -333,10 +343,18 @@ const GameModeSelector: React.FC<GameModeSelectorProps> = ({
               }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-              <i 
-                className={`${mainMode ? MAIN_MODE_ICONS[mainMode] : 'icon-osu'} text-xl transition-colors duration-200`}
-                style={{ color: selectedMode === mode ? 'white' : 'currentColor' }}
-              />
+              {mainMode === 'osuspaceruleset' || (mainMode && MAIN_MODE_ICONS[mainMode] && (MAIN_MODE_ICONS[mainMode].includes('.svg') || MAIN_MODE_ICONS[mainMode].includes('.png') || MAIN_MODE_ICONS[mainMode].startsWith('/'))) ? (
+                <img 
+                  src={mainMode === 'osuspaceruleset' ? '/image/logo.png' : MAIN_MODE_ICONS[mainMode]} 
+                  alt={`${mainMode} icon`}
+                  className="w-[1.2rem] h-[1.2rem] object-contain"
+                  style={{ filter: selectedMode === mode ? 'brightness(0) invert(1)' : 'none' }}
+                />
+              ) : (
+                <i 
+                  className={`text-xl transition-colors duration-200 ${(mainMode && MAIN_MODE_ICONS[mainMode]) || 'icon-osu'}`}
+                />
+              )}
             </motion.div>
             
             <motion.span 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { FiCamera } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { userAPI } from '../../utils/api';
@@ -42,7 +42,7 @@ const ImageBlock = React.memo(function ImageBlock({
   return (
     <div className="relative w-full h-full" style={{ transform: 'translateZ(0)' }}>
       {isLoading && (
-        <div className={`absolute inset-0 bg-gray-300 dark:bg-gray-700 animate-pulse ${radiusClass}`} />
+        <div className={`absolute inset-0 bg-gray-300 animate-pulse ${radiusClass}`} />
       )}
       <img
         /** 关键点二：不给 <img> 设置任何会触发重算的 key；hover 时 props 不变、就不会重建节点 */

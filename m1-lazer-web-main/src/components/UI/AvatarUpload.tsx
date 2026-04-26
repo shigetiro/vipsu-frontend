@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FiUpload, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -147,15 +147,15 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
         style={{ minHeight: '400px' }}
       >
         {/* 头部 */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">
             {step === 'select' ? '上传头像' : '裁剪头像'}
           </h3>
           <button
             type="button"
             onClick={onClose}
             disabled={isUploading}
-            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+            className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
           >
             <FiX className="w-5 h-5" />
           </button>
@@ -175,11 +175,11 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
               
               {currentAvatarUrl && (
                 <div className="mb-6">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">当前头像</p>
+                  <p className="text-sm text-gray-600 mb-2">当前头像</p>
                   <img
                     src={currentAvatarUrl}
                     alt="当前头像"
-                    className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-gray-200 dark:border-gray-600"
+                    className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-gray-200"
                   />
                 </div>
               )}
@@ -188,7 +188,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
                 className={`border-2 border-dashed rounded-lg p-8 mb-4 transition-colors cursor-pointer ${
                   isDragOver 
                     ? 'border-osu-pink bg-osu-pink/10' 
-                    : 'border-gray-300 dark:border-gray-600 hover:border-osu-pink/50'
+                    : 'border-gray-300 hover:border-osu-pink/50'
                 }`}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -196,13 +196,13 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
                 onClick={() => fileInputRef.current?.click()}
               >
                 <FiUpload className={`w-12 h-12 mx-auto mb-4 ${isDragOver ? 'text-osu-pink' : 'text-gray-400'}`} />
-                <p className={`mb-2 ${isDragOver ? 'text-osu-pink' : 'text-gray-600 dark:text-gray-400'}`}>
+                <p className={`mb-2 ${isDragOver ? 'text-osu-pink' : 'text-gray-600'}`}>
                   {isDragOver ? '释放文件开始上传' : '点击选择图片或拖拽图片到此处'}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-500">
+                <p className="text-sm text-gray-500">
                   支持 PNG、JPEG、GIF 格式，最大 5MB
                 </p>
-                <p className="text-xs text-gray-400 dark:text-gray-400 mt-1">
+                <p className="text-xs text-gray-400 mt-1">
                   头像将自动调整为 256x256 像素
                 </p>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FiChevronDown, FiTrendingUp, FiAward } from 'react-icons/fi';
 import type { RankingType } from '../../types';
@@ -116,8 +116,8 @@ const RankingTypeSelector: React.FC<RankingTypeSelectorProps> = ({
         onClick={handleToggle}
         className={`
           flex items-center justify-between w-full px-3 sm:px-4 py-2 sm:py-2.5 
-          border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl
-          bg-card text-gray-900 dark:text-white 
+          border border-gray-200 rounded-lg sm:rounded-xl
+          bg-card text-gray-900 
           shadow-sm min-h-[44px] sm:min-h-[48px] font-medium text-sm sm:text-base
           transition-all duration-200 transform group
           ${isClosing ? 'scale-95' : ''}
@@ -145,7 +145,7 @@ const RankingTypeSelector: React.FC<RankingTypeSelectorProps> = ({
             isOpen ? 'rotate-180' : 'rotate-0'
           }`}
         >
-          <FiChevronDown size={14} className="text-gray-500 dark:text-gray-400" />
+          <FiChevronDown size={14} className="text-gray-500" />
         </div>
       </button>
 
@@ -154,7 +154,7 @@ const RankingTypeSelector: React.FC<RankingTypeSelectorProps> = ({
         <div
           className={`
             absolute left-0 right-0 z-50
-            bg-card border border-gray-200 dark:border-gray-700
+            bg-card border border-gray-200
             rounded-lg sm:rounded-xl shadow-lg min-w-full
             py-1 origin-top animate-in fade-in-0 zoom-in-95 duration-100
             ${dropdownPosition === 'bottom' ? 'top-full mt-1' : 'bottom-full mb-1'}
@@ -174,7 +174,7 @@ const RankingTypeSelector: React.FC<RankingTypeSelectorProps> = ({
                   flex items-center justify-between
                   ${isSelected
                     ? 'bg-profile-color/10 text-profile-color'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    : 'text-gray-700 hover:bg-gray-50'
                   }
                 `}
                 role="option"
@@ -186,7 +186,7 @@ const RankingTypeSelector: React.FC<RankingTypeSelectorProps> = ({
                     <span className="font-medium text-sm sm:text-base">
                       {type.label}
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <span className="text-xs text-gray-500">
                       {type.description}
                     </span>
                   </div>

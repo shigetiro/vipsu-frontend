@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronDown, FiCheck } from 'react-icons/fi';
 
@@ -51,13 +51,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         type="button"
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
-        className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white 
+        className={`w-full px-4 py-2.5 border rounded-lg bg-white text-gray-900 
                    focus:ring-2 focus:ring-osu-pink focus:border-transparent transition-all duration-200
                    flex items-center justify-between
                    ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-osu-pink/50'}
                    ${isOpen ? 'border-osu-pink ring-2 ring-osu-pink/20' : 'border-card'}`}
       >
-        <span className={selectedOption ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}>
+        <span className={selectedOption ? 'text-gray-900' : 'text-gray-500'}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <motion.div
@@ -75,7 +75,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-50 w-full mt-2 bg-card border border-gray-200 dark:border-gray-600 
+            className="absolute z-50 w-full mt-2 bg-card border border-gray-200 
                        rounded-lg shadow-xl overflow-hidden"
           >
             <div className="py-1 max-h-60 overflow-y-auto">
@@ -92,7 +92,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                     className={`w-full px-4 py-2.5 text-left flex items-center justify-between transition-colors duration-150
                                ${isSelected 
                                  ? 'bg-osu-pink text-white' 
-                                 : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                 : 'text-gray-700 hover:bg-gray-100'
                                }`}
                   >
                     <span className="font-medium">{option.label}</span>

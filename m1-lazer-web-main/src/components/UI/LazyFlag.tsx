@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 
 interface LazyFlagProps {
   src: string;
@@ -71,7 +71,7 @@ const LazyFlag: React.FC<LazyFlagProps> = ({
     >
       {/* 占位符背景 - 只在未加载且没有错误时显示 */}
       {!isLoaded && !hasError && (
-        <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded animate-pulse" />
+        <div className="absolute inset-0 bg-surface-2 border border-gray-200 rounded animate-pulse" />
       )}
       
       {/* 国旗图片 */}
@@ -89,8 +89,8 @@ const LazyFlag: React.FC<LazyFlagProps> = ({
       
       {/* 错误时的占位符 */}
       {hasError && (
-        <div className={`bg-gray-200 dark:bg-gray-600 flex items-center justify-center border border-gray-200 dark:border-gray-600 rounded ${className}`}>
-          <span className="text-xs text-gray-500 dark:text-gray-400">{alt}</span>
+        <div className={`bg-gray-200 flex items-center justify-center border border-gray-200 rounded ${className}`}>
+          <span className="text-xs text-gray-500">{alt}</span>
         </div>
       )}
     </div>

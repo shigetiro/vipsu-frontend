@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 
 interface StatCardProps {
@@ -29,14 +29,14 @@ const StatCard: React.FC<StatCardProps> = ({
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+          <h3 className="text-sm font-medium text-gray-500 mb-1">
             {title}
           </h3>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white break-words">
+          <p className="text-2xl font-bold text-gray-900 break-words">
             {value}
           </p>
           {subtitle && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-xs text-gray-500 mt-1">
               {subtitle}
             </p>
           )}

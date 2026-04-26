@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 interface RankBadgeProps {
   rank: number;
@@ -49,8 +49,8 @@ const RankBadge: React.FC<RankBadgeProps> = ({
     }
     
     return {
-      bg: 'bg-gray-100 dark:bg-gray-700/80',
-      text: 'text-gray-700 dark:text-gray-300',
+      bg: 'bg-gray-100/80',
+      text: 'text-gray-700',
       shadow: 'shadow-sm',
     };
   };

@@ -1,4 +1,4 @@
-import React, { useId, useMemo } from "react";
+﻿import React, { useId, useMemo } from "react";
 import { Tooltip } from "react-tooltip";
 
 /**
@@ -90,7 +90,7 @@ export default function LevelProgress({
     <div className={`flex items-center gap-3 ${className}`}>
       {/* Linear Progress Bar - Hidden on mobile */}
       <div
-        className="relative w-48 h-4 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden shadow-inner hidden sm:block"
+        className="relative w-48 h-4 bg-gray-200 rounded-full overflow-hidden shadow-inner hidden sm:block"
         style={barContainerStyle}
         role="progressbar"
         aria-valuenow={clamped}
@@ -149,10 +149,10 @@ export default function LevelProgress({
         </svg>
         {/* Center label for mobile */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+          <span className="text-xs font-semibold text-gray-700">
             Lv.{levelCurrent}
           </span>
-          <span className="text-xs text-gray-500 dark:text-gray-400">
+          <span className="text-xs text-gray-500">
             {clamped}%
           </span>
         </div>
@@ -160,7 +160,7 @@ export default function LevelProgress({
 
       {/* Right-side label - Hidden on mobile since it's in the center of circle */}
       {showLabel && (
-        <span className="text-gray-800 dark:text-gray-100 font-semibold whitespace-nowrap hidden sm:inline">
+        <span className="text-gray-800 font-semibold whitespace-nowrap hidden sm:inline">
           {labelContent}
         </span>
       )}

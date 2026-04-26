@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import ImageCropper from './ImageCropper';
 import toast from 'react-hot-toast';
@@ -141,7 +141,7 @@ const ImageUploadWithCrop: React.FC<ImageUploadWithCropProps> = ({
             {isDragOver ? '释放文件开始上传' : placeholder}
           </button>
           {description && (
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-gray-500">
               {description}
             </div>
           )}
@@ -149,7 +149,7 @@ const ImageUploadWithCrop: React.FC<ImageUploadWithCropProps> = ({
 
         {/* 预览图片 */}
         {preview && (
-          <div className={`border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden ${
+          <div className={`border border-gray-200 rounded-lg overflow-hidden ${
             aspectRatio === 2 ? 'w-60 h-30' : // 旗帜比例 2:1 (240x120)
             aspectRatio === 1.5 ? 'w-full max-w-md h-48' : // 封面比例 3:2
             'w-48 h-48' // 默认方形

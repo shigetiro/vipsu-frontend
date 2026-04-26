@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FiChevronDown, FiUser } from 'react-icons/fi';
 import { GiCrown } from 'react-icons/gi';
 import { useTranslation } from 'react-i18next';
@@ -69,8 +69,8 @@ const MemberSelector: React.FC<MemberSelectorProps> = ({
       <button
         type="button"
         onClick={handleToggle}
-        className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg
-                   bg-card text-gray-900 dark:text-white
+        className="w-full px-4 py-3 border border-gray-200 rounded-lg
+                   bg-card text-gray-900
                    focus:ring-2 focus:ring-osu-pink focus:border-transparent
                    flex items-center justify-between transition-colors
                    hover:border-gray-300 dark:hover:border-gray-600"
@@ -92,7 +92,7 @@ const MemberSelector: React.FC<MemberSelectorProps> = ({
                   {selectedMember.username}
                 </span>
                 {selectedMember.country?.name && (
-                  <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-1 text-xs text-gray-500">
                     <span>{selectedMember.country.name}</span>
                     {selectedMember.country.code && (
                       <img
@@ -108,7 +108,7 @@ const MemberSelector: React.FC<MemberSelectorProps> = ({
           ) : (
             <>
               <FiUser className="w-5 h-5 text-gray-400" />
-              <span className="text-gray-500 dark:text-gray-400">
+              <span className="text-gray-500">
                 {placeholder || t('teams.create.keepCurrentLeader')}
               </span>
             </>
@@ -124,17 +124,17 @@ const MemberSelector: React.FC<MemberSelectorProps> = ({
 
       {/* 下拉选项 */}
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-card border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+        <div className="absolute z-50 w-full mt-1 bg-card border border-gray-200 rounded-lg shadow-lg overflow-hidden">
           <div className="max-h-60 overflow-y-auto">
             {/* 保持当前队长选项 */}
             <button
               type="button"
               onClick={() => handleSelect(null)}
-              className={`w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
+              className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors
                          flex items-center gap-3 ${
                            value === null 
                              ? 'bg-osu-pink/10 text-osu-pink border-r-2 border-osu-pink' 
-                             : 'text-gray-900 dark:text-white'
+                             : 'text-gray-900'
                          }`}
             >
               <GiCrown className="w-5 h-5 text-yellow-500" />
@@ -145,7 +145,7 @@ const MemberSelector: React.FC<MemberSelectorProps> = ({
 
             {/* 分隔线 */}
             {availableMembers.length > 0 && (
-              <div className="border-t border-gray-200 dark:border-gray-700" />
+              <div className="border-t border-gray-200" />
             )}
 
             {/* 可选择的成员 */}
@@ -154,11 +154,11 @@ const MemberSelector: React.FC<MemberSelectorProps> = ({
                 key={member.id}
                 type="button"
                 onClick={() => handleSelect(member.id)}
-                className={`w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors
+                className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors
                            flex items-center gap-3 ${
                              value === member.id 
                                ? 'bg-osu-pink/10 text-osu-pink border-r-2 border-osu-pink' 
-                               : 'text-gray-900 dark:text-white'
+                               : 'text-gray-900'
                            }`}
               >
                 <div className="flex-shrink-0">
@@ -173,7 +173,7 @@ const MemberSelector: React.FC<MemberSelectorProps> = ({
                     {member.username}
                   </span>
                   {member.country?.name && (
-                    <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
                       <span>{member.country.name}</span>
                       {member.country.code && (
                         <img
@@ -190,7 +190,7 @@ const MemberSelector: React.FC<MemberSelectorProps> = ({
 
             {/* 空状态 */}
             {availableMembers.length === 0 && (
-              <div className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+              <div className="px-4 py-6 text-center text-gray-500">
                 <FiUser className="w-8 h-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">{t('teams.create.noMembersAvailable')}</p>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiUser, FiLogOut, FiSettings, FiChevronDown, FiChevronRight, FiCheck } from 'react-icons/fi';
@@ -109,7 +109,7 @@ const UserDropdown: React.FC<UserDropdownProps> = memo(({ user, onLogout }) => {
         className={`flex items-center space-x-2 px-3 py-2.5 rounded-xl font-medium transition-all duration-200 ${
           isOpen
             ? 'text-osu-pink bg-osu-pink/10 shadow-sm'
-            : 'text-gray-600 dark:text-gray-300 hover:text-osu-pink dark:hover:text-osu-pink hover:bg-gray-50 dark:hover:bg-gray-800/50'
+            : 'text-gray-600 hover:text-osu-pink dark:hover:text-osu-pink hover:bg-gray-50'
         }`}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -163,9 +163,9 @@ const UserDropdown: React.FC<UserDropdownProps> = memo(({ user, onLogout }) => {
               duration: 0.15,
               ease: [0.16, 1, 0.3, 1]
             }}
-            className="absolute right-0 mt-3 w-52 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 py-2 z-50 overflow-visible"
+            className="absolute right-0 mt-3 w-52 glass-card rounded-2xl py-2 z-50 overflow-visible"
             style={{
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)'
+              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08)'
             }}
           >
             {/* Menu Items */}
@@ -188,7 +188,7 @@ const UserDropdown: React.FC<UserDropdownProps> = memo(({ user, onLogout }) => {
               <div className="relative">
                 <button
                   onClick={handleLanguageToggle}
-                  className="flex items-center justify-between w-full px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-osu-pink dark:hover:text-osu-pink transition-all duration-200"
+                  className="flex items-center justify-between w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-osu-pink dark:hover:text-osu-pink transition-all duration-200"
                 >
                   <div className="flex items-center space-x-3">
                     <img
@@ -214,9 +214,9 @@ const UserDropdown: React.FC<UserDropdownProps> = memo(({ user, onLogout }) => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -10, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 right-0 mt-2 bg-card rounded-xl border border-gray-200 dark:border-gray-700 py-2 shadow-xl z-[60] overflow-hidden min-w-[200px]"
+                      className="absolute top-full left-0 right-0 mt-2 glass-card rounded-xl py-2 shadow-xl z-[60] overflow-hidden min-w-[200px]"
                       style={{
-                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08)'
                       }}
                     >
                       {SUPPORTED_LANGUAGES.map((language) => {
@@ -232,7 +232,7 @@ const UserDropdown: React.FC<UserDropdownProps> = memo(({ user, onLogout }) => {
                               ${
                                 isSelected
                                   ? 'text-osu-pink bg-osu-pink/10'
-                                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-osu-pink'
+                                  : 'text-gray-700 hover:bg-gray-50 hover:text-osu-pink'
                               }
                             `}
                           >
@@ -261,7 +261,7 @@ const UserDropdown: React.FC<UserDropdownProps> = memo(({ user, onLogout }) => {
             </div>
 
             {/* Logout */}
-            <div className="border-t border-gray-200/50 dark:border-gray-700/50 mt-2 pt-2">
+            <div className="border-t border-gray-200/50 mt-2 pt-2">
               <button
                 onClick={handleLogout}
                 className="flex items-center w-full px-4 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-700 dark:hover:text-red-300 transition-all duration-200"
@@ -300,7 +300,7 @@ const DropdownItem: React.FC<DropdownItemProps> = memo(({
       onClick={onClick}
       className="block"
     >
-      <div className="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-osu-pink dark:hover:text-osu-pink transition-all duration-200">
+      <div className="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-osu-pink dark:hover:text-osu-pink transition-all duration-200">
         <Icon size={16} className="mr-3" />
         {label}
       </div>

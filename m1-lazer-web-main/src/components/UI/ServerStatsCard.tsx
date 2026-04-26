@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { FiBarChart, FiUsers, FiActivity, FiPlay, FiRefreshCw, FiTrendingUp } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -182,15 +182,15 @@ const ServerStatsCard: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+        className="bg-card rounded-2xl p-6 shadow-lg border border-gray-200"
       >
         {/* 标题占位符 */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-            <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-6 w-24 bg-gray-200 rounded animate-pulse"></div>
           </div>
-          <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+          <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
         </div>
 
         {/* 统计数据占位符 */}
@@ -198,10 +198,10 @@ const ServerStatsCard: React.FC = () => {
           {[1, 2, 3].map((i) => (
             <div key={i} className="text-center">
               <div className="flex items-center justify-center gap-2 mb-1">
-                <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-                <div className="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-8 w-12 bg-gray-200 rounded animate-pulse"></div>
               </div>
-              <div className="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+              <div className="h-3 w-16 bg-gray-200 rounded animate-pulse mx-auto"></div>
             </div>
           ))}
         </div>
@@ -210,34 +210,34 @@ const ServerStatsCard: React.FC = () => {
         <div>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-              <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="w-4 h-4 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
-                <div className="h-3 w-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                <div className="w-3 h-3 bg-gray-200 rounded-full animate-pulse"></div>
+                <div className="h-3 w-8 bg-gray-200 rounded animate-pulse"></div>
               </div>
               <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
-                <div className="h-3 w-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                <div className="w-3 h-3 bg-gray-200 rounded-full animate-pulse"></div>
+                <div className="h-3 w-8 bg-gray-200 rounded animate-pulse"></div>
               </div>
             </div>
           </div>
           
           {/* 图表区域占位符 */}
-          <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+          <div className="h-20 bg-gray-200 rounded animate-pulse mb-2"></div>
           
           {/* 时间标签占位符 */}
           <div className="flex justify-between mb-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-3 w-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div key={i} className="h-3 w-10 bg-gray-200 rounded animate-pulse"></div>
             ))}
           </div>
           
           {/* 时区标识占位符 */}
           <div className="text-center">
-            <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+            <div className="h-3 w-20 bg-gray-200 rounded animate-pulse mx-auto"></div>
           </div>
         </div>
       </motion.div>
@@ -249,9 +249,9 @@ const ServerStatsCard: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+        className="bg-card rounded-2xl p-6 shadow-lg border border-gray-200"
       >
-        <div className="text-center text-gray-500 dark:text-gray-400">
+        <div className="text-center text-gray-500">
           <FiBarChart className="w-8 h-8 mx-auto mb-2" />
           <p className="mb-2">{t('common.statsUnavailable')}</p>
           <button
@@ -282,17 +282,17 @@ const ServerStatsCard: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 dark:border-gray-700/50"
+      className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50"
     >
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-3">
+        <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
           <div className="w-8 h-8 bg-profile-color/10 dark:bg-profile-color/20 rounded-xl flex items-center justify-center">
             <FiBarChart className="w-4 h-4 text-profile-color" />
           </div>
           {t('common.serverStats')}
         </h3>
         {stats && (
-          <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
+          <span className="text-xs text-gray-500 flex items-center gap-2">
             {t('common.updatedAt')} {formatLocalDateTime(stats.timestamp)}
             <button
               onClick={fetchStats}
@@ -337,7 +337,7 @@ const ServerStatsCard: React.FC = () => {
       {onlineChartData.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+            <h4 className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <FiTrendingUp className="w-4 h-4" />
               {t('common.onlineTrend24h')}
             </h4>
@@ -346,11 +346,11 @@ const ServerStatsCard: React.FC = () => {
             <div className="flex items-center gap-4 text-xs">
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-gray-600 dark:text-gray-400">{t('common.online')}</span>
+                <span className="text-gray-600">{t('common.online')}</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                <span className="text-gray-600 dark:text-gray-400">{t('common.playing')}</span>
+                <span className="text-gray-600">{t('common.playing')}</span>
               </div>
             </div>
           </div>
@@ -358,7 +358,7 @@ const ServerStatsCard: React.FC = () => {
           <SimpleLineChart onlineData={onlineChartData} playingData={playingChartData} />
           
           {/* 时间标签 */}
-          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+          <div className="flex justify-between text-xs text-gray-500 mt-2">
             <span>{onlineChartData[0]?.time}</span>
             <span>{onlineChartData[Math.floor(onlineChartData.length / 2)]?.time}</span>
             <span>{onlineChartData[onlineChartData.length - 1]?.time}</span>
@@ -366,7 +366,7 @@ const ServerStatsCard: React.FC = () => {
           
           {/* 时区指示 */}
           <div className="text-center mt-1">
-            <span className="text-xs text-gray-400 dark:text-gray-500">
+            <span className="text-xs text-gray-400">
               {Intl.DateTimeFormat().resolvedOptions().timeZone} {t('common.timezone')}
             </span>
           </div>

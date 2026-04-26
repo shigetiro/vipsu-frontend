@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
+﻿import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 
@@ -424,7 +424,7 @@ export const AudioPlayerControls: React.FC<AudioPlayerControlsProps> = ({ classN
       fixed bottom-4 right-4 z-50
       w-1/3 min-w-[280px] max-w-[400px]
       sm:min-w-[320px] md:w-1/3 lg:w-1/4
-      bg-card border border-gray-200 dark:border-gray-700
+      bg-card border border-gray-200
       rounded-xl shadow-lg backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95
       px-3 py-2 flex items-center gap-2 sm:gap-3
       max-sm:bottom-2 max-sm:right-2 max-sm:left-2 max-sm:w-auto
@@ -453,7 +453,7 @@ export const AudioPlayerControls: React.FC<AudioPlayerControlsProps> = ({ classN
 
       {/* 进度条 */}
       <div className="flex-1 flex items-center gap-1 sm:gap-2">
-        <span className="text-xs text-gray-600 dark:text-gray-400 min-w-[28px] sm:min-w-[32px] hidden xs:block">
+        <span className="text-xs text-gray-600 min-w-[28px] sm:min-w-[32px] hidden xs:block">
           {formatTime(currentTime)}
         </span>
         
@@ -461,7 +461,7 @@ export const AudioPlayerControls: React.FC<AudioPlayerControlsProps> = ({ classN
           ref={progressRef}
           onClick={handleProgressClick}
           onMouseDown={handleProgressMouseDown}
-          className={`flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer group overflow-hidden ${
+          className={`flex-1 h-2 bg-gray-200 rounded-full cursor-pointer group overflow-hidden ${
             isDraggingProgress ? 'cursor-grabbing' : 'cursor-pointer'
           }`}
           whileHover={{ height: 8 }}
@@ -492,7 +492,7 @@ export const AudioPlayerControls: React.FC<AudioPlayerControlsProps> = ({ classN
           </div>
         </motion.div>
         
-        <span className="text-xs text-gray-600 dark:text-gray-400 min-w-[28px] sm:min-w-[32px] hidden xs:block">
+        <span className="text-xs text-gray-600 min-w-[28px] sm:min-w-[32px] hidden xs:block">
           {formatTime(duration)}
         </span>
       </div>
@@ -501,7 +501,7 @@ export const AudioPlayerControls: React.FC<AudioPlayerControlsProps> = ({ classN
       <div className="flex items-center gap-1 flex-shrink-0 hidden sm:flex">
         <motion.button
           onClick={toggleMute}
-          className="p-1 text-gray-600 dark:text-gray-400 hover:text-osu-pink transition-colors rounded"
+          className="p-1 text-gray-600 hover:text-osu-pink transition-colors rounded"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -523,7 +523,7 @@ export const AudioPlayerControls: React.FC<AudioPlayerControlsProps> = ({ classN
           ref={volumeRef}
           onClick={handleVolumeClick}
           onMouseDown={handleVolumeMouseDown}
-          className={`w-12 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full group overflow-hidden ${
+          className={`w-12 h-1.5 bg-gray-200 rounded-full group overflow-hidden ${
             isDraggingVolume ? 'cursor-grabbing' : 'cursor-pointer'
           }`}
           whileHover={{ height: 6 }}
