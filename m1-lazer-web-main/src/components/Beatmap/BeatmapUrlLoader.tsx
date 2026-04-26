@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { beatmapAPI } from '../../utils/api';
@@ -60,7 +60,7 @@ const BeatmapUrlLoader: React.FC<BeatmapUrlLoaderProps> = ({ onLoad, className =
   return (
     <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden ${className}`}>
       <div className="px-6 py-4 bg-gradient-to-r from-osu-pink/10 to-transparent border-b border-slate-200 dark:border-slate-700">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-osu-pink flex items-center gap-2">
           <ExternalLink size={20} className="text-osu-pink" />
           {t('beatmap.loadFromUrl')}
         </h3>
@@ -79,7 +79,7 @@ const BeatmapUrlLoader: React.FC<BeatmapUrlLoaderProps> = ({ onLoad, className =
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://osu.ppy.sh/beatmapsets/123456#osu/789012"
               className="w-full px-4 py-3 pl-10 pr-12 border-2 border-slate-200 dark:border-slate-700 rounded-lg 
-                        bg-white dark:bg-slate-900 text-slate-900 dark:text-white
+                        bg-white dark:bg-slate-900 text-osu-pink
                         focus:ring-2 focus:ring-osu-pink focus:border-osu-pink
                         placeholder-slate-400 dark:placeholder-slate-500
                         transition-all"
