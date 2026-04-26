@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { adminAPI } from '../../utils/api';
 import { Link } from 'react-router-dom';
@@ -73,12 +73,12 @@ const AdminBeatmapRequests: React.FC = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Beatmap Rank Requests</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Beatmap Rank Requests</h2>
         <div className="flex gap-2">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as RequestStatus | 'all')}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+            className="px-3 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900"
           >
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
@@ -102,7 +102,7 @@ const AdminBeatmapRequests: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700">
+              <tr className="border-b border-gray-200 dark:border-white/10">
                 <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">ID</th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Beatmap</th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Requester</th>
@@ -115,14 +115,14 @@ const AdminBeatmapRequests: React.FC = () => {
             <tbody>
               {requests.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <td colSpan={7} className="text-center py-8 text-gray-500">
                     No requests found
                   </td>
                 </tr>
               ) : (
                 requests.map((r) => (
-                  <tr key={r.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{r.id}</td>
+                  <tr key={r.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-3 px-4 text-gray-600">{r.id}</td>
                     <td className="py-3 px-4">{formatBeatmapLink(r)}</td>
                     <td className="py-3 px-4">
                       <Link to={`/users/${r.requester_id}`} className="text-blue-600 dark:text-blue-400 hover:underline">

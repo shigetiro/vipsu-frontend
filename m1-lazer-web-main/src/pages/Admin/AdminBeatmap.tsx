@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { adminAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import LazyBackgroundImage from '../../components/UI/LazyBackgroundImage';
@@ -131,7 +131,7 @@ const AdminBeatmap: React.FC = () => {
     return (
       <LazyBackgroundImage
         src={coverUrl}
-        className="relative overflow-hidden border-b border-gray-100 dark:border-gray-700/50 last:border-b-0"
+        className="relative overflow-hidden border-b border-gray-100 last:border-b-0"
       >
         {/* Gradient overlay for readability with theme color */}
         <div
@@ -142,7 +142,7 @@ const AdminBeatmap: React.FC = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/75 to-white/60 dark:from-gray-800/90 dark:via-gray-800/75 dark:to-gray-800/60" />
 
-        <div className="relative bg-transparent hover:bg-white/20 dark:hover:bg-gray-800/20 transition-colors duration-150 group">
+        <div className="relative bg-transparent hover:bg-white/20/20 transition-colors duration-150 group">
           {/* Desktop layout */}
           <div className="hidden sm:block">
             <div className="flex items-center h-12 pl-5 pr-24">
@@ -152,7 +152,7 @@ const AdminBeatmap: React.FC = () => {
                   {/* Title and Artist */}
                   <div className="flex items-baseline gap-1 text-sm leading-tight">
                     <span
-                      className="font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors cursor-pointer"
+                      className="font-semibold text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors cursor-pointer"
                       title={`${beatmapset.artist} - ${beatmapset.title}`}
                       data-tooltip-id={tooltipId}
                       data-tooltip-content={`${beatmapset.beatmaps.length} beatmap${beatmapset.beatmaps.length !== 1 ? 's' : ''} • Click to view details`}
@@ -160,10 +160,10 @@ const AdminBeatmap: React.FC = () => {
                     >
                       {beatmapset.title}
                     </span>
-                    <span className="text-gray-600 dark:text-gray-400 text-xs flex-shrink-0">
+                    <span className="text-gray-600 text-xs flex-shrink-0">
                       by
                     </span>
-                    <span className="text-gray-600 dark:text-gray-400 text-xs truncate">
+                    <span className="text-gray-600 text-xs truncate">
                       {beatmapset.artist}
                     </span>
                   </div>
@@ -173,7 +173,7 @@ const AdminBeatmap: React.FC = () => {
                     <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                       {beatmapset.creator}
                     </span>
-                    <span className="text-gray-500 dark:text-gray-400">
+                    <span className="text-gray-500">
                       {beatmapset.beatmaps.length} beatmap{beatmapset.beatmaps.length !== 1 ? 's' : ''}
                     </span>
                   </div>
@@ -192,7 +192,7 @@ const AdminBeatmap: React.FC = () => {
                     ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300'
                     : beatmapset.rank_status === 'loved'
                     ? 'bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                    : 'bg-gray-100 text-gray-700'
                 }`}>
                   {beatmapset.rank_status || 'pending'}
                 </span>
@@ -223,7 +223,7 @@ const AdminBeatmap: React.FC = () => {
               {/* Title and Artist */}
               <div className="flex items-baseline gap-1 text-sm leading-tight mb-1">
                 <span
-                  className="font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors cursor-pointer"
+                  className="font-semibold text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors cursor-pointer"
                   title={`${beatmapset.artist} - ${beatmapset.title}`}
                   data-tooltip-id={tooltipId}
                   data-tooltip-content={`${beatmapset.beatmaps.length} beatmap${beatmapset.beatmaps.length !== 1 ? 's' : ''} • Click to view details`}
@@ -231,10 +231,10 @@ const AdminBeatmap: React.FC = () => {
                 >
                   {beatmapset.title}
                 </span>
-                <span className="text-gray-600 dark:text-gray-400 text-xs flex-shrink-0">
+                <span className="text-gray-600 text-xs flex-shrink-0">
                   by
                 </span>
-                <span className="text-gray-600 dark:text-gray-400 text-xs truncate">
+                <span className="text-gray-600 text-xs truncate">
                   {beatmapset.artist}
                 </span>
               </div>
@@ -245,7 +245,7 @@ const AdminBeatmap: React.FC = () => {
                   <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                     {beatmapset.creator}
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400">
+                  <span className="text-gray-500">
                     {beatmapset.beatmaps.length} beatmap{beatmapset.beatmaps.length !== 1 ? 's' : ''}
                   </span>
                 </div>
@@ -259,7 +259,7 @@ const AdminBeatmap: React.FC = () => {
                       ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300'
                       : beatmapset.rank_status === 'loved'
                       ? 'bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                      : 'bg-gray-100 text-gray-700'
                   }`}>
                     {beatmapset.rank_status || 'pending'}
                   </span>
@@ -294,7 +294,7 @@ const AdminBeatmap: React.FC = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Beatmap Management</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Beatmap Management</h2>
         <button
           onClick={loadBeatmaps}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -311,7 +311,7 @@ const AdminBeatmap: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by Artist, Title, or ID..."
-            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900"
           />
           <button
             type="submit"
@@ -344,7 +344,7 @@ const AdminBeatmap: React.FC = () => {
           <div className="bg-card rounded-lg overflow-hidden border border-card">
             <div className="divide-y divide-gray-100 dark:divide-gray-700/50">
               {beatmaps?.beatmapsets.length === 0 ? (
-                <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                <div className="p-8 text-center text-gray-500">
                   No beatmaps found
                 </div>
               ) : (
@@ -362,21 +362,21 @@ const AdminBeatmap: React.FC = () => {
           {/* Pagination */}
           {beatmaps && beatmaps.total_pages > 1 && (
             <div className="flex items-center justify-between mt-6">
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm text-gray-600">
                 Showing page {beatmaps.page} of {beatmaps.total_pages} ({beatmaps.total} total)
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border border-gray-300 dark:border-white/20 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.min(beatmaps.total_pages, p + 1))}
                   disabled={currentPage >= beatmaps.total_pages}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border border-gray-300 dark:border-white/20 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Next
                 </button>
@@ -408,13 +408,13 @@ const AdminBeatmap: React.FC = () => {
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 {!selectedBeatmapset.cover_url && (
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="text-2xl font-bold text-gray-900">
                     Beatmap Details: {selectedBeatmapset.title}
                   </h2>
                 )}
                 <button
                   onClick={() => setSelectedBeatmapset(null)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                  className="text-gray-400 hover:text-gray-600"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -442,8 +442,8 @@ const AdminBeatmap: React.FC = () => {
                       <div key={beatmap.id} className="bg-gray-50 dark:bg-slate-700 rounded p-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="font-medium text-gray-900 dark:text-white">{beatmap.version}</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <p className="font-medium text-gray-900">{beatmap.version}</p>
+                            <p className="text-sm text-gray-600">
                               Mode: {beatmap.mode || 'N/A'} | Difficulty: {beatmap.difficulty_rating?.toFixed(2) || 'N/A'}★
                             </p>
                           </div>
@@ -462,7 +462,7 @@ const AdminBeatmap: React.FC = () => {
                   <select
                     value={newRankStatus}
                     onChange={(e) => setNewRankStatus(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900"
                   >
                     <option value="">Select status...</option>
                     <option value="ranked">Ranked</option>
@@ -479,7 +479,7 @@ const AdminBeatmap: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedBeatmapset(null)}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="px-4 py-2 border border-gray-300 dark:border-white/20 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
                   >
                     Cancel
                   </button>

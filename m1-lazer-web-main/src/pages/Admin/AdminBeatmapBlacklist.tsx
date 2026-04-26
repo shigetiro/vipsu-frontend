@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { adminAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 
@@ -74,18 +74,18 @@ const AdminBeatmapBlacklist: React.FC = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Beatmap Blacklist</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Beatmap Blacklist</h2>
 
       {/* Add Beatmapset Form */}
       <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-6 mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Add Beatmapset to Blacklist</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Add Beatmapset to Blacklist</h3>
         <form onSubmit={handleAdd} className="flex gap-3">
           <input
             type="number"
             value={beatmapsetId}
             onChange={(e) => setBeatmapsetId(e.target.value)}
             placeholder="Enter Beatmapset ID"
-            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900"
             required
             min="1"
           />
@@ -108,7 +108,7 @@ const AdminBeatmapBlacklist: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700">
+              <tr className="border-b border-gray-200 dark:border-white/10">
                 <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Beatmapset ID</th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Title</th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Artist</th>
@@ -118,7 +118,7 @@ const AdminBeatmapBlacklist: React.FC = () => {
             <tbody>
               {blacklistedBeatmaps.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <td colSpan={4} className="text-center py-8 text-gray-500">
                     No blacklisted beatmaps
                   </td>
                 </tr>
@@ -126,15 +126,15 @@ const AdminBeatmapBlacklist: React.FC = () => {
                 blacklistedBeatmaps.map((item) => (
                   <tr
                     key={item.id}
-                    className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className="border-b border-gray-100 hover:bg-gray-50"
                   >
-                    <td className="py-3 px-4 text-gray-600 dark:text-gray-400 font-mono">
+                    <td className="py-3 px-4 text-gray-600 font-mono">
                       {item.beatmapset_id}
                     </td>
-                    <td className="py-3 px-4 text-gray-900 dark:text-white">
+                    <td className="py-3 px-4 text-gray-900">
                       {item.beatmapset?.title || 'N/A'}
                     </td>
-                    <td className="py-3 px-4 text-gray-600 dark:text-gray-400">
+                    <td className="py-3 px-4 text-gray-600">
                       {item.beatmapset?.artist || 'N/A'}
                     </td>
                     <td className="py-3 px-4">
