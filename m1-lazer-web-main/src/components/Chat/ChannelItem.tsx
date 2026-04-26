@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { FiMessageCircle, FiUsers, FiLock, FiHash } from 'react-icons/fi';
 import Avatar from '../UI/Avatar';
@@ -109,7 +109,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel, isSelected, onClick 
       onClick={onClick}
       className={`
         w-full p-3 rounded-lg text-left transition-all duration-200
-        hover:bg-gray-50 dark:hover:bg-gray-700/50
+        hover:bg-gray-50
         ${isSelected
           ? 'bg-osu-pink/10 border border-osu-pink/20 shadow-sm'
           : 'border border-transparent'
@@ -121,7 +121,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel, isSelected, onClick 
         <div className="flex-shrink-0 relative">
           {getChannelIcon()}
           {hasUnreadMessages && (
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-osu-pink rounded-full border-2 border-white dark:border-gray-800" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-osu-pink rounded-full border-2 border-white" />
           )}
         </div>
         
@@ -132,7 +132,7 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel, isSelected, onClick 
               font-medium truncate
               ${isSelected 
                 ? 'text-osu-pink' 
-                : 'text-gray-900 dark:text-white'
+                : 'text-gray-900'
               }
               ${hasUnreadMessages ? 'font-semibold' : ''}
             `}>
@@ -153,8 +153,8 @@ const ChannelItem: React.FC<ChannelItemProps> = ({ channel, isSelected, onClick 
           <p className={`
             text-sm truncate
             ${hasUnreadMessages 
-              ? 'text-gray-700 dark:text-gray-200 font-medium' 
-              : 'text-gray-500 dark:text-gray-400'
+              ? 'text-gray-700 font-medium' 
+              : 'text-gray-500'
             }
           `}>
             {formatLastMessage()}

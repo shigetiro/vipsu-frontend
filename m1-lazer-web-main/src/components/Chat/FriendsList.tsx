@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiUser, FiMessageCircle, FiX } from 'react-icons/fi';
 import Avatar from '../UI/Avatar';
+import UserRoleBadge from '../UI/UserRoleBadge';
 import { friendsAPI } from '../../utils/api';
 import type { FriendRelation, User } from '../../types';
 import toast from 'react-hot-toast';
@@ -110,22 +111,22 @@ const FriendsList: React.FC<FriendsListProps> = ({ currentUser: _currentUser, on
         onClick={(e) => e.stopPropagation()}
       >
         {/* 头部 */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">好友管理</h2>
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">好友管理</h2>
           <button
             onClick={() => {
               console.log('关闭按钮被点击');
               onClose();
             }}
-            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="p-2 text-gray-500 hover:text-gray-700"
           >
             <FiX size={20} />
           </button>
         </div>
 
         {/* 标题栏 */}
-        <div className="py-3 px-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div className="py-3 px-4 border-b border-gray-200">
+          <h3 className="text-sm font-medium text-gray-700">
             好友列表 ({friends.length})
           </h3>
         </div>
@@ -139,7 +140,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ currentUser: _currentUser, on
               placeholder="搜索好友..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900"
             />
           </div>
 
@@ -148,12 +149,12 @@ const FriendsList: React.FC<FriendsListProps> = ({ currentUser: _currentUser, on
             {isLoading ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-osu-pink mx-auto"></div>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">加载中...</p>
+                <p className="text-gray-500 mt-2">加载中...</p>
               </div>
             ) : filteredFriends.length === 0 ? (
               <div className="text-center py-8">
                 <FiUser className="mx-auto h-12 w-12 text-gray-400" />
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
+                <p className="text-gray-500 mt-2">
                   {searchQuery ? '没有找到匹配的好友' : '暂无好友'}
                 </p>
               </div>
@@ -161,7 +162,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ currentUser: _currentUser, on
               filteredFriends.map((friend) => (
                 <div
                   key={friend.target_id}
-                  className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                  className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50"
                 >
                   <Avatar
                     userId={friend.target_id}
@@ -172,16 +173,24 @@ const FriendsList: React.FC<FriendsListProps> = ({ currentUser: _currentUser, on
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2">
-                      <h3 className="font-medium text-gray-900 dark:text-white truncate">
+                      <h3 className="font-medium text-gray-900 truncate">
                         {friend.target?.username || '未知用户'}
                       </h3>
+                      {friend.target && (
+                        <UserRoleBadge 
+                          isAdmin={friend.target.is_admin} 
+                          isGMT={friend.target.is_gmt} 
+                          isQAT={friend.target.is_qat}
+                          isBNG={friend.target.is_bng}
+                        />
+                      )}
                       {friend.mutual && (
                         <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full">
                           互相关注
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-500">
                       {friend.target?.country_code ? `来自 ${friend.target.country_code}` : '未知地区'}
                     </p>
                   </div>

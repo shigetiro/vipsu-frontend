@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiSend } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -69,7 +69,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   return (
-    <div className=" px-3 pt-3 pb-2 bg-card border-t border-gray-200 dark:border-gray-700">
+    <div className=" px-3 pt-3 pb-2 bg-card border-t border-gray-200">
       <div className="mb-3 flex items-end space-x-3">
         {/* 消息输入区域 */}
         <div className="flex-1 relative">
@@ -83,9 +83,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
             disabled={disabled}
             maxLength={maxLength}
             className={`
-              w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 
-              border border-gray-200 dark:border-gray-600 rounded-lg 
-              resize-none text-gray-900 dark:text-white 
+              w-full px-4 py-3 bg-gray-50 
+              border border-gray-200 rounded-lg 
+              resize-none text-gray-900 
               placeholder-gray-500 dark:placeholder-gray-400 
               focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent
               transition-all duration-200 overflow-hidden
@@ -121,7 +121,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           className={`mb-[5px]
             w-12 h-12 rounded-lg transition-all duration-200 flex items-center justify-center flex-shrink-0
             ${!message.trim() || disabled
-              ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : 'bg-osu-pink text-white hover:bg-osu-pink/90 shadow-lg shadow-osu-pink/25'
             }
           `}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiSend, FiSearch } from 'react-icons/fi';
 import { chatAPI } from '../../utils/api';
@@ -128,14 +128,14 @@ const PrivateMessageModal: React.FC<PrivateMessageModalProps> = ({
           className="relative bg-card rounded-xl shadow-xl w-full max-w-md mx-4"
         >
           {/* 头部 */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900">
               {t('messages.privateMessage.newMessage')}
             </h2>
             <button
               onClick={onClose}
               aria-label={t('common.close')}
-              className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100"
             >
               <FiX size={20} />
             </button>
@@ -145,7 +145,7 @@ const PrivateMessageModal: React.FC<PrivateMessageModalProps> = ({
           <div className="p-6 space-y-4">
             {/* 选择用户 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t('messages.privateMessage.sendTo')}
               </label>
               <div className="relative">
@@ -169,14 +169,14 @@ const PrivateMessageModal: React.FC<PrivateMessageModalProps> = ({
                       setTargetUserId(null);
                     }
                   }}
-                  className="w-full px-4 py-3 pl-10 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent"
+                  className="w-full px-4 py-3 pl-10 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent"
                 />
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
               </div>
 
               {/* 搜索结果 */}
               {searchResults.length > 0 && (
-                <div className="mt-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                <div className="mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                   {searchResults.map(user => (
                     <button
                       key={user.id}
@@ -190,10 +190,10 @@ const PrivateMessageModal: React.FC<PrivateMessageModalProps> = ({
                         size="sm"
                       />
                       <div className="text-left">
-                        <div className="font-medium text-gray-900 dark:text-white">
+                        <div className="font-medium text-gray-900">
                           {user.username}
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-sm text-gray-500">
                           {user.country?.name}
                         </div>
                       </div>
@@ -205,7 +205,7 @@ const PrivateMessageModal: React.FC<PrivateMessageModalProps> = ({
 
             {/* 消息内容 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t('messages.privateMessage.messageLabel')}
               </label>
               <textarea
@@ -214,10 +214,10 @@ const PrivateMessageModal: React.FC<PrivateMessageModalProps> = ({
                 placeholder={t('messages.privateMessage.messagePlaceholder')}
                 rows={4}
                 maxLength={1000}
-                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg resize-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg resize-none text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-osu-pink focus:border-transparent"
               />
               <div className="flex justify-between mt-1">
-                <div className="text-xs text-gray-500 dark:text-gray-400">
+                <div className="text-xs text-gray-500">
                   {message.length}/1000
                 </div>
               </div>
@@ -225,10 +225,10 @@ const PrivateMessageModal: React.FC<PrivateMessageModalProps> = ({
           </div>
 
           {/* 底部 */}
-          <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             >
               {t('common.cancel')}
             </button>
