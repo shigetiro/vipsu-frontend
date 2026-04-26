@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiAlertTriangle } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -116,13 +116,13 @@ const TotpDisableModal: React.FC<TotpDisableModalProps> = ({
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <FiAlertTriangle className="w-6 h-6 text-red-500" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-gray-900">
               {t('settings.totp.disableTitle')}
             </h2>
           </div>
           <button
             onClick={handleClose}
-            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <FiX className="w-5 h-5" />
           </button>
@@ -138,7 +138,7 @@ const TotpDisableModal: React.FC<TotpDisableModalProps> = ({
 
           {/* 验证码输入 */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-gray-700">
               {t('settings.totp.enterCodeToDisable')}
             </label>
             <input
@@ -146,14 +146,14 @@ const TotpDisableModal: React.FC<TotpDisableModalProps> = ({
               value={verificationCode}
               onChange={handleCodeInputChange}
               placeholder="123456"
-              className="w-full px-4 py-3 text-center text-lg font-mono border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-4 py-3 text-center text-lg font-mono border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white text-gray-900"
               maxLength={6}
               required
             />
             {error && (
               <p className="text-sm text-red-500">{error}</p>
             )}
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-gray-500">
               {t('settings.totp.disableCodeHint')}
             </p>
           </div>

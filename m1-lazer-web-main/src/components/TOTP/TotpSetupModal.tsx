@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiShield, FiDownload, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -177,13 +177,13 @@ const TotpSetupModal: React.FC<TotpSetupModalProps> = ({
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <FiShield className="w-6 h-6 text-osu-pink" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-gray-900">
               {t('settings.totp.setupTitle')}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <FiX className="w-5 h-5" />
           </button>
@@ -199,10 +199,10 @@ const TotpSetupModal: React.FC<TotpSetupModalProps> = ({
               exit={{ opacity: 0, x: -20 }}
               className="space-y-4"
             >
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-gray-600">
                 {t('settings.totp.setupDescription')}
               </p>
-              <ul className="text-sm text-gray-500 dark:text-gray-400 space-y-1 list-disc list-inside">
+              <ul className="text-sm text-gray-500 space-y-1 list-disc list-inside">
                 <li>{t('settings.totp.setupStep1')}</li>
                 <li>{t('settings.totp.setupStep2')}</li>
                 <li>{t('settings.totp.setupStep3')}</li>
@@ -239,7 +239,7 @@ const TotpSetupModal: React.FC<TotpSetupModalProps> = ({
 
               {/* 手动输入密钥 */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-medium text-gray-700">
                   {t('settings.totp.manualEntry')}
                 </label>
                 <div className="flex items-center gap-2">
@@ -247,11 +247,11 @@ const TotpSetupModal: React.FC<TotpSetupModalProps> = ({
                     type={showSecret ? 'text' : 'password'}
                     value={totpSecret.secret}
                     readOnly
-                    className="flex-1 px-3 py-2 text-sm font-mono bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg"
+                    className="flex-1 px-3 py-2 text-sm font-mono bg-gray-50 border border-gray-300 rounded-lg"
                   />
                   <button
                     onClick={() => setShowSecret(!showSecret)}
-                    className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
                   >
                     {showSecret ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                   </button>
@@ -260,7 +260,7 @@ const TotpSetupModal: React.FC<TotpSetupModalProps> = ({
 
               {/* 验证码输入 */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-medium text-gray-700">
                   {t('settings.totp.enterCode')}
                 </label>
                 <input
@@ -268,13 +268,13 @@ const TotpSetupModal: React.FC<TotpSetupModalProps> = ({
                   value={verificationCode}
                   onChange={handleCodeInputChange}
                   placeholder="123456"
-                  className="w-full px-4 py-3 text-center text-lg font-mono border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-3 text-center text-lg font-mono border border-gray-300 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900"
                   maxLength={6}
                 />
                 {verificationError && (
                   <p className="text-sm text-red-500">{verificationError}</p>
                 )}
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-gray-500">
                   {t('settings.totp.codeHint')}
                 </p>
                 <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
@@ -301,16 +301,16 @@ const TotpSetupModal: React.FC<TotpSetupModalProps> = ({
             >
               <div className="text-center">
                 <div className="text-4xl mb-2">🎉</div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {t('settings.totp.setupComplete')}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm text-gray-600">
                   {t('settings.totp.backupCodesDescription')}
                 </p>
               </div>
 
               {/* 备份码 */}
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+              <div className="bg-gray-50 rounded-lg p-4">
                 <div className="grid grid-cols-2 gap-2 font-mono text-sm">
                   {backupCodes.map((code, index) => (
                     <div key={index} className="text-center py-1">
@@ -337,7 +337,7 @@ const TotpSetupModal: React.FC<TotpSetupModalProps> = ({
                 {t('settings.totp.finishSetup')}
               </button>
 
-              <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+              <p className="text-xs text-gray-500 text-center">
                 {t('settings.totp.backupCodesWarning')}
               </p>
             </motion.div>
