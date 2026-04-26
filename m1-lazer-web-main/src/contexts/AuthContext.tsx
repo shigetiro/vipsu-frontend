@@ -66,6 +66,12 @@ const CacheUtil = {
 
       // 返回缓存数据
       const user = JSON.parse(userJson) as User;
+      // Check if critical new fields are missing - if so, invalidate cache
+      if (user.is_dev === undefined) {
+        console.log('Cache missing is_dev field, invalidating');
+        CacheUtil.clearCache();
+        return { user: null, isAuthenticated: false, isValid: false };
+      }
       return {
         user,
         isAuthenticated: authStatus === 'true',
