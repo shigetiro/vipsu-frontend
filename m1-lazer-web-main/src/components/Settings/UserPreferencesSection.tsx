@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+﻿import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { FiCheck } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
@@ -209,7 +209,7 @@ const UserPreferencesSection: React.FC = () => {
     return (
       <div className="flex items-center justify-center py-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-osu-pink"></div>
-        <span className="ml-3 text-gray-600 dark:text-gray-400">
+        <span className="ml-3 text-gray-600">
           {t('settings.preferences.loading')}
         </span>
       </div>
@@ -220,17 +220,17 @@ const UserPreferencesSection: React.FC = () => {
     <div className="space-y-6">
       {/* Game Mode Settings */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+        <h3 className="text-lg font-medium text-gray-900">
           {t('settings.preferences.gameMode.title')}
         </h3>
         
         <div className="space-y-3">
           {/* Default Game Mode */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.gameMode.playmode')}
             </label>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+            <p className="text-xs text-gray-500 mb-4">
               {t('settings.preferences.gameMode.playmodeDescription')}
             </p>
             <GameModeSelector
@@ -244,18 +244,18 @@ const UserPreferencesSection: React.FC = () => {
       </div>
 
       {/* Beatmapset Settings */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div className="border-t border-gray-200 pt-6 space-y-4">
+        <h3 className="text-lg font-medium text-gray-900">
           {t('settings.preferences.beatmapset.title')}
         </h3>
 
         <div className="space-y-3">
           {/* Card Size */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.beatmapset.cardSize')}
             </label>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+            <p className="text-xs text-gray-500 mb-2">
               {t('settings.preferences.beatmapset.cardSizeDescription')}
             </p>
             <CustomSelect
@@ -271,10 +271,10 @@ const UserPreferencesSection: React.FC = () => {
 
           {/* Download Option */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.beatmapset.download')}
             </label>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+            <p className="text-xs text-gray-500 mb-2">
               {t('settings.preferences.beatmapset.downloadDescription')}
             </p>
             <CustomSelect
@@ -292,10 +292,10 @@ const UserPreferencesSection: React.FC = () => {
           {/* Show NSFW */}
           <div className="flex items-center justify-between">
             <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-medium text-gray-700">
                 {t('settings.preferences.beatmapset.showNsfw')}
               </label>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-500">
                 {t('settings.preferences.beatmapset.showNsfwDescription')}
               </p>
             </div>
@@ -307,15 +307,15 @@ const UserPreferencesSection: React.FC = () => {
                 disabled={savingFields.has('beatmapset_show_nsfw')}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-osu-pink/20 dark:peer-focus:ring-osu-pink/40 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-osu-pink peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-osu-pink/20 dark:peer-focus:ring-osu-pink/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-osu-pink peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
             </label>
           </div>
         </div>
       </div>
 
       {/* Profile Settings */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div className="border-t border-gray-200 pt-6 space-y-4">
+        <h3 className="text-lg font-medium text-gray-900">
           {t('settings.preferences.profile.title')}
         </h3>
 
@@ -323,10 +323,10 @@ const UserPreferencesSection: React.FC = () => {
           {/* Legacy Score Only */}
           <div className="flex items-center justify-between">
             <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-medium text-gray-700">
                 {t('settings.preferences.profile.legacyScoreOnly')}
               </label>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-500">
                 {t('settings.preferences.profile.legacyScoreOnlyDescription')}
               </p>
             </div>
@@ -338,17 +338,17 @@ const UserPreferencesSection: React.FC = () => {
                 disabled={savingFields.has('legacy_score_only')}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-osu-pink/20 dark:peer-focus:ring-osu-pink/40 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-osu-pink peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-osu-pink/20 dark:peer-focus:ring-osu-pink/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-osu-pink peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
             </label>
           </div>
 
           {/* Cover Expanded */}
           <div className="flex items-center justify-between">
             <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-medium text-gray-700">
                 {t('settings.preferences.profile.coverExpanded')}
               </label>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-500">
                 {t('settings.preferences.profile.coverExpandedDescription')}
               </p>
             </div>
@@ -360,45 +360,45 @@ const UserPreferencesSection: React.FC = () => {
                 disabled={savingFields.has('profile_cover_expanded')}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-osu-pink/20 dark:peer-focus:ring-osu-pink/40 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-osu-pink peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-osu-pink/20 dark:peer-focus:ring-osu-pink/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-osu-pink peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
             </label>
           </div>
 
           {/* Profile Colour */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.profile.colour')}
             </label>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+            <p className="text-xs text-gray-500 mb-2">
               {t('settings.preferences.profile.colourDescription')}
             </p>
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setShowColorPicker(!showColorPicker)}
-                className="h-10 px-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer flex items-center gap-3 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                className="h-10 px-4 rounded-lg border border-gray-300 cursor-pointer flex items-center gap-3 bg-white hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
                 <div 
                   className="w-6 h-6 rounded border border-gray-300 dark:border-gray-500"
                   style={{ backgroundColor: preferences.profile_colour ?? '#FF66AB' }}
                 />
-                <span className="text-sm font-mono text-gray-700 dark:text-gray-300">
+                <span className="text-sm font-mono text-gray-700">
                   {preferences.profile_colour ?? '#FF66AB'}
                 </span>
               </button>
               
               {showColorPicker && (
-                <div className="absolute z-10 mt-2 p-5 bg-card rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 min-w-[320px]">
+                <div className="absolute z-10 mt-2 p-5 bg-card rounded-xl shadow-xl border border-gray-200 min-w-[320px]">
                   <div 
                     className="fixed inset-0" 
                     onClick={() => setShowColorPicker(false)}
                   />
                   <div className="relative space-y-4">
                     <div className="flex items-center justify-between">
-                      <div className="text-sm font-bold text-gray-700 dark:text-gray-300">
+                      <div className="text-sm font-bold text-gray-700">
                         {t('settings.preferences.profile.colour')}
                       </div>
-                      <div className="text-xs font-mono text-gray-500 dark:text-gray-400">
+                      <div className="text-xs font-mono text-gray-500">
                         {currentHue}°
                       </div>
                     </div>
@@ -420,10 +420,10 @@ const UserPreferencesSection: React.FC = () => {
                         }}
                       />
                       <div className="flex flex-col gap-1">
-                        <span className="text-sm font-mono text-gray-700 dark:text-gray-300">
+                        <span className="text-sm font-mono text-gray-700">
                           {pendingColorRef.current || preferences.profile_colour || '#FF66AB'}
                         </span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-gray-500">
                           OKLCH (L: 0.70, C: 0.14)
                         </span>
                       </div>
@@ -437,15 +437,15 @@ const UserPreferencesSection: React.FC = () => {
       </div>
 
       {/* Personal Information */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div className="border-t border-gray-200 pt-6 space-y-4">
+        <h3 className="text-lg font-medium text-gray-900">
           {t('settings.preferences.personalInfo.title')}
         </h3>
 
         <div className="space-y-3">
           {/* Interests */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.personalInfo.interests')}
             </label>
             <div className="flex gap-2">
@@ -454,7 +454,7 @@ const UserPreferencesSection: React.FC = () => {
                 value={preferences.interests ?? ''}
                 onChange={(e) => setPreferences(prev => ({ ...prev, interests: e.target.value }))}
                 placeholder={t('settings.preferences.personalInfo.interestsPlaceholder')}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-osu-pink focus:border-transparent"
               />
               {hasFieldChanged('interests') && (
                 <button
@@ -470,7 +470,7 @@ const UserPreferencesSection: React.FC = () => {
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.personalInfo.location')}
             </label>
             <div className="flex gap-2">
@@ -479,7 +479,7 @@ const UserPreferencesSection: React.FC = () => {
                 value={preferences.location ?? ''}
                 onChange={(e) => setPreferences(prev => ({ ...prev, location: e.target.value }))}
                 placeholder={t('settings.preferences.personalInfo.locationPlaceholder')}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-osu-pink focus:border-transparent"
               />
               {hasFieldChanged('location') && (
                 <button
@@ -495,7 +495,7 @@ const UserPreferencesSection: React.FC = () => {
 
           {/* Occupation */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.personalInfo.occupation')}
             </label>
             <div className="flex gap-2">
@@ -504,7 +504,7 @@ const UserPreferencesSection: React.FC = () => {
                 value={preferences.occupation ?? ''}
                 onChange={(e) => setPreferences(prev => ({ ...prev, occupation: e.target.value }))}
                 placeholder={t('settings.preferences.personalInfo.occupationPlaceholder')}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-osu-pink focus:border-transparent"
               />
               {hasFieldChanged('occupation') && (
                 <button
@@ -520,7 +520,7 @@ const UserPreferencesSection: React.FC = () => {
 
           {/* Twitter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.personalInfo.twitter')}
             </label>
             <div className="flex gap-2">
@@ -529,7 +529,7 @@ const UserPreferencesSection: React.FC = () => {
                 value={preferences.twitter ?? ''}
                 onChange={(e) => setPreferences(prev => ({ ...prev, twitter: e.target.value }))}
                 placeholder={t('settings.preferences.personalInfo.twitterPlaceholder')}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-osu-pink focus:border-transparent"
               />
               {hasFieldChanged('twitter') && (
                 <button
@@ -545,7 +545,7 @@ const UserPreferencesSection: React.FC = () => {
 
           {/* Website */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.personalInfo.website')}
             </label>
             <div className="flex gap-2">
@@ -554,7 +554,7 @@ const UserPreferencesSection: React.FC = () => {
                 value={preferences.website ?? ''}
                 onChange={(e) => setPreferences(prev => ({ ...prev, website: e.target.value }))}
                 placeholder={t('settings.preferences.personalInfo.websitePlaceholder')}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-osu-pink focus:border-transparent"
               />
               {hasFieldChanged('website') && (
                 <button
@@ -570,7 +570,7 @@ const UserPreferencesSection: React.FC = () => {
 
           {/* Discord */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.preferences.personalInfo.discord')}
             </label>
             <div className="flex gap-2">
@@ -579,7 +579,7 @@ const UserPreferencesSection: React.FC = () => {
                 value={preferences.discord ?? ''}
                 onChange={(e) => setPreferences(prev => ({ ...prev, discord: e.target.value }))}
                 placeholder={t('settings.preferences.personalInfo.discordPlaceholder')}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-osu-pink focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-osu-pink focus:border-transparent"
               />
               {hasFieldChanged('discord') && (
                 <button

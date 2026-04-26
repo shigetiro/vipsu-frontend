@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { FiLock, FiEye, FiEyeOff, FiCheck, FiX, FiShield } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
@@ -160,7 +160,7 @@ const PasswordResetSection: React.FC = () => {
     <div className="space-y-4">
       {!isExpanded ? (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600">
             {t('settings.password.description')}
           </p>
           <button
@@ -171,11 +171,11 @@ const PasswordResetSection: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-6 border border-gray-200 dark:border-gray-600 space-y-4">
+        <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 space-y-4">
           {isLoadingTotpStatus ? (
             <div className="flex items-center justify-center py-4">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-osu-pink"></div>
-              <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+              <span className="ml-2 text-sm text-gray-500">
                 {t('settings.password.checkingTotpStatus')}
               </span>
             </div>
@@ -194,7 +194,7 @@ const PasswordResetSection: React.FC = () => {
               {/* 当前密码或 TOTP 验证码 */}
               {totpStatus?.enabled ? (
                 <div>
-                  <label htmlFor="totpCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="totpCode" className="block text-sm font-medium text-gray-700 mb-2">
                     {t('settings.password.totpCode')}
                   </label>
                   <div className="relative">
@@ -206,8 +206,8 @@ const PasswordResetSection: React.FC = () => {
                       name="totpCode"
                       type="text"
                       maxLength={10}
-                      className={`w-full px-4 py-3 pl-10 border rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-center tracking-wider ${
-                        errors.totpCode ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                      className={`w-full px-4 py-3 pl-10 border rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900 text-center tracking-wider ${
+                        errors.totpCode ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder={t('settings.password.totpCodePlaceholder')}
                       value={formData.totpCode}
@@ -217,13 +217,13 @@ const PasswordResetSection: React.FC = () => {
                   {errors.totpCode && (
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.totpCode}</p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-xs text-gray-500">
                     {t('settings.password.totpCodeHint')}
                   </p>
                 </div>
               ) : (
                 <div>
-                  <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-2">
                     {t('settings.password.currentPassword')}
                   </label>
                   <div className="relative">
@@ -234,8 +234,8 @@ const PasswordResetSection: React.FC = () => {
                       id="currentPassword"
                       name="currentPassword"
                       type={showCurrentPassword ? 'text' : 'password'}
-                      className={`w-full px-4 py-3 pl-10 pr-10 border rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                        errors.currentPassword ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                      className={`w-full px-4 py-3 pl-10 pr-10 border rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900 ${
+                        errors.currentPassword ? 'border-red-500' : 'border-gray-300'
                       }`}
                       placeholder={t('settings.password.currentPasswordPlaceholder')}
                       value={formData.currentPassword}
@@ -262,7 +262,7 @@ const PasswordResetSection: React.FC = () => {
           )}
 
           <div>
-            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.password.newPassword')}
             </label>
             <div className="relative">
@@ -273,8 +273,8 @@ const PasswordResetSection: React.FC = () => {
                 id="newPassword"
                 name="newPassword"
                 type={showNewPassword ? 'text' : 'password'}
-                className={`w-full px-4 py-3 pl-10 pr-10 border rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                  errors.newPassword ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                className={`w-full px-4 py-3 pl-10 pr-10 border rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900 ${
+                  errors.newPassword ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder={t('settings.password.newPasswordPlaceholder')}
                 value={formData.newPassword}
@@ -298,7 +298,7 @@ const PasswordResetSection: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
               {t('settings.password.confirmPassword')}
             </label>
             <div className="relative">
@@ -309,8 +309,8 @@ const PasswordResetSection: React.FC = () => {
                 id="confirmPassword"
                 name="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
-                className={`w-full px-4 py-3 pl-10 pr-10 border rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                className={`w-full px-4 py-3 pl-10 pr-10 border rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900 ${
+                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder={t('settings.password.confirmPasswordPlaceholder')}
                 value={formData.confirmPassword}

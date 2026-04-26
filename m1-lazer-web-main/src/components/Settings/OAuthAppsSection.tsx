@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FiPlus, FiEdit2, FiTrash2, FiCopy, FiCheck, 
@@ -114,7 +114,7 @@ const OAuthAppsSection: React.FC = () => {
     <div className="space-y-4">
       {/* 创建按钮 */}
       <div className="flex justify-between items-center">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-600">
           {t('settings.oauth.description')}
         </p>
         <button
@@ -128,9 +128,9 @@ const OAuthAppsSection: React.FC = () => {
 
       {/* 应用列表 */}
       {apps.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700">
+        <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
           <FiExternalLink className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <p className="text-gray-600 mb-4">
             {t('settings.oauth.noApps')}
           </p>
           <button
@@ -233,19 +233,19 @@ const OAuthAppCard: React.FC<OAuthAppCardProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow"
+      className="bg-card rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">
             {app.name}
           </h3>
           {app.description && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <p className="text-sm text-gray-600 mb-2">
               {app.description}
             </p>
           )}
-          <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-4 text-xs text-gray-500">
             <div className="flex items-center gap-1">
               <span className="font-medium">{t('settings.oauth.clientId')}:</span>
               <button
@@ -275,21 +275,21 @@ const OAuthAppCard: React.FC<OAuthAppCardProps> = ({
           </button>
           <button
             onClick={() => onEdit(app)}
-            className="p-2 text-gray-600 dark:text-gray-400 hover:text-osu-pink dark:hover:text-osu-pink transition-colors"
+            className="p-2 text-gray-600 hover:text-osu-pink dark:hover:text-osu-pink transition-colors"
             title={t('settings.oauth.edit')}
           >
             <FiEdit2 className="w-4 h-4" />
           </button>
           <button
             onClick={() => onRefreshSecret(app.client_id, app.name)}
-            className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+            className="p-2 text-gray-600 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
             title={t('settings.oauth.refreshSecret')}
           >
             <FiRefreshCw className="w-4 h-4" />
           </button>
           <button
             onClick={() => onDelete(app.client_id, app.name)}
-            className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+            className="p-2 text-gray-600 hover:text-red-500 dark:hover:text-red-400 transition-colors"
             title={t('settings.oauth.delete')}
           >
             <FiTrash2 className="w-4 h-4" />
@@ -304,18 +304,18 @@ const OAuthAppCard: React.FC<OAuthAppCardProps> = ({
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 overflow-hidden"
+            className="mt-4 pt-4 border-t border-gray-200 overflow-hidden"
           >
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-xs font-medium text-gray-700 mb-1">
                   {t('settings.oauth.redirectUris')}
                 </label>
                 <div className="space-y-1">
                   {app.redirect_uris.map((uri, index) => (
                     <div
                       key={index}
-                      className="text-sm font-mono text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900 px-3 py-2 rounded"
+                      className="text-sm font-mono text-gray-600 bg-page px-3 py-2 rounded"
                     >
                       {uri}
                     </div>
@@ -412,16 +412,16 @@ const CreateEditModal: React.FC<CreateEditModalProps> = ({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-card rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
       >
         <div className="p-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
             {app ? t('settings.oauth.editApp') : t('settings.oauth.createApp')}
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t('settings.oauth.appName')} *
               </label>
               <input
@@ -429,26 +429,26 @@ const CreateEditModal: React.FC<CreateEditModalProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900"
                 placeholder={t('settings.oauth.appNamePlaceholder')}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t('settings.oauth.appDescription')}
               </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900"
                 placeholder={t('settings.oauth.appDescriptionPlaceholder')}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t('settings.oauth.redirectUris')} *
               </label>
               <div className="space-y-2">
@@ -462,7 +462,7 @@ const CreateEditModal: React.FC<CreateEditModalProps> = ({
                         newUris[index] = e.target.value;
                         setRedirectUris(newUris);
                       }}
-                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-osu-pink focus:border-transparent bg-white text-gray-900"
                       placeholder="https://example.com/callback"
                     />
                     {redirectUris.length > 1 && (
@@ -542,16 +542,16 @@ const SecretModal: React.FC<SecretModalProps> = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full"
+        className="bg-card rounded-xl shadow-2xl max-w-2xl w-full"
       >
         <div className="p-6">
           <div className="flex items-start gap-3 mb-6">
             <FiAlertCircle className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 {t('settings.oauth.secretTitle')}
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600">
                 {t('settings.oauth.secretWarning')}
               </p>
             </div>
@@ -559,16 +559,16 @@ const SecretModal: React.FC<SecretModalProps> = ({
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t('settings.oauth.clientId')}
               </label>
-              <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-900 px-4 py-3 rounded-lg">
-                <code className="flex-1 font-mono text-sm text-gray-900 dark:text-white">
+              <div className="flex items-center gap-2 bg-page px-4 py-3 rounded-lg">
+                <code className="flex-1 font-mono text-sm text-gray-900">
                   {response.client_id}
                 </code>
                 <button
                   onClick={() => onCopy(response.client_id.toString(), 'new_client_id')}
-                  className="text-gray-600 dark:text-gray-400 hover:text-osu-pink transition-colors"
+                  className="text-gray-600 hover:text-osu-pink transition-colors"
                 >
                   {copiedField === 'new_client_id' ? (
                     <FiCheck className="w-5 h-5 text-green-500" />
@@ -580,16 +580,16 @@ const SecretModal: React.FC<SecretModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t('settings.oauth.clientSecret')}
               </label>
               <div className="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/20 px-4 py-3 rounded-lg border-2 border-yellow-200 dark:border-yellow-800">
-                <code className="flex-1 font-mono text-sm text-gray-900 dark:text-white break-all">
+                <code className="flex-1 font-mono text-sm text-gray-900 break-all">
                   {response.client_secret}
                 </code>
                 <button
                   onClick={() => onCopy(response.client_secret, 'new_client_secret')}
-                  className="text-gray-600 dark:text-gray-400 hover:text-osu-pink transition-colors flex-shrink-0"
+                  className="text-gray-600 hover:text-osu-pink transition-colors flex-shrink-0"
                 >
                   {copiedField === 'new_client_secret' ? (
                     <FiCheck className="w-5 h-5 text-green-500" />
@@ -647,7 +647,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full"
+        className="bg-card rounded-xl shadow-2xl max-w-md w-full"
       >
         <div className="p-6">
           <div className="flex items-start gap-4 mb-6">
@@ -663,10 +663,10 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               }`} />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 {title}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600">
                 {message}
               </p>
             </div>
