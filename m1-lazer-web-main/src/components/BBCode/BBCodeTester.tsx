@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { parseBBCode } from '../../utils/bbcodeParser';
 import BBCodeRenderer from '../BBCode/BBCodeRenderer';
 
@@ -48,16 +48,16 @@ function hello() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">BBCode解析器测试</h1>
+      <h1 className="text-3xl font-bold text-gray-900">BBCode解析器测试</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 输入区域 */}
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">BBCode输入</h2>
+          <h2 className="text-xl font-semibold text-gray-800">BBCode输入</h2>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full h-96 p-4 border border-gray-300 dark:border-gray-600 rounded-lg font-mono text-sm bg-card text-gray-900 dark:text-gray-100 resize-none"
+            className="w-full h-96 p-4 border border-gray-300 rounded-lg font-mono text-sm bg-card text-gray-900 resize-none"
             placeholder="在这里输入BBCode..."
           />
           
@@ -87,17 +87,17 @@ function hello() {
         
         {/* 预览区域 */}
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">HTML预览</h2>
-          <div className="border border-gray-300 dark:border-gray-600 rounded-lg bg-card p-4 h-96 overflow-auto">
+          <h2 className="text-xl font-semibold text-gray-800">HTML预览</h2>
+          <div className="border border-gray-300 rounded-lg bg-card p-4 h-96 overflow-auto">
             <BBCodeRenderer html={parseResult.html} />
           </div>
           
           {/* HTML源码 */}
-          <details className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
-            <summary className="p-3 cursor-pointer font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <details className="bg-page border border-gray-200 rounded-lg">
+            <summary className="p-3 cursor-pointer font-medium text-gray-700 hover:bg-gray-100">
               查看HTML源码
             </summary>
-            <pre className="p-4 text-xs text-gray-600 dark:text-gray-400 overflow-auto bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+            <pre className="p-4 text-xs text-gray-600 overflow-auto bg-surface-2 border-t border-gray-200">
               <code>{parseResult.html}</code>
             </pre>
           </details>

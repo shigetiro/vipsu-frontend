@@ -8,8 +8,12 @@ export const adminAPI = {
   },
 
   // Users
-  getUsers: async () => {
-    const response = await api.get('/api/private/admin/users');
+  getUsers: async (page: number = 1, limit: number = 50, search: string = '') => {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
+    if (search) params.append('search', search);
+    const response = await api.get(`/api/private/admin/users?${params.toString()}`);
     return response.data;
   },
 
@@ -24,14 +28,15 @@ export const adminAPI = {
     is_qat?: boolean;
     is_gmt?: boolean;
     is_admin?: boolean;
+    is_dev?: boolean;
     badge?: string | object;
   }) => {
     const response = await api.patch(`/api/private/admin/users/${userId}`, userData);
     return response.data;
   },
 
-  banUser: async (userId: number) => {
-    const response = await api.post(`/api/private/admin/users/${userId}/ban`);
+  banUser: async (userId: number, reason?: string) => {
+    const response = await api.post(`/api/private/admin/users/${userId}/ban`, { reason });
     return response.data;
   },
 
@@ -99,6 +104,73 @@ export const adminAPI = {
 
   removeBlacklistedBeatmap: async (beatmapsetId: number) => {
     const response = await api.delete(`/api/private/admin/beatmaps/blacklist/${beatmapsetId}`);
+    return response.data;
+  },
+
+  // User History & Suspicious Activity
+  getUserHistory: async (userId: number) => {
+    const response = await api.get(`/api/private/admin/users/${userId}/history`);
+    return response.data;
+  },
+
+  getUserSuspiciousActivity: async (userId: number) => {
+    const response = await api.get(`/api/private/admin/users/${userId}/suspicious`);
+    return response.data;
+  },
+
+  updateUserTrustScore: async (userId: number, score: number) => {
+    const response = await api.patch(`/api/private/admin/users/${userId}/trust-score`, { score });
+    return response.data;
+  },
+
+  markUserSuspicious: async (userId: number, reasons: string[], notes?: string) => {
+    const response = await api.post(`/api/private/admin/users/${userId}/suspicious`, { reasons, notes });
+    return response.data;
+  },
+
+  unmarkUserSuspicious: async (userId: number) => {
+    const response = await api.delete(`/api/private/admin/users/${userId}/suspicious`);
+    return response.data;
+  },
+
+  resetUserPassword: async (userId: number) => {
+    const response = await api.post(`/api/private/admin/users/${userId}/reset-password`);
+    return response.data;
+  },
+
+  resendVerificationEmail: async (userId: number) => {
+    const response = await api.post(`/api/private/admin/users/${userId}/resend-verification`);
+    return response.data;
+  },
+
+  deleteUser: async (userId: number) => {
+    const response = await api.delete(`/api/private/admin/users/${userId}`);
+    return response.data;
+  },
+
+  addUserNote: async (userId: number, note: string) => {
+    const response = await api.post(`/api/private/admin/users/${userId}/notes`, { note });
+    return response.data;
+  },
+
+  // Team Management
+  getTeams: async () => {
+    const response = await api.get('/api/private/admin/teams');
+    return response.data;
+  },
+
+  getTeamMembers: async (teamId: number) => {
+    const response = await api.get(`/api/private/admin/teams/${teamId}/members`);
+    return response.data;
+  },
+
+  addUserToTeam: async (userId: number, teamId: number) => {
+    const response = await api.post(`/api/private/admin/users/${userId}/team`, { team_id: teamId });
+    return response.data;
+  },
+
+  removeUserFromTeam: async (userId: number) => {
+    const response = await api.delete(`/api/private/admin/users/${userId}/team`);
     return response.data;
   },
 
@@ -226,6 +298,124 @@ export const adminAPI = {
     return response.data;
   },
 
+  // Announcements
+  getAnnouncements: async (params?: { page?: number; per_page?: number; is_active?: boolean; type?: string; include_expired?: boolean }) => {
+    const response = await api.get('/api/private/admin/announcements', { params });
+    return response.data;
+  },
+
+  createAnnouncement: async (data: {
+    title: string;
+    content: string;
+    type?: string;
+    target_roles?: string[];
+    start_at?: string;
+    end_at?: string;
+    is_active?: boolean;
+    is_pinned?: boolean;
+    show_in_client?: boolean;
+    show_on_website?: boolean;
+  }) => {
+    const response = await api.post('/api/private/admin/announcements', data);
+    return response.data;
+  },
+
+  updateAnnouncement: async (id: number, data: {
+    title?: string;
+    content?: string;
+    type?: string;
+    target_roles?: string[];
+    start_at?: string;
+    end_at?: string;
+    is_active?: boolean;
+    is_pinned?: boolean;
+    show_in_client?: boolean;
+    show_on_website?: boolean;
+  }) => {
+    const response = await api.put(`/api/private/admin/announcements/${id}`, data);
+    return response.data;
+  },
+
+  deleteAnnouncement: async (id: number) => {
+    const response = await api.delete(`/api/private/admin/announcements/${id}`);
+    return response.data;
+  },
+
+  activateAnnouncement: async (id: number, sendNotification?: boolean, onlineOnly?: boolean) => {
+    const params = new URLSearchParams();
+    if (sendNotification !== undefined) {
+      params.append('send_notification', sendNotification.toString());
+    }
+    if (onlineOnly !== undefined) {
+      params.append('online_only', onlineOnly.toString());
+    }
+    const queryString = params.toString() ? `?${params.toString()}` : '';
+    const response = await api.post(`/api/private/admin/announcements/${id}/activate${queryString}`);
+    return response.data;
+  },
+
+  deactivateAnnouncement: async (id: number) => {
+    const response = await api.post(`/api/private/admin/announcements/${id}/deactivate`);
+    return response.data;
+  },
+
+  // System Tools
+  getMaintenanceMode: async () => {
+    const response = await api.get('/api/private/admin/system/maintenance-mode');
+    return response.data;
+  },
+
+  setMaintenanceMode: async (enabled: boolean) => {
+    const response = await api.post('/api/private/admin/system/maintenance-mode', { enabled });
+    return response.data;
+  },
+
+  // Maintenance mode with countdown scheduling
+  getMaintenanceModeStatus: async () => {
+    const response = await api.get('/api/private/admin/system/maintenance-mode/status');
+    return response.data;
+  },
+
+  scheduleMaintenanceMode: async (data: {
+    enabled: boolean;
+    message?: string;
+    schedule_minutes?: number;
+  }) => {
+    const response = await api.post('/api/private/admin/system/maintenance-mode/schedule', data);
+    return response.data;
+  },
+
+  recalculateUser: async (userId: number) => {
+    const response = await api.post(`/api/private/admin/recalculate/user/${userId}`);
+    return response.data;
+  },
+
+  recalculateBeatmap: async (beatmapId: number) => {
+    const response = await api.post(`/api/private/admin/recalculate/beatmap/${beatmapId}`);
+    return response.data;
+  },
+
+  recalculateOverall: async () => {
+    const response = await api.post('/api/private/admin/recalculate/overall');
+    return response.data;
+  },
+
+  getRecalculationTasks: async (params?: { status?: string; limit?: number }) => {
+    const response = await api.get('/api/private/admin/recalculate/tasks', { params });
+    return response.data;
+  },
+
+  getRecalculationStatus: async () => {
+    const response = await api.get('/api/private/admin/recalculate/status');
+    return response.data;
+  },
+
+  // Pending counts for menu badges
+  getPendingCounts: async () => {
+    const response = await api.get('/api/private/admin/pending-counts');
+    return response.data;
+  },
+
   // Beatmap Rank Requests
   getBeatmapRequests: async (params?: { page?: number; per_page?: number; status?: string }) => {
     const response = await api.get('/api/private/admin/beatmap-rank-requests', { params });
@@ -239,6 +429,68 @@ export const adminAPI = {
 
   rejectBeatmapRequest: async (requestId: number, reason?: string) => {
     const response = await api.post(`/api/private/admin/beatmap-rank-requests/${requestId}/reject`, { reason });
+    return response.data;
+  },
+
+  // Client Version/Platform Stats
+  getClientVersionStats: async (timeRange: string = '7d') => {
+    const response = await api.get('/api/private/admin/logs/client-version-stats', { params: { time_range: timeRange } });
+    return response.data;
+  },
+
+  getClientPlatformStats: async (timeRange: string = '7d') => {
+    const response = await api.get('/api/private/admin/logs/client-platform-stats', { params: { time_range: timeRange } });
+    return response.data;
+  },
+
+  // Client Logs
+  getClientLogs: async (params?: {
+    page?: number;
+    limit?: number;
+    user_id?: string;
+    client_version?: string;
+    client_hash?: string;
+    os_version?: string;
+    log_type?: string;
+    search?: string;
+  }) => {
+    const response = await api.get('/api/private/admin/logs/client-logs', { params });
+    return response.data;
+  },
+
+  deleteClientLog: async (logId: string) => {
+    const response = await api.delete(`/api/private/admin/logs/client-logs/${logId}`);
+    return response.data;
+  },
+
+  // Audit Logs
+  getAuditLogs: async (params?: {
+    page?: number;
+    limit?: number;
+    action_type?: string;
+    search?: string;
+  }) => {
+    const response = await api.get('/api/private/admin/logs/audit-logs', { params });
+    return response.data;
+  },
+
+  // Unknown Client Hashes
+  getUnknownClientHashes: async (params?: {
+    page?: number;
+    per_page?: number;
+    search?: string;
+  }) => {
+    const response = await api.get('/api/private/admin/client-hashes/unknown', { params });
+    return response.data;
+  },
+
+  assignClientHash: async (data: {
+    client_hash: string;
+    client_name: string;
+    version?: string;
+    os_name?: string;
+  }) => {
+    const response = await api.post('/api/private/admin/client-hashes/assign', data);
     return response.data;
   },
 };
