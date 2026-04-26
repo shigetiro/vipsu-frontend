@@ -5,5 +5,6 @@ export interface NavItem {
   title: string;
   icon?: ComponentType<{ size?: number; className?: string }>;
   requireAuth?: boolean;
+  hasDropdown?: boolean;
   children?: NavItem[];
 }

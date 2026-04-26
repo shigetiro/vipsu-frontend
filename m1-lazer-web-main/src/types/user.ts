@@ -100,6 +100,7 @@ export interface User {
   is_gmt: boolean;
   is_qat: boolean;
   is_bng: boolean;
+  is_dev: boolean;
   is_online: number;
   groups: unknown[];
   country: {
@@ -147,7 +148,13 @@ export interface User {
   };
   user_achievements: unknown[];
   team?: Team;
+  team_id?: number | null;
   session_verified: boolean;
+  trust_score?: number;
+  is_suspicious?: boolean;
+  suspicious_reasons?: string[];
+  alt_accounts?: { id: number; username: string }[];
+  notes?: string;
   daily_challenge_user_stats?: {
     daily_streak_best: number;
     daily_streak_current: number;

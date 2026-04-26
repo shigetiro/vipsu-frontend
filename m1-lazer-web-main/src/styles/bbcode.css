@@ -1,33 +1,36 @@
-/* BBCode Styles for osu-web compatibility */
+/* BBCode Styles - osu-web compatibility */
 
 .bbcode {
   line-height: 1.6;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  color: var(--text-primary);
 }
 
 .bbcode--normal-line-height {
   line-height: normal;
 }
 
-/* 折叠框样式 */
+/* Spoilerbox */
 .bbcode-spoilerbox {
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   margin: 8px 0;
-  background: #fff;
+  background: var(--card-bg);
+  overflow: hidden;
 }
 
 .bbcode-spoilerbox__link {
   display: block;
-  padding: 8px 12px !important;
-  background: #f8f8f8 !important;
-  color: #333 !important;
+  padding: 10px 14px !important;
+  background: var(--surface-2) !important;
+  color: var(--text-secondary) !important;
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.875rem;
   border: none !important;
-  border-bottom: 1px solid #ddd !important;
-  transition: background-color 0.2s;
+  border-bottom: 1px solid var(--border-color) !important;
+  transition: background 0.2s;
   cursor: pointer;
   text-align: left !important;
   width: 100% !important;
@@ -36,348 +39,91 @@
 }
 
 .bbcode-spoilerbox__link:hover {
-  background: #f0f0f0 !important;
-  color: #333 !important;
+  background: var(--surface-3) !important;
 }
 
 .bbcode-spoilerbox__link-icon::before {
   content: "▶";
   margin-right: 6px;
   transition: transform 0.2s;
+  font-size: 0.7em;
+  opacity: 0.6;
 }
 
 .bbcode-spoilerbox__link[aria-expanded="true"] .bbcode-spoilerbox__link-icon::before {
   transform: rotate(90deg);
+  content: "▶";
 }
 
 .bbcode-spoilerbox__body {
-  padding: 12px;
-  display: none;
+  padding: 12px 14px;
+  color: var(--text-primary);
 }
 
-.bbcode-spoilerbox__body.is-visible {
-  display: block;
-}
-
-/* 暗色主题支持 */
-@media (prefers-color-scheme: dark) {
-  .bbcode-spoilerbox {
-    border-color: #404040;
-    background: #1a1a1a;
-  }
-  
-  .bbcode-spoilerbox__link {
-    background: #2a2a2a !important;
-    color: #e0e0e0 !important;
-    border-bottom-color: #404040 !important;
-  }
-  
-  .bbcode-spoilerbox__link:hover {
-    background: #333 !important;
-    color: #fff !important;
-  }
-}
-
-/* 剧透条样式 */
-.spoiler {
-  background-color: #000;
-  color: #000;
-  border-radius: 3px;
-  padding: 0 2px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.spoiler:hover,
-.spoiler.revealed {
-  color: inherit;
-  background-color: transparent;
-}
-
-/* 列表样式 */
-.bbcode ol.unordered {
-  list-style-type: disc;
-}
-
-.bbcode__list-title {
-  margin: 0 0 4px 0;
-  font-weight: bold;
-  list-style: none;
-  padding: 0;
-}
-
-.bbcode__list-title li {
-  margin: 0;
-  padding: 0;
-}
-
-/* 引用样式 */
-.bbcode blockquote {
-  margin: 12px 0;
-  padding: 12px 16px;
-  border-left: 4px solid #ed6ea0;
-  background: rgba(237, 110, 160, 0.1);
-  border-radius: 4px;
-}
-
-.bbcode blockquote h4 {
-  margin: 0 0 8px 0;
-  font-size: 0.9em;
-  color: #666;
-  font-weight: 600;
-}
-
-/* 代码样式 */
+/* Code blocks */
+.bbcode code,
 .bbcode pre {
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 12px;
-  overflow-x: auto;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 0.9em;
-  line-height: 1.4;
-  margin: 8px 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  font-size: 0.875em;
 }
 
 .bbcode code {
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  padding: 2px 4px;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 0.9em;
+  padding: 2px 6px;
+  color: var(--osu-pink, #ED8EA6);
 }
 
-/* 通知框样式 */
-.well {
-  background: #2a2a2a;
-  color: #fff;
-  border: 2px solid #666;
-  border-radius: 8px;
-  padding: 16px;
-  margin: 16px 0;
-  font-weight: bold;
-}
-
-/* 深色主题适配 */
-@media (prefers-color-scheme: dark) {
-  .bbcode-spoilerbox {
-    border-color: #444;
-    background: #2a2a2a;
-  }
-  
-  .bbcode-spoilerbox__link {
-    background: #3a3a3a;
-    color: #e0e0e0;
-    border-color: #444;
-  }
-  
-  .bbcode-spoilerbox__link:hover {
-    background: #4a4a4a;
-    color: #e0e0e0;
-  }
-  
-  .bbcode blockquote {
-    background: rgba(237, 110, 160, 0.2);
-    border-left-color: #ed6ea0;
-  }
-  
-  .bbcode blockquote h4 {
-    color: #ccc;
-  }
-  
-  .bbcode pre {
-    background: #1e1e1e;
-    border-color: #444;
-    color: #e0e0e0;
-  }
-  
-  .bbcode code {
-    background: #1e1e1e;
-    border-color: #444;
-    color: #e0e0e0;
-  }
-}
-
-/* 嵌入媒体样式 */
-.u-embed-wide {
-  width: 100%;
-  max-width: 100%;
+.bbcode pre {
+  padding: 12px 14px;
+  overflow-x: auto;
   margin: 8px 0;
+  color: var(--text-primary);
 }
 
-.u-embed-wide--bbcode {
-  height: 315px;
-  border: none;
-  border-radius: 4px;
-}
-
-/* 图片映射样式 */
-.imagemap {
-  position: relative;
-  display: inline-block;
+/* Quotes */
+.bbcode blockquote,
+.bbcode .bbcode-quote {
+  border-left: 3px solid var(--osu-pink, #ED8EA6);
   margin: 8px 0;
+  padding: 8px 14px;
+  background: var(--bg-accent-light);
+  border-radius: 0 6px 6px 0;
+  color: var(--text-secondary);
+  font-style: italic;
 }
 
-.imagemap__image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
+/* Headers */
+.bbcode h1, .bbcode h2, .bbcode h3 {
+  color: var(--text-primary);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 1em 0 0.5em;
 }
 
-.imagemap__link {
-  position: absolute;
-  border: 2px solid transparent;
-  background: rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.imagemap__link:hover {
-  border-color: #ed6ea0;
-  background: rgba(237, 110, 160, 0.2);
-}
-
-/* CSS变量定义 - 方便主题切换 */
-:root {
-  --imagemap-tooltip-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  --imagemap-tooltip-color: #212529;
-  --imagemap-tooltip-border: rgba(0, 0, 0, 0.2);
-  --imagemap-tooltip-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.1);
-  --imagemap-tooltip-arrow: #f8f9fa;
-}
-
-/* 暗色主题变量 */
-.dark,
-[data-theme="dark"] {
-  --imagemap-tooltip-bg: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-  --imagemap-tooltip-color: #ffffff;
-  --imagemap-tooltip-border: rgba(255, 255, 255, 0.2);
-  --imagemap-tooltip-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
-  --imagemap-tooltip-arrow: #2c3e50;
-}
-
-/* CSS Tooltip for ImageMap - 使用CSS变量实现主题适配 */
-.imagemap__link[title]:not([title=""]):hover::before {
-  content: attr(title);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--imagemap-tooltip-bg);
-  color: var(--imagemap-tooltip-color);
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--imagemap-tooltip-border);
-  box-shadow: var(--imagemap-tooltip-shadow);
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 1;
-  visibility: visible;
-  z-index: 1000;
-  pointer-events: none;
-  margin-bottom: 4px;
-  backdrop-filter: blur(4px);
-}
-
-/* 暗色主题下添加text-shadow增强可读性 */
-.dark .imagemap__link[title]:not([title=""]):hover::before,
-[data-theme="dark"] .imagemap__link[title]:not([title=""]):hover::before {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-/* 确保tooltip不会被容器裁剪 */
-.imagemap {
-  overflow: visible;
-}
-
-/* 用户链接样式 */
-.profile-link {
-  color: #ed6ea0;
+/* Links */
+.bbcode a {
+  color: var(--osu-pink, #ED8EA6);
   text-decoration: none;
-  font-weight: 500;
+  transition: opacity 0.15s;
 }
 
-.profile-link:hover {
+.bbcode a:hover {
+  opacity: 0.75;
   text-decoration: underline;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .bbcode {
-    font-size: 0.9em;
-  }
-  
-  .bbcode-spoilerbox__link {
-    padding: 6px 10px;
-  }
-  
-  .bbcode-spoilerbox__body {
-    padding: 10px;
-  }
-  
-  .bbcode blockquote {
-    margin: 8px 0;
-    padding: 8px 12px;
-  }
-  
-  .bbcode pre {
-    padding: 8px;
-    font-size: 0.8em;
-  }
-  
-  .u-embed-wide--bbcode {
-    height: 200px;
-  }
+/* Center, center-like alignment */
+.bbcode-center {
+  text-align: center;
 }
 
-/* 打印样式 */
-@media print {
-  .bbcode-spoilerbox__link {
-    display: none;
-  }
-  
-  .bbcode-spoilerbox__body {
-    display: block !important;
-    border: 1px solid #000;
-    padding: 8px;
-  }
-  
-  .spoiler {
-    background: transparent !important;
-    color: inherit !important;
-  }
-  
-  .u-embed-wide--bbcode {
-    display: none;
-  }
-}
-
-/* 可访问性增强 */
-.bbcode-spoilerbox__link:focus {
-  outline: 2px solid #ed6ea0;
-  outline-offset: 2px;
-}
-
-.spoiler:focus {
-  outline: 2px solid #ed6ea0;
-  outline-offset: 1px;
-}
-
-/* 高对比度模式 */
-@media (prefers-contrast: high) {
-  .bbcode blockquote {
-    border-left-color: #000;
-    background: #f0f0f0;
-  }
-  
-  .bbcode-spoilerbox {
-    border-color: #000;
-  }
-  
-  .bbcode-spoilerbox__link {
-    border-bottom-color: #000;
-  }
-}
+/* Size */
+.bbcode-size-1 { font-size: 0.75em; }
+.bbcode-size-2 { font-size: 0.875em; }
+.bbcode-size-3 { font-size: 1em; }
+.bbcode-size-4 { font-size: 1.25em; }
+.bbcode-size-5 { font-size: 1.5em; }
+.bbcode-size-6 { font-size: 2em; }
+.bbcode-size-7 { font-size: 2.5em; }

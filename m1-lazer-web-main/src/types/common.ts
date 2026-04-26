@@ -1,12 +1,13 @@
-export type GameMode = 'osu' | 'taiko' | 'fruits' | 'mania' | 'osurx' | 'osuap' | 'taikorx' | 'fruitsrx';
+export type GameMode = 'osu' | 'taiko' | 'fruits' | 'mania' | 'osurx' | 'osuap' | 'taikorx' | 'fruitsrx'| 'osuspaceruleset';
 
-export type MainGameMode = 'osu' | 'taiko' | 'fruits' | 'mania';
+export type MainGameMode = 'osu' | 'taiko' | 'fruits' | 'mania'| 'osuspaceruleset';
 
 export const GAME_MODE_GROUPS: Record<MainGameMode, GameMode[]> = {
   osu: ['osu', 'osurx', 'osuap'],
   taiko: ['taiko', 'taikorx'],
   fruits: ['fruits', 'fruitsrx'],
   mania: ['mania'],
+  osuspaceruleset: ['osuspaceruleset'],
 };
 
 export const GAME_MODE_NAMES: Record<GameMode, string> = {
@@ -18,6 +19,7 @@ export const GAME_MODE_NAMES: Record<GameMode, string> = {
   fruits: 'Catch',
   fruitsrx: 'Catch RX',
   mania: 'Mania',
+  osuspaceruleset: 'Space',
 };
 
 // 获取主题色的函数 - 直接从 CSS 变量读取
@@ -38,6 +40,7 @@ export const GAME_MODE_COLORS: Record<GameMode, string> = {
   fruits: 'var(--profile-color, #ED8EA6)',
   fruitsrx: 'var(--profile-color, #ED8EA6)',
   mania: 'var(--profile-color, #ED8EA6)',
+  osuspaceruleset: 'var(--profile-color, #ED8EA6)',
 };
 
 export type Theme = 'light' | 'dark';
@@ -47,4 +50,5 @@ export const MAIN_MODE_ICONS: Record<MainGameMode, string> = {
   taiko: 'fa-extra-mode-taiko',
   fruits: 'fa-extra-mode-fruits',
   mania: 'fa-extra-mode-mania',
+  osuspaceruleset: '/image/logo.png',
 };
