@@ -48,4 +48,6 @@ export const beatmapPage = {
   'beatmap.noResults': 'No beatmaps found',
   'beatmap.uploaded': 'Uploaded',
   'beatmap.customMaps': 'Custom Maps',
+  'beatmap.mirrorDownload': 'Mirror Download',
+  'beatmap.noScores': 'No scores yet',
 } as const;

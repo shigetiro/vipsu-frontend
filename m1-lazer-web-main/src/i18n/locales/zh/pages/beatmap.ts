@@ -48,4 +48,6 @@ export const beatmapPage = {
   'beatmap.noResults': '未找到相关谱面',
   'beatmap.uploaded': '已上传',
   'beatmap.customMaps': '自定义谱面',
+  'beatmap.mirrorDownload': '镜像下载',
+  'beatmap.noScores': '暂无成绩',
 } as const;
