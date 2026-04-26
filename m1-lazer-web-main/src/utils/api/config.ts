@@ -1,7 +1,6 @@
 export const CLIENT_CONFIG = {
-  osu_client_id: 45641,
-  osu_client_secret: 'BVJenl6cBmKbkquaPvsXM6r0Dd3oi8fVmpi8p2a2',
-  
-  web_client_id: Number(import.meta.env.VITE_WEB_CLIENT_ID ?? 5),
-  web_client_secret: import.meta.env.VITE_WEB_CLIENT_SECRET ?? 'a85f097d6c413b2e',
+  osu_client_id: 6,
+  osu_client_secret: '563856155755f082690a687194691b62792e9dd0e0bd7d0cb57d83045244d20af819ab87387e0261',
+  web_client_id: 6,
+  web_client_secret: '563856155755f082690a687194691b62792e9dd0e0bd7d0cb57d83045244d20af819ab87387e0261',
 };
