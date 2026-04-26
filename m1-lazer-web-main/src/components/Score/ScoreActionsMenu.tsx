@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaEllipsisV, FaThumbtack, FaDownload } from 'react-icons/fa';
 import { scoreAPI, handleApiError } from '../../utils/api';
@@ -123,7 +123,7 @@ const ScoreActionsMenu: React.FC<ScoreActionsMenuProps> = ({
       <button
         ref={refs.setReference}
         {...getReferenceProps()}
-        className={`w-8 h-8 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors text-gray-600 dark:text-gray-400 ${className}`}
+        className={`w-8 h-8 rounded-full hover:bg-gray-200 flex items-center justify-center transition-colors text-gray-600 ${className}`}
         aria-label={t('profile.bestScores.actions.more')}
       >
         <FaEllipsisV className="w-3 h-3" />
@@ -136,12 +136,12 @@ const ScoreActionsMenu: React.FC<ScoreActionsMenuProps> = ({
               ref={refs.setFloating}
               style={floatingStyles}
               {...getFloatingProps()}
-              className="w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[9999]"
+              className="w-48 bg-card rounded-lg shadow-xl border border-gray-200 overflow-hidden z-[9999]"
             >
               <button
                 onClick={handleTogglePin}
                 disabled={isLoading}
-                className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 transition-colors"
+                className="w-full px-4 py-3 text-left hover:bg-gray-100 flex items-center gap-3 text-sm text-gray-700 disabled:opacity-50 transition-colors"
               >
                 <FaThumbtack className={`w-4 h-4 ${isPinned ? 'text-osu-pink' : ''}`} />
                 <span>
@@ -155,7 +155,7 @@ const ScoreActionsMenu: React.FC<ScoreActionsMenuProps> = ({
                 <button
                   onClick={handleDownloadReplay}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 border-t border-gray-200 dark:border-gray-700 transition-colors"
+                  className="w-full px-4 py-3 text-left hover:bg-gray-100 flex items-center gap-3 text-sm text-gray-700 disabled:opacity-50 border-t border-gray-200 transition-colors"
                 >
                   <FaDownload className="w-4 h-4" />
                   <span>{t('profile.bestScores.actions.downloadReplay')}</span>

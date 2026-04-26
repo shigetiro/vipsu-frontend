@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiCheck } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -99,7 +99,7 @@ const DefaultModeSelector: React.FC = () => {
     return (
       <div className="flex items-center justify-center py-8">
         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-profile-color"></div>
-        <span className="ml-3 text-gray-500 dark:text-gray-400">
+        <span className="ml-3 text-gray-500">
           {t('common.loading', '加载中...')}
         </span>
       </div>
@@ -110,7 +110,7 @@ const DefaultModeSelector: React.FC = () => {
     <div className="space-y-6">
       {/* 当前默认模式显示 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
           {t('settings.preferences.defaultMode.current')}
         </label>
         {!isEditing ? (
@@ -127,7 +127,7 @@ const DefaultModeSelector: React.FC = () => {
                     <i className={`${GAME_MODES.find(m => m.value === currentMode)?.iconClass || 'fa-extra-mode-osu'} text-lg`}></i>
                   )}
                 </div>
-              <span className="text-lg font-medium text-gray-900 dark:text-white">
+              <span className="text-lg font-medium text-gray-900">
                 {currentMode ? getModeName(currentMode) : 'osu!'}
               </span>
             </div>
@@ -155,14 +155,14 @@ const DefaultModeSelector: React.FC = () => {
                   className={`relative p-4 rounded-lg border-2 transition-all ${
                     selectedMode === mode.value
                       ? 'border-profile-color bg-profile-color/10 text-profile-color'
-                      : 'border-gray-200 dark:border-gray-700 bg-card text-gray-700 dark:text-gray-300 hover:border-profile-color/50'
+                      : 'border-gray-200 bg-card text-gray-700 hover:border-profile-color/50'
                   }`}
                 >
                   <div className="flex flex-col items-center gap-2">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                       selectedMode === mode.value
                         ? 'bg-profile-color text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                        : 'bg-gray-100 text-gray-600'
                     }`}>
                       {mode.value === 'osuspaceruleset' ? (
                         <img 

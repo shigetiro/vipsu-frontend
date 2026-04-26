@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { scoreAPI } from '../../utils/api';
@@ -63,7 +63,7 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
+      <div className="rounded-xl glass-card p-8 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-osu-pink"></div>
       </div>
     );
@@ -71,10 +71,10 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
 
   if (error) {
     return (
-      <div className="flex items-center justify-center py-12">
+      <div className="rounded-xl glass-card p-8 flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 text-lg mb-2">⚠️</div>
-          <p className="text-slate-600 dark:text-slate-400">{error}</p>
+          <p className="text-white">{error}</p>
         </div>
       </div>
     );
@@ -82,10 +82,10 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
 
   if (scores.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12">
+      <div className="rounded-xl glass-card p-8 flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-3">📭</div>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-white">
             {t('beatmap.noScores') || 'Noch keine Scores'}
           </p>
         </div>
@@ -94,38 +94,33 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-xl glass-card p-4">
       <table className="w-full">
-        <thead className="bg-slate-50 dark:bg-slate-700/50">
+        <thead className="bg-slate-50/50 dark:bg-slate-800/50 backdrop-blur-sm">
           <tr className="border-b border-slate-200 dark:border-slate-700">
-            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
               #
             </th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-              {t('beatmap.player') || 'Player'}
+            <th className="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
             </th>
-            <th className="px-6 py-3 text-center text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+            <th className="px-6 py-3 text-center text-xs font-semibold text-white uppercase tracking-wider">
               {t('beatmap.grade') || 'Grade'}
             </th>
-            <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-              PP
+            <th className="px-6 py-3 text-right text-xs font-semibold text-white uppercase tracking-wider">
             </th>
-            <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-              {t('beatmap.accuracy') || 'Accuracy'}
+            <th className="px-6 py-3 text-right text-xs font-semibold text-white uppercase tracking-wider">
             </th>
-            <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-              {t('beatmap.combo') || 'Max Combo'}
+            <th className="px-6 py-3 text-right text-xs font-semibold text-white uppercase tracking-wider">
             </th>
-            <th className="px-6 py-3 text-center text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-              {t('beatmap.mods') || 'Mods'}
+            <th className="px-6 py-3 text-center text-xs font-semibold text-white uppercase tracking-wider">
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-slate-200/50 dark:divide-slate-700/50">
           {scores.map((score, index) => (
             <tr
               key={score.id}
-              className="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+              className="border-b border-slate-200/50 dark:border-slate-700/50 glass-card-hover transition-all cursor-pointer"
             >
               <td className="px-6 py-4 text-sm font-bold text-osu-pink">
                 {index + 1}
@@ -141,7 +136,7 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
                     <div className="flex items-center gap-2">
                       <Link
                         to={`/users/${score.user.id}`}
-                        className="font-semibold text-slate-900 dark:text-white hover:text-osu-pink transition-colors"
+                        className="font-semibold text-osu-pink hover:text-white transition-colors"
                       >
                         {score.user.username}
                       </Link>
@@ -152,7 +147,7 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
                          isBNG={score.user.is_bng}
                        />
                     </div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400">
+                    <div className="text-xs text-white/70">
                       {score.user.country_code}
                     </div>
                   </div>
@@ -176,12 +171,12 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
                 </Link>
               </td>
               <td className="px-6 py-4 text-right">
-                <div className="text-sm font-semibold text-slate-900 dark:text-white">
+                <div className="text-sm font-semibold text-osu-pink">
                   {(score.accuracy * 100).toFixed(2)}%
                 </div>
               </td>
               <td className="px-6 py-4 text-right">
-                <div className="text-sm text-slate-600 dark:text-slate-400">
+                <div className="text-sm text-osu-pink/80">
                   {score.max_combo}
                   {beatmap && `/${beatmap.max_combo}`}
                 </div>
@@ -198,7 +193,7 @@ const BeatmapLeaderboard: React.FC<BeatmapLeaderboardProps> = ({
                       </span>
                     ))
                   ) : (
-                    <span className="text-slate-500 dark:text-slate-400 text-xs">
+                    <span className="text-white/60 text-xs">
                       NM
                     </span>
                   )}
