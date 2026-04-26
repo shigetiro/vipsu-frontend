@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiMonitor, FiSmartphone, FiTablet, FiTrash2, FiClock, FiMapPin, FiGlobe } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -151,11 +151,11 @@ const TrustedDeviceManagement: React.FC<TrustedDeviceManagementProps> = ({ class
   return (
     <div className={className}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+        <h3 className="text-lg font-medium text-gray-900">
           {t('settings.device.trustedDevices.title')}
         </h3>
         {devicesData && (
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="text-sm text-gray-500">
             {t('settings.device.trustedDevices.totalDevices', { count: devicesData.total })}
           </span>
         )}
@@ -164,14 +164,14 @@ const TrustedDeviceManagement: React.FC<TrustedDeviceManagementProps> = ({ class
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-osu-pink"></div>
-          <span className="ml-3 text-gray-500 dark:text-gray-400">
+          <span className="ml-3 text-gray-500">
             {t('settings.device.trustedDevices.loading')}
           </span>
         </div>
       ) : !devicesData || devicesData.devices.length === 0 ? (
         <div className="text-center py-8">
           <div className="text-4xl mb-3">📱</div>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-gray-500">
             {t('settings.device.trustedDevices.noDevices')}
           </p>
         </div>
@@ -197,21 +197,21 @@ const TrustedDeviceManagement: React.FC<TrustedDeviceManagementProps> = ({ class
                   className={`flex items-center justify-between p-4 rounded-lg border ${
                     isCurrent
                       ? 'border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/10'
-                      : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'
+                      : 'border-gray-200 bg-gray-50'
                   }`}
                 >
                   <div className="flex items-center gap-3 flex-1">
                     <div className={`p-2 rounded-lg ${
                       isCurrent
                         ? 'bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-400'
-                        : 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
+                        : 'bg-gray-100 text-gray-600'
                     }`}>
                       {getDeviceIcon(device)}
                     </div>
                     
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h4 className="font-medium text-gray-900 dark:text-white">
+                        <h4 className="font-medium text-gray-900">
                           {getDeviceDisplayName(device)}
                         </h4>
                         {isCurrent && (
@@ -221,7 +221,7 @@ const TrustedDeviceManagement: React.FC<TrustedDeviceManagementProps> = ({ class
                         )}
                       </div>
                       
-                      <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 mt-1 flex-wrap">
+                      <div className="flex items-center gap-3 text-sm text-gray-600 mt-1 flex-wrap">
                         <div className="flex items-center gap-1">
                           <FiGlobe className="w-3 h-3" />
                           <span>{getClientTypeName(device)}</span>

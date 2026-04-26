@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiAlertTriangle, FiX } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -72,7 +72,7 @@ const RemoveDeviceModal: React.FC<RemoveDeviceModalProps> = ({
             <button
               onClick={handleClose}
               disabled={isRemoving}
-              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FiX className="w-5 h-5" />
             </button>
@@ -87,13 +87,13 @@ const RemoveDeviceModal: React.FC<RemoveDeviceModalProps> = ({
               </div>
 
               {/* 标题 */}
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center mb-2">
+              <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
                 {title}
               </h3>
 
               {/* 设备名称 */}
-              <p className="text-center text-gray-600 dark:text-gray-400 mb-4">
-                <span className="font-medium text-gray-900 dark:text-white">{deviceName}</span>
+              <p className="text-center text-gray-600 mb-4">
+                <span className="font-medium text-gray-900">{deviceName}</span>
               </p>
 
               {/* 警告信息 */}
@@ -108,7 +108,7 @@ const RemoveDeviceModal: React.FC<RemoveDeviceModalProps> = ({
                 <button
                   onClick={handleClose}
                   disabled={isRemoving}
-                  className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {t('settings.username.cancel')}
                 </button>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiTrash2, FiAlertTriangle } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -80,19 +80,19 @@ const RevokeSessionModal: React.FC<RevokeSessionModalProps> = ({
             className="relative bg-card rounded-xl shadow-2xl w-full max-w-md mx-4"
           >
             {/* 头部 */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-100 dark:bg-red-900/20 rounded-lg">
                   <FiAlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-gray-900">
                   {t('settings.device.sessions.revokeTitle', '撤销会话')}
                 </h3>
               </div>
               <button
                 onClick={onClose}
                 disabled={isRevoking}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FiX className="w-5 h-5" />
               </button>
@@ -100,21 +100,21 @@ const RevokeSessionModal: React.FC<RevokeSessionModalProps> = ({
 
             {/* 内容 */}
             <div className="p-6">
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-gray-600 mb-4">
                 {t('settings.device.sessions.revokeConfirm')}
               </p>
               
               {/* 会话信息 */}
-              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 mb-6">
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gray-100 dark:bg-gray-600 rounded-lg">
-                    <FiTrash2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                  <div className="p-2 bg-gray-100 rounded-lg">
+                    <FiTrash2 className="w-4 h-4 text-gray-600" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white">
+                    <h4 className="font-medium text-gray-900">
                       {getClientDisplayName(session)}
                     </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600">
                       {session.location && !session.location.startsWith('IP:') 
                         ? session.location 
                         : '未知位置'
@@ -132,11 +132,11 @@ const RevokeSessionModal: React.FC<RevokeSessionModalProps> = ({
             </div>
 
             {/* 底部按钮 */}
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
               <button
                 onClick={onClose}
                 disabled={isRevoking}
-                className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-gray-700 bg-surface-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {t('settings.username.cancel', '取消')}
               </button>
