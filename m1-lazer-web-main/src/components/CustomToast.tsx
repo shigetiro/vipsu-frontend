@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { userAPI } from '../utils/api';
@@ -83,12 +83,12 @@ export const CustomToast: React.FC<CustomToastProps> = ({
   const displayUsername = getDisplayUsername();
 
   return (
-    <div className="flex items-start space-x-3 p-4 bg-card rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-w-sm min-w-[300px] relative">
+    <div className="flex items-start space-x-3 p-4 bg-card rounded-lg shadow-xl border border-gray-200 max-w-sm min-w-[300px] relative">
       {/* 关闭按钮 */}
       {onDismiss && (
         <button
           onClick={onDismiss}
-          className="absolute top-2 right-2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+          className="absolute top-2 right-2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
         >
           <FiX size={16} />
         </button>
@@ -100,7 +100,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({
           <img
             src={avatarUrl}
             alt={displayUsername}
-            className="w-12 h-12 rounded-lg object-cover border-2 border-gray-200 dark:border-gray-600"
+            className="w-12 h-12 rounded-lg object-cover border-2 border-gray-200"
             onError={(e) => {
               // {t('common.avatarLoadFailed')}
               e.currentTarget.style.display = 'none';
@@ -120,7 +120,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({
             type === 'public' ? 'bg-green-500/20' :
             type === 'system' ? 'bg-purple-500/20' :
             'bg-gray-500/20'
-          } border-2 border-gray-200 dark:border-gray-600`}
+          } border-2 border-gray-200`}
           style={{ display: avatarUrl && !isLoading ? 'none' : 'flex' }}
         >
           {isLoading ? (
@@ -134,7 +134,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({
       {/* 内容 */}
       <div className="flex-1 min-w-0 pt-1">
         <div className="flex items-center space-x-2 mb-2">
-          <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
+          <h4 className="font-semibold text-gray-900 text-sm">
             {title}
           </h4>
         </div>
@@ -142,7 +142,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({
         {/* 用户名 */}
         {(username || userInfo?.username) && (
           <div className="flex items-center space-x-1 mb-2">
-            <span className="text-xs text-gray-500 dark:text-gray-400">{t('common.from')}</span>
+            <span className="text-xs text-gray-500">{t('common.from')}</span>
             <span className="text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded">
               {displayUsername}
             </span>
@@ -150,7 +150,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({
         )}
         
         {/* 消息内容 */}
-        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+        <p className="text-sm text-gray-600 leading-relaxed">
           {message}
         </p>
       </div>
