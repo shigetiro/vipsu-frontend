@@ -298,7 +298,22 @@ export const adminAPI = {
     return response.data;
   },
 
-  // Announcements
+  // Global Announcement (simple notification send)
+  sendGlobalAnnouncement: async (data: {
+    title: string;
+    message: string;
+    severity: 'info' | 'warning' | 'error';
+    also_send_pm: boolean;
+    online_only: boolean;
+    show_popup: boolean;
+    sender_username?: string;
+    sender_user_id?: number | null;
+  }) => {
+    const response = await api.post('/api/private/admin/global-announcement', data);
+    return response.data;
+  },
+
+  // Announcements (legacy CRUD)
   getAnnouncements: async (params?: { page?: number; per_page?: number; is_active?: boolean; type?: string; include_expired?: boolean }) => {
     const response = await api.get('/api/private/admin/announcements', { params });
     return response.data;
