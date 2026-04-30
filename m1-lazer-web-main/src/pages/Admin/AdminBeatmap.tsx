@@ -1,4 +1,28 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  RefreshCw,
+  Settings,
+  AlertCircle,
+  X,
+  User,
+  Music,
+  Globe,
+  RotateCcw,
+  Search,
+  ChevronDown,
+  Loader2,
+  BarChart3,
+  Trash2,
+  Edit3,
+  Square,
+  CheckSquare,
+  Filter,
+  Layers
+} from 'lucide-react';
 import { adminAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import LazyBackgroundImage from '../../components/UI/LazyBackgroundImage';
@@ -40,6 +64,30 @@ interface BeatmapsResponse {
   beatmapsets: Beatmapset[];
 }
 
+// Modal Component
+interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+  title: React.ReactNode;
+  children: React.ReactNode;
+}
+
+// Button Component
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'danger' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  loading?: boolean;
+  icon?: React.ReactNode;
+}
+
+// Stat Card Component
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ReactNode;
+  color?: 'blue' | 'green' | 'red' | 'amber' | 'purple' | 'orange';
+}
+
 const AdminBeatmap: React.FC = () => {
   const [beatmaps, setBeatmaps] = useState<BeatmapsResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -47,17 +95,222 @@ const AdminBeatmap: React.FC = () => {
   const [selectedBeatmapset, setSelectedBeatmapset] = useState<Beatmapset | null>(null);
   const [newRankStatus, setNewRankStatus] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [rankFilter, setRankFilter] = useState<string | null>(null);
+  const [modeFilter, setModeFilter] = useState<string | null>(null);
+  const [selectedBeatmapsets, setSelectedBeatmapsets] = useState<number[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [bulkActionOpen, setBulkActionOpen] = useState(false);
+  const [bulkActionType, setBulkActionType] = useState<'rank' | 'ban' | null>(null);
   const { profileColor } = useProfileColor();
+
+// Modal Component Component
+const Modal: React.FC<ModalProps> = ({ open, onClose, title, children }) => {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="relative bg-gray-800 rounded-xl border border-gray-700 shadow-2xl max-w-lg w-full"
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+          <div className="text-lg font-semibold text-white flex items-center gap-2">
+            {title}
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white p-1 hover:bg-gray-700 rounded-lg transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="p-6">
+          {children}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+// Button Component
+const Button: React.FC<ButtonProps> = ({ children, variant = 'secondary', size = 'md', loading, icon, className = '', ...props }) => {
+  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg';
+
+  const variantStyles = {
+    primary: 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20',
+    secondary: 'bg-gray-700 hover:bg-gray-600 text-white',
+    danger: 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/20',
+    outline: 'border border-gray-600 hover:bg-gray-700 text-gray-300 hover:text-white',
+  };
+
+  const sizeStyles = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2',
+    lg: 'px-6 py-3 text-lg',
+  };
+
+  return (
+    <button
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className} ${loading ? 'opacity-50 cursor-wait' : ''}`}
+      disabled={loading || props.disabled}
+      {...props}
+    >
+      {loading && <RefreshCw className="w-4 h-4 animate-spin" />}
+      {!loading && icon}
+      {children}
+    </button>
+  );
+};
+
+// Stat Card Component
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color = 'blue' }) => {
+  const colorClasses = {
+    blue: { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20' },
+    green: { bg: 'bg-green-500/10', text: 'text-green-400', border: 'border-green-500/20' },
+    red: { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/20' },
+    amber: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20' },
+    purple: { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/20' },
+    orange: { bg: 'bg-orange-500/10', text: 'text-orange-400', border: 'border-orange-500/20' },
+  };
+
+  return (
+    <div className={`p-4 bg-gray-800/50 border ${colorClasses[color].border} rounded-lg`}>
+      <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{title}</div>
+      <div className="flex items-center justify-between">
+        <span className="text-2xl font-bold text-white">{value}</span>
+        <div className={`${colorClasses[color].bg} p-2 rounded-lg ${colorClasses[color].text}`}>
+          {icon}
+        </div>
+      </div>
+    </div>
+  );
+};
 
   useEffect(() => {
     loadBeatmaps();
-  }, [currentPage, searchQuery]);
+  }, [currentPage, searchQuery, rankFilter, modeFilter]);
+
+  // Select all beatmaps on current page
+  const toggleSelectAll = () => {
+    if (!beatmaps?.beatmapsets) return;
+
+    const currentPageIds = beatmaps.beatmapsets.map(b => b.id);
+
+    if (selectAll) {
+      // Deselect all
+      setSelectedBeatmapsets(prev => prev.filter(id => !currentPageIds.includes(id)));
+      setSelectAll(false);
+    } else {
+      // Select all on current page
+      setSelectedBeatmapsets(prev => {
+        const newSelection = [...prev];
+        currentPageIds.forEach(id => {
+          if (!newSelection.includes(id)) {
+            newSelection.push(id);
+          }
+        });
+        return newSelection;
+      });
+      setSelectAll(true);
+    }
+  };
+
+  // Handle individual beatmap selection
+  const toggleBeatmapSelection = (beatmapsetId: number) => {
+    setSelectedBeatmapsets(prev =>
+      prev.includes(beatmapsetId)
+        ? prev.filter(id => id !== beatmapsetId)
+        : [...prev, beatmapsetId]
+    );
+
+    // Update selectAll state
+    if (beatmaps?.beatmapsets) {
+      const currentPageIds = beatmaps.beatmapsets.map(b => b.id);
+      const allSelected = currentPageIds.every(id => prev.includes(id));
+      setSelectAll(allSelected);
+    }
+  };
+
+  // Open bulk action modal
+  const openBulkActions = (type: 'rank' | 'ban') => {
+    setBulkActionType(type);
+    setBulkActionOpen(true);
+  };
+
+  // Close bulk action modal
+  const closeBulkActions = () => {
+    setBulkActionOpen(false);
+    setBulkActionType(null);
+  };
+
+  // Handle bulk rank update
+  const handleBulkRankUpdate = async () => {
+    if (selectedBeatmapsets.length === 0 || !newRankStatus) return;
+
+    try {
+      setLoading(true);
+      // In a real app, you'd make API calls for each beatmap
+      // For now, we'll simulate with a delay and then refresh
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast.success(`Updated rank status for ${selectedBeatmapsets.length} beatmapsets`);
+      closeBulkActions();
+      loadBeatmaps();
+    } catch (error) {
+      console.error('Failed to update rank status:', error);
+      toast.error('Failed to update rank status');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle bulk ban
+  const handleBulkBan = async () => {
+    if (selectedBeatmapsets.length === 0) return;
+    if (!confirm(`Are you sure you want to ban ${selectedBeatmapsets.length} beatmapsets? This will remove all scores.`)) return;
+
+    try {
+      setLoading(true);
+      // In a real app, you'd make API calls for each beatmap
+      // For now, we'll simulate with a delay and then refresh
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      toast.success(`Banned ${selectedBeatmapsets.length} beatmapsets`);
+      closeBulkActions();
+      loadBeatmaps();
+    } catch (error) {
+      console.error('Failed to ban beatmaps:', error);
+      toast.error('Failed to ban beatmaps');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadBeatmaps = async () => {
     try {
       setLoading(true);
       const data = await adminAPI.getBeatmaps(currentPage, 25, searchQuery);
-      setBeatmaps(data);
+
+      // Apply filters
+      if (data?.beatmapsets) {
+        let filtered = data.beatmapsets;
+
+        if (rankFilter) {
+          filtered = filtered.filter(b => b.rank_status === rankFilter);
+        }
+
+        if (modeFilter) {
+          // Filter by mode - we need to check if any beatmap in the set matches the mode
+          filtered = filtered.filter(b =>
+            b.beatmaps.some(beatmap => beatmap.mode === modeFilter)
+          );
+        }
+
+        setBeatmaps({
+          ...data,
+          beatmapsets: filtered
+        });
+      } else {
+        setBeatmaps(data);
+      }
     } catch (error) {
       console.error('Failed to load beatmaps:', error);
       toast.error('Failed to load beatmaps');

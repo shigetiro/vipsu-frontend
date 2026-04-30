@@ -470,15 +470,15 @@ export const AnnouncementsPage: React.FC = () => {
             className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-pink-500/30 transition-all hover:scale-105 hover:shadow-pink-500/50 disabled:opacity-50 disabled:hover:scale-100"
           >
             {submitting ? (
-              <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              <span className="flex items-center gap-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white inline-block" />
                 Sending...
-              </>
+              </span>
             ) : (
-              <>
+              <span className="flex items-center gap-2">
                 <Send className="h-4 w-4" />
                 Send Announcement
-              </>
+              </span>
             )}
           </button>
         </div>

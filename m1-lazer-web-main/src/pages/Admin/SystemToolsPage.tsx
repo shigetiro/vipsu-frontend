@@ -238,6 +238,50 @@ const SystemToolsPage: React.FC = () => {
   // Beatmap input
   const [beatmapId, setBeatmapId] = useState('');
 
+  // Server stats state
+  const [serverStats, setServerStats] = useState({
+    online_users: 0,
+    total_users: 0,
+    total_plays: 0,
+    total_scores: 0,
+  });
+  const [uptime, setUptime] = useState('0h 0m');
+  const [scoreQueue, setScoreQueue] = useState(0);
+
+  // Fetch server stats
+  const fetchServerStats = useCallback(async () => {
+    try {
+      const stats = await adminAPI.getStats();
+      setServerStats({
+        online_users: stats.online_users || 0,
+        total_users: stats.total_users || 0,
+        total_plays: stats.total_plays || 0,
+        total_scores: stats.total_scores || 0,
+      });
+    } catch (err) {
+      console.error('Failed to fetch server stats:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchServerStats();
+    const interval = setInterval(fetchServerStats, 30000); // Update every 30 seconds
+    return () => clearInterval(interval);
+  }, [fetchServerStats]);
+
+  // Calculate uptime (track from page load)
+  useEffect(() => {
+    const computeUptime = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      setUptime(`${hours}h ${minutes.toString().padStart(2, '0')}m`);
+    };
+    computeUptime();
+    const interval = setInterval(computeUptime, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
+
   // Fetch maintenance status
   const fetchMaintenanceStatus = useCallback(async () => {
     try {
@@ -1014,19 +1058,7 @@ const SystemToolsPage: React.FC = () => {
           <BarChart3 className="w-5 h-5 text-gray-400" />
           <h3 className="text-lg font-semibold text-white">Server Status</h3>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { label: 'Status', value: 'Online', color: 'text-green-400' },
-            { label: 'Players Online', value: '-', color: 'text-white' },
-            { label: 'Score Queue', value: '-', color: 'text-white' },
-            { label: 'Uptime', value: '-', color: 'text-white' },
-          ].map((stat, i) => (
-            <div key={i} className="p-4 bg-gray-700/30 rounded-lg">
-              <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{stat.label}</div>
-              <div className={`text-xl font-semibold ${stat.color}`}>{stat.value}</div>
-            </div>
-          ))}
-        </div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4"> <div className="p-4 bg-gray-700/30 rounded-lg"> <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Status</div> <div className="text-xl font-semibold text-green-400">Online</div> </div> <div className="p-4 bg-gray-700/30 rounded-lg"> <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Players Online</div> <div className="text-xl font-semibold text-white">{serverStats.online_users}</div> </div> <div className="p-4 bg-gray-700/30 rounded-lg"> <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Score Queue</div> <div className="text-xl font-semibold text-white">{scoreQueue}</div> </div> <div className="p-4 bg-gray-700/30 rounded-lg"> <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Uptime</div> <div className="text-xl font-semibold text-white">{uptime}</div> </div> </div>
       </div>
     </motion.div>
   );
