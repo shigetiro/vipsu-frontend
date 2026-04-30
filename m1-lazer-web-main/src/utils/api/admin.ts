@@ -97,13 +97,24 @@ export const adminAPI = {
     return response.data;
   },
 
-  addBlacklistedBeatmap: async (beatmapsetId: number) => {
+  addBlacklistedBeatmapSet: async (beatmapsetId: number) => {
     const response = await api.post('/api/private/admin/beatmaps/blacklist', { beatmapset_id: beatmapsetId });
     return response.data;
   },
 
-  removeBlacklistedBeatmap: async (beatmapsetId: number) => {
+  removeBlacklistedBeatmapSet: async (beatmapsetId: number) => {
     const response = await api.delete(`/api/private/admin/beatmaps/blacklist/${beatmapsetId}`);
+    return response.data;
+  },
+
+  // Add/Remove by individual beatmap ID
+  addBlacklistedBeatmapById: async (beatmapId: number) => {
+    const response = await api.post('/api/private/admin/beatmaps/blacklist', { beatmap_id: beatmapId });
+    return response.data;
+  },
+
+  removeBlacklistedBeatmapById: async (beatmapId: number) => {
+    const response = await api.delete(`/api/private/admin/beatmaps/blacklist/beatmap/${beatmapId}`);
     return response.data;
   },
 
