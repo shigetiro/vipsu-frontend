@@ -285,6 +285,7 @@ const AdminUsers: React.FC = () => {
                   <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">User</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Country</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Status</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Trust</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Roles</th>
                   <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">Actions</th>
                 </tr>
@@ -292,7 +293,7 @@ const AdminUsers: React.FC = () => {
               <tbody>
                 {paginatedUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center">
+                    <td colSpan={6} className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center gap-3">
                         <svg className="h-12 w-12 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -362,6 +363,29 @@ const AdminUsers: React.FC = () => {
                           <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/20 px-3 py-1 text-xs font-medium text-green-400 ring-1 ring-green-500/30">
                             <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
                             Active
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        {user.is_suspicious ? (
+                          <div className="flex flex-col items-start gap-1">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-400 ring-1 ring-amber-500/30">
+                              <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                              </svg>
+                              Suspicious
+                            </span>
+                            <span className="text-xs text-amber-400/70">
+                              Score: {user.trust_score ?? 100}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className={`text-sm font-medium ${
+                            (user.trust_score ?? 100) >= 80 ? 'text-green-400' :
+                            (user.trust_score ?? 100) >= 50 ? 'text-yellow-400' :
+                            'text-red-400'
+                          }`}>
+                            {(user.trust_score ?? 100)}/100
                           </span>
                         )}
                       </td>
