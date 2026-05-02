@@ -2,7 +2,7 @@
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-  stats?: { pp?: number };
+  stats?: { pp?: number; play_time?: number };
   playTime: string;
   user_achievements?: {
     achievement_id: number;
@@ -39,9 +39,12 @@ const PlayerRankCard: React.FC<Props> = ({ stats, playTime, user_achievements, g
             {Math.round(stats?.pp ?? 0)}
           </div>
         </div>
-        <div className="text-center min-w-0 flex-shrink-0">
+        <div className="text-center min-w-0 flex-shrink-0 group relative">
           <div className="text-gray-500 text-xs mb-1 whitespace-nowrap">{t('profile.stats.playTime')}</div>
-          <div className="text-gray-800 font-bold text-base">{playTime}</div>
+          <div className="text-gray-800 font-bold text-base cursor-help">{playTime}</div>
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+            {stats?.play_time ? `${Math.round(stats.play_time / 3600).toLocaleString()} hours` : '0 hours'}
+          </div>
         </div>
       </div>
 

@@ -15,6 +15,7 @@ import UserBestScores from './UserBestScores';
 import UserRecentScores from './UserRecentScores';
 import UserPageDisplay from './UserPageDisplay';
 import RestrictedBanner from './RestrictedBanner';
+import SuspiciousBanner from './SuspiciousBanner';
 import { FaTools, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip';
 import { useAuth } from '../../hooks/useAuth';
@@ -23,6 +24,7 @@ import { useProfileColor } from '../../contexts/ProfileColorContext';
 import Badges from './Badges';
 import Achievements from './Achievements';
 import UserMostPlayedBeatmaps from './UserMostPlayedBeatmaps';
+import DailyChallengeStatsCard from './DailyChallengeStats';
 import { cn } from '../../utils/cn';
 
 interface UserProfileLayoutProps {
@@ -177,6 +179,17 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
           </div>
         )}
 
+        {/* 可疑账户提示 - 对所有用户可见 */}
+        {user.is_suspicious && (
+          <div className="px-3 md:px-6 pt-4">
+            <SuspiciousBanner 
+              is_suspicious={user.is_suspicious}
+              suspicious_reasons={user.suspicious_reasons}
+              trust_score={user.trust_score}
+            />
+          </div>
+        )}
+
         {/* 头部栏 + 模式选择 */}
         <div className="relative">
           <div className="relative z-10 bg-transparent md:bg-card px-4 md:px-6 py-3 md:py-4 flex items-center justify-between md:rounded-t-2xl border-b border-card" style={{ color: 'var(--text-primary)' }}>
@@ -312,7 +325,7 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
             {/* 左侧 3/4 */}
             <div className="flex-[3] flex flex-col gap-3">
               {/* 排名 */}
-              <div className="flex gap-8 p-3 md:rounded-lg md:rank-card-shadow mb-4">
+              <div className="flex gap-4 md:gap-8 p-3 md:rounded-lg md:rank-card-shadow mb-4">
                 <div className="text-center">
                   <div className="text-gray-500 mb-1 text-xs">{t('profile.info.globalRank')}</div>
                   <div className="font-bold text-primary text-xl">#{stats?.global_rank ?? '—'}</div>
@@ -320,6 +333,10 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
                 <div className="text-center">
                   <div className="text-gray-500 mb-1 text-xs">{t('profile.info.countryRank')}</div>
                   <div className="font-bold text-primary text-xl">#{stats?.country_rank ?? '—'}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-gray-500 mb-1 text-xs">{t('profile.info.scoreRank')}</div>
+                  <div className="font-bold text-primary text-xl">#{stats?.total_score_rank ?? '—'}</div>
                 </div>
               </div>
 
@@ -368,6 +385,9 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({ user, selectedMod
             </div>
           </div>
         </div>
+
+        {/* 每日挑战统计 */}
+        <DailyChallengeStatsCard stats={user.daily_challenge_user_stats} />
 
         {/* 成绩部分 */}
         <div className="bg-transparent md:bg-card px-3 md:px-6 lg:px-8 py-4 md:py-6 border-b border-card">
