@@ -1,4 +1,20 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  AlertTriangle,
+  RefreshCw,
+  X,
+  Music,
+  Search,
+  Loader2,
+  Trash2,
+  Filter,
+  Shield,
+  Ban,
+  Star,
+  SortAsc,
+  SortDesc,
+} from 'lucide-react';
 import { adminAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 
@@ -24,6 +40,40 @@ interface BlacklistedBeatmap {
   };
 }
 
+type SortField = 'beatmap_id' | 'beatmapset_id' | 'title' | 'artist' | 'stars' | 'bpm' | 'length' | 'mode';
+
+// Button Component
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  loading?: boolean;
+  icon?: React.ReactNode;
+}
+
+const Button: React.FC<ButtonProps> = ({ children, variant = 'secondary', size = 'md', loading, icon, className = '', ...props }) => {
+  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg';
+  const variantStyles = {
+    primary: 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20',
+    secondary: 'bg-gray-700 hover:bg-gray-600 text-white',
+    danger: 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/20',
+    outline: 'border border-gray-600 hover:bg-gray-700 text-gray-300 hover:text-white',
+    ghost: 'hover:bg-gray-700/50 text-gray-300 hover:text-white',
+  };
+  const sizeStyles = { sm: 'px-3 py-1.5 text-sm', md: 'px-4 py-2', lg: 'px-6 py-3 text-lg' };
+
+  return (
+    <button
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className} ${loading ? 'opacity-50 cursor-wait' : ''}`}
+      disabled={loading || props.disabled}
+      {...props}
+    >
+      {loading && <RefreshCw className="w-4 h-4 animate-spin" />}
+      {!loading && icon}
+      {children}
+    </button>
+  );
+};
+
 const AdminBeatmapBlacklist: React.FC = () => {
   const [blacklistedBeatmaps, setBlacklistedBeatmaps] = useState<BlacklistedBeatmap[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,38 +81,110 @@ const AdminBeatmapBlacklist: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [addByBeatmapId, setAddByBeatmapId] = useState(false);
   const [adding, setAdding] = useState(false);
+  const [sortField, setSortField] = useState<SortField>('beatmap_id');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [searchDebounced, setSearchDebounced] = useState('');
+  const searchTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     loadBlacklist();
   }, []);
 
+  // Auto-apply search filter with debounce
+  useEffect(() => {
+    if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(() => {
+      setSearchDebounced(searchTerm);
+    }, 300);
+    return () => { if (searchTimeout.current) clearTimeout(searchTimeout.current); };
+  }, [searchTerm]);
+
   const loadBlacklist = async () => {
     try {
       setLoading(true);
       const data = await adminAPI.getBlacklistedBeatmaps();
-      // Filter by search term if provided
-      if (searchTerm.trim()) {
-        const searchNum = parseInt(searchTerm.trim());
-        if (!isNaN(searchNum)) {
-          // Search by beatmap ID or beatmapset ID
-          const filtered = data.filter((item) =>
-            item.beatmap_id === searchNum ||
-            item.beatmapset_id === searchNum
-          );
-          setBlacklistedBeatmaps(filtered || []);
-        } else {
-          // If not a number, show all (or could implement text search on title/artist)
-          setBlacklistedBeatmaps(data || []);
-        }
-      } else {
-        setBlacklistedBeatmaps(data || []);
-      }
+      setBlacklistedBeatmaps(data || []);
     } catch (error) {
       console.error('Failed to load blacklist:', error);
       toast.error('Failed to load blacklisted beatmaps');
     } finally {
       setLoading(false);
     }
+  };
+
+  // Filter + sort with useMemo
+  const filteredAndSorted = useMemo(() => {
+    let result = [...blacklistedBeatmaps];
+
+    // Search filter
+    if (searchDebounced.trim()) {
+      const searchNum = parseInt(searchDebounced.trim());
+      if (!isNaN(searchNum)) {
+        result = result.filter(item =>
+          item.beatmap_id === searchNum || item.beatmapset_id === searchNum
+        );
+      }
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      let cmp = 0;
+      switch (sortField) {
+        case 'beatmap_id':
+          cmp = a.beatmap_id - b.beatmap_id;
+          break;
+        case 'beatmapset_id':
+          cmp = a.beatmapset_id - b.beatmapset_id;
+          break;
+        case 'title':
+          cmp = (a.beatmapset?.title || '').localeCompare(b.beatmapset?.title || '');
+          break;
+        case 'artist':
+          cmp = (a.beatmapset?.artist || '').localeCompare(b.beatmapset?.artist || '');
+          break;
+        case 'stars':
+          cmp = (a.beatmap?.difficulty_rating || 0) - (b.beatmap?.difficulty_rating || 0);
+          break;
+        case 'bpm':
+          cmp = (a.beatmap?.bpm || 0) - (b.beatmap?.bpm || 0);
+          break;
+        case 'length':
+          cmp = (a.beatmap?.total_length || 0) - (b.beatmap?.total_length || 0);
+          break;
+        case 'mode':
+          cmp = (a.beatmap?.mode || '').localeCompare(b.beatmap?.mode || '');
+          break;
+      }
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+
+    return result;
+  }, [blacklistedBeatmaps, searchDebounced, sortField, sortDirection]);
+
+  const toggleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('desc');
+    }
+  };
+
+  const SortHeader: React.FC<{ field: SortField; children: React.ReactNode; align?: string }> = ({ field, children, align = 'center' }) => {
+    const alignClass = align === 'left' ? 'text-left' : 'text-center';
+    return (
+      <th
+        className={`${alignClass} py-2 px-2 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-300 select-none whitespace-nowrap`}
+        onClick={() => toggleSort(field)}
+      >
+        <div className={`flex items-center gap-1 ${align === 'left' ? '' : 'justify-center'}`}>
+          {children}
+          {sortField === field && (
+            sortDirection === 'asc' ? <SortAsc size={10} /> : <SortDesc size={10} />
+          )}
+        </div>
+      </th>
+    );
   };
 
   const handleAdd = async (e: React.FormEvent) => {
@@ -111,189 +233,194 @@ const AdminBeatmapBlacklist: React.FC = () => {
     }
   };
 
-  return (
-    <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Beatmap Blacklist</h2>
+  const formatLength = (seconds?: number) => {
+    if (!seconds) return 'N/A';
+    return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
+  };
 
-      {/* Toggle and Add Form */}
-      <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-6 mb-6">
+  const getModeLabel = (mode?: string) => {
+    switch (mode) {
+      case 'osu': return 'osu!';
+      case 'taiko': return 'Taiko';
+      case 'fruits': return 'Catch';
+      case 'mania': return 'Mania';
+      default: return mode || 'N/A';
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="p-6"
+    >
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-white mb-2">Beatmap Blacklist</h2>
+        <p className="text-sm text-gray-400">
+          Manage blacklisted beatmaps and beatmapsets
+        </p>
+      </div>
+
+      {/* Add to Blacklist */}
+      <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Add to Blacklist
-          </h3>
-          <div className="flex items-center space-x-3">
-            <span className="text-sm text-gray-500">Add by:</span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={addByBeatmapId}
-                onChange={(e) => setAddByBeatmapId(e.target.checked)}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 transition-colors">
-                <div className="absolute left-0 top-0.5 mt-[-2px] inline-block h-5 w-5 rounded-full bg-white shadow translate-x-0 peer-checked:translate-x-[100%] transition-transform duration-200"></div>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center">
+              <Ban className="w-5 h-5 text-red-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">Add to Blacklist</h3>
+              <p className="text-xs text-gray-400">Blacklisted beatmaps will have their scores removed</p>
+            </div>
+          </div>
+
+          {/* Toggle Switch */}
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-400">Add by:</span>
+            <button
+              onClick={() => setAddByBeatmapId(!addByBeatmapId)}
+              className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 rounded-lg border border-gray-600 hover:border-gray-500 transition-colors"
+            >
+              <span className={`text-sm font-medium transition-colors ${!addByBeatmapId ? 'text-blue-400' : 'text-gray-500'}`}>Beatmapset</span>
+              <div className={`relative w-10 h-5 rounded-full transition-colors ${addByBeatmapId ? 'bg-blue-600' : 'bg-gray-600'}`}>
+                <div
+                  className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all duration-200 ${addByBeatmapId ? 'left-[22px]' : 'left-0.5'}`}
+                />
               </div>
-            </label>
-            <span className="ml-2 text-sm font-medium">{addByBeatmapId ? 'Beatmap ID' : 'Beatmapset ID'}</span>
+              <span className={`text-sm font-medium transition-colors ${addByBeatmapId ? 'text-blue-400' : 'text-gray-500'}`}>Beatmap</span>
+            </button>
           </div>
         </div>
+
         <form onSubmit={handleAdd} className="flex gap-3">
-          <input
-            type="number"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder={addByBeatmapId ? 'Enter Beatmap ID' : 'Enter Beatmapset ID'}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900"
-            required
-            min="1"
-          />
-          <button
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <input
+              type="number"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder={addByBeatmapId ? 'Enter Beatmap ID' : 'Enter Beatmapset ID'}
+              className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm"
+              required
+              min="1"
+            />
+          </div>
+          <Button
             type="submit"
-            disabled={adding}
-            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="danger"
+            loading={adding}
+            icon={<Ban size={16} />}
           >
             {adding ? 'Adding...' : 'Add to Blacklist'}
-          </button>
+          </Button>
         </form>
 
-        {/* Search Bar */}
-        <div className="mt-4 flex gap-3">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by Beatmap ID or Beatmapset ID..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900"
-          />
-          <button
-            onClick={() => loadBlacklist()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Search
-          </button>
+        {/* Search Filter */}
+        <div className="mt-4">
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Filter by Beatmap ID or Beatmapset ID..."
+              className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm"
+            />
+          </div>
         </div>
       </div>
 
       {/* Blacklist Table */}
       {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="flex items-center justify-center py-16">
+          <Loader2 className="w-8 h-8 animate-spin text-red-400" />
+        </div>
+      ) : filteredAndSorted.length === 0 ? (
+        <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-12 text-center">
+          <Shield className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+          <p className="text-gray-400 text-lg">No blacklisted beatmaps</p>
+          <p className="text-gray-500 text-sm mt-1">Add a beatmap or beatmapset above to blacklist it</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200 dark:border-white/10">
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Beatmap ID
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Beatmapset ID
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Title
-                </th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Artist
-                </th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Version
-                </th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Stars
-                </th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Length
-                </th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  BPM
-                </th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Mode
-                </th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Circles/Sliders/Spinners
-                </th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {blacklistedBeatmaps.length === 0 ? (
-                <tr>
-                  <td colSpan={11} className="text-center py-8 text-gray-500">
-                    No blacklisted beatmaps
-                  </td>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-700">
+                  <SortHeader field="beatmap_id" align="left">Map ID</SortHeader>
+                  <SortHeader field="beatmapset_id" align="left">Set ID</SortHeader>
+                  <SortHeader field="title" align="left">Title</SortHeader>
+                  <SortHeader field="artist" align="left">Artist</SortHeader>
+                  <SortHeader field="stars">Stars</SortHeader>
+                  <SortHeader field="length">Len</SortHeader>
+                  <SortHeader field="bpm">BPM</SortHeader>
+                  <SortHeader field="mode">Mode</SortHeader>
+                  <th className="text-center py-2 px-2 text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Diff</th>
+                  <th className="text-right py-2 px-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-16"></th>
                 </tr>
-              ) : (
-                blacklistedBeatmaps.map((item) => (
+              </thead>
+              <tbody>
+                {filteredAndSorted.map((item) => (
                   <tr
                     key={item.id}
-                    className="border-b border-gray-100 hover:bg-gray-50"
+                    className="border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors"
                   >
-                    <td className="py-3 px-4 text-gray-600 font-mono">
-                      {item.beatmap_id}
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 font-mono">
-                      {item.beatmapset_id}
-                    </td>
-                    <td className="py-3 px-4 text-gray-900">
+                    <td className="py-2 px-2 font-mono text-gray-300 text-xs">{item.beatmap_id}</td>
+                    <td className="py-2 px-2 font-mono text-gray-400 text-xs">{item.beatmapset_id}</td>
+                    <td className="py-2 px-2 text-white truncate max-w-[140px]">
                       {item.beatmapset?.title || 'N/A'}
                     </td>
-                    <td className="py-3 px-4 text-gray-600">
+                    <td className="py-2 px-2 text-gray-400 truncate max-w-[100px]">
                       {item.beatmapset?.artist || 'N/A'}
                     </td>
-                    <td className="text-center py-3 px-4 text-sm text-gray-400">
-                      {item.beatmap?.version || 'N/A'}
+                    <td className="py-2 px-2 text-center">
+                      {item.beatmap?.difficulty_rating != null ? (
+                        <span className="font-medium text-amber-400">{item.beatmap.difficulty_rating.toFixed(2)}</span>
+                      ) : (
+                        <span className="text-gray-500">N/A</span>
+                      )}
                     </td>
-                    <td className="text-center py-3 px-4 text-sm text-gray-400">
-                      {item.beatmap?.difficulty_rating !== null && item.beatmap?.difficulty_rating !== undefined
-                        ? item.beatmap.difficulty_rating.toFixed(2)
-                        : 'N/A'}
+                    <td className="py-2 px-2 text-center text-gray-400">
+                      {item.beatmap?.total_length != null ? formatLength(item.beatmap.total_length) : 'N/A'}
                     </td>
-                    <td className="text-center py-3 px-4 text-sm text-gray-400">
-                      {item.beatmap?.total_length !== null && item.beatmap?.total_length !== undefined
-                        ? `${Math.floor(item.beatmap.total_length / 60)}:${(
-                            item.beatmap.total_length % 60
-                          )
-                            .toString()
-                            .padStart(2, '0')}`
-                        : 'N/A'}
+                    <td className="py-2 px-2 text-center text-gray-400">
+                      {item.beatmap?.bpm != null ? item.beatmap.bpm.toFixed(0) : 'N/A'}
                     </td>
-                    <td className="text-center py-3 px-4 text-sm text-gray-400">
-                      {item.beatmap?.bpm !== null && item.beatmap?.bpm !== undefined
-                        ? item.beatmap.bpm.toFixed(1)
-                        : 'N/A'}
+                    <td className="py-2 px-2 text-center text-gray-400">
+                      {getModeLabel(item.beatmap?.mode)}
                     </td>
-                    <td className="text-center py-3 px-4 text-sm text-gray-400 capitalize">
-                      {item.beatmap?.mode || 'N/A'}
-                    </td>
-                    <td className="text-center py-3 px-4 text-sm text-gray-400">
+                    <td className="py-2 px-2 text-center text-gray-400 text-xs">
                       {item.beatmap
                         ? `${item.beatmap.count_circles}/${item.beatmap.count_sliders}/${item.beatmap.count_spinners}`
                         : 'N/A'}
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center justify-end">
-                        <button
-                          onClick={() => handleRemove(item.beatmap_id)}
-                          className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm"
-                        >
-                          Remove
-                        </button>
-                      </div>
+                    <td className="py-2 px-2 text-right">
+                      <button
+                        onClick={() => handleRemove(item.beatmap_id)}
+                        className="p-1 text-green-400 hover:text-green-300 hover:bg-green-500/10 rounded transition-colors"
+                        title="Remove from blacklist"
+                      >
+                        <Trash2 size={14} />
+                      </button>
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
-    </div>
+
+      {/* Count */}
+      {!loading && filteredAndSorted.length > 0 && (
+        <div className="text-center text-xs text-gray-500 mt-3">
+          {filteredAndSorted.length} blacklisted {filteredAndSorted.length === 1 ? 'beatmap' : 'beatmaps'}
+        </div>
+      )}
+    </motion.div>
   );
 };
 
 export default AdminBeatmapBlacklist;
-
