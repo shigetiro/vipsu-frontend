@@ -82,6 +82,41 @@ export interface ClientLogParams {
   search?: string;
 }
 
+// Login Audit - login records with client version tracking
+export interface LoginAuditEntry {
+  id: number;
+  user_id: number;
+  username?: string;
+  client_version?: string;
+  os_version?: string;
+  client_hash?: string;
+  ip_address?: string;
+  login_time: string;
+  login_success: boolean;
+  login_method: string;
+  country_name?: string;
+}
+
+export interface LoginAuditListResponse {
+  total: number;
+  page: number;
+  per_page: number;
+  logs: LoginAuditEntry[];
+}
+
+export interface LoginAuditParams {
+  page?: number;
+  per_page?: number;
+  search?: string;
+  user_id?: number;
+  client_version?: string;
+  client_hash?: string;
+  os_version?: string;
+  login_success?: boolean;
+  login_method?: string;
+  time_range?: string;
+}
+
 // Unknown Hash Management
 export interface UnknownHashEntry {
   hash: string;
@@ -294,6 +329,20 @@ export async function deleteClientLog(id: string): Promise<void> {
  */
 export async function fetchClientLogStats(): Promise<ClientLogStats> {
   return fetchWithAuth<ClientLogStats>(`${API_BASE}/client-logs/stats`);
+}
+
+// ============================================================================
+// Login Audit API Functions
+// ============================================================================
+
+/**
+ * Fetch login audit records with client version tracking
+ */
+export async function fetchLoginAudit(
+  params: LoginAuditParams = {}
+): Promise<LoginAuditListResponse> {
+  const queryString = buildQueryString(params);
+  return fetchWithAuth<LoginAuditListResponse>(`${API_BASE}/login-audit${queryString}`);
 }
 
 // ============================================================================
