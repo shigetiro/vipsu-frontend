@@ -273,6 +273,19 @@ export const adminAPI = {
     return response.data;
   },
 
+  createRandomDailyChallenge: async (data: {
+    date?: string;
+    ruleset_id?: number;
+    min_difficulty?: number;
+    max_difficulty?: number;
+    create_challenge?: boolean;
+    required_mods?: string;
+    allowed_mods?: string;
+  }) => {
+    const response = await api.post('/api/private/admin/daily-challenge/random', data);
+    return response.data;
+  },
+
   getDailyChallengeStats: async (userId: number) => {
     const response = await api.get(`/api/private/admin/daily-challenge/stats/${userId}`);
     return response.data;

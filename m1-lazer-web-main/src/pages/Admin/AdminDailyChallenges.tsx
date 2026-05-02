@@ -37,7 +37,23 @@ const AdminDailyChallenges: React.FC = () => {
   const [challenges, setChallenges] = useState<DailyChallenge[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showRandomModal, setShowRandomModal] = useState(false);
   const [editingChallenge, setEditingChallenge] = useState<DailyChallenge | null>(null);
+  const [randomPreview, setRandomPreview] = useState<{
+    beatmap_id: number;
+    beatmap_title: string;
+    beatmap_artist: string;
+    difficulty_rating: number;
+    ruleset_id: number;
+  } | null>(null);
+  const [randomLoading, setRandomLoading] = useState(false);
+  const [randomFormData, setRandomFormData] = useState({
+    date: new Date().toISOString().split('T')[0],
+    ruleset_id: '0',
+    min_difficulty: '',
+    max_difficulty: '',
+    required_mods: [] as string[],
+  });
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     beatmap_id: '',
@@ -63,6 +79,71 @@ const AdminDailyChallenges: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePickRandom = async () => {
+    try {
+      setRandomLoading(true);
+      const response = await adminAPI.createRandomDailyChallenge({
+        ruleset_id: randomFormData.ruleset_id ? Number(randomFormData.ruleset_id) : undefined,
+        min_difficulty: randomFormData.min_difficulty ? Number(randomFormData.min_difficulty) : undefined,
+        max_difficulty: randomFormData.max_difficulty ? Number(randomFormData.max_difficulty) : undefined,
+      });
+      setRandomPreview({
+        beatmap_id: response.beatmap_id,
+        beatmap_title: response.beatmap_title,
+        beatmap_artist: response.beatmap_artist,
+        difficulty_rating: response.difficulty_rating,
+        ruleset_id: response.ruleset_id,
+      });
+    } catch (error: any) {
+      console.error('Failed to pick random beatmap:', error);
+      toast.error(error?.response?.data?.detail || 'Failed to pick random beatmap');
+    } finally {
+      setRandomLoading(false);
+    }
+  };
+
+  const handleCreateRandomChallenge = async () => {
+    if (!randomPreview || !randomFormData.date) return;
+    try {
+      const response = await adminAPI.createRandomDailyChallenge({
+        date: randomFormData.date,
+        ruleset_id: randomFormData.ruleset_id ? Number(randomFormData.ruleset_id) : undefined,
+        min_difficulty: randomFormData.min_difficulty ? Number(randomFormData.min_difficulty) : undefined,
+        max_difficulty: randomFormData.max_difficulty ? Number(randomFormData.max_difficulty) : undefined,
+        required_mods: JSON.stringify(randomFormData.required_mods),
+        create_challenge: true,
+      });
+      if (response.challenge_created) {
+        toast.success('Random daily challenge created successfully');
+        setShowRandomModal(false);
+        setRandomPreview(null);
+        setRandomFormData({
+          date: new Date().toISOString().split('T')[0],
+          ruleset_id: '0',
+          min_difficulty: '',
+          max_difficulty: '',
+          required_mods: [],
+        });
+        loadChallenges();
+      }
+    } catch (error: any) {
+      console.error('Failed to create random challenge:', error);
+      toast.error(error?.response?.data?.detail || 'Failed to create random challenge');
+    }
+  };
+
+  const closeRandomModal = () => {
+    setShowRandomModal(false);
+    setRandomPreview(null);
+    setRandomFormData({
+      date: new Date().toISOString().split('T')[0],
+      ruleset_id: '0',
+      min_difficulty: '',
+      max_difficulty: '',
+      required_mods: [],
+    });
   };
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -196,6 +277,12 @@ const AdminDailyChallenges: React.FC = () => {
           >
             Add Daily Challenge
           </button>
+          <button
+            onClick={() => setShowRandomModal(true)}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-600/90 transition-colors whitespace-nowrap"
+          >
+            Random Challenge
+          </button>
         </div>
       </div>
 
@@ -241,7 +328,7 @@ const AdminDailyChallenges: React.FC = () => {
                         {(() => {
                           try {
                             const mods = JSON.parse(challenge.required_mods);
-                            return mods.length > 0 && <span>Required: {mods.join(', ')}</span>;
+                            return mods.length > 0 && <span>Required: {mods.map((m: any) => m.acronym || m).join(', ')}</span>;
                           } catch {
                             return challenge.required_mods !== '[]' && <span>Required: {challenge.required_mods}</span>;
                           }
@@ -249,7 +336,7 @@ const AdminDailyChallenges: React.FC = () => {
                         {(() => {
                           try {
                             const mods = JSON.parse(challenge.allowed_mods);
-                            return mods.length > 0 && <span>Allowed: {mods.join(', ')}</span>;
+                            return mods.length > 0 && <span>Allowed: {mods.map((m: any) => m.acronym || m).join(', ')}</span>;
                           } catch {
                             return challenge.allowed_mods !== '[]' && <span>Allowed: {challenge.allowed_mods}</span>;
                           }
@@ -440,6 +527,166 @@ const AdminDailyChallenges: React.FC = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showRandomModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-200">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Random Challenge</h2>
+                <button
+                  onClick={closeRandomModal}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                    Date *
+                  </label>
+                  <input
+                    type="date"
+                    value={randomFormData.date}
+                    onChange={(e) => setRandomFormData({ ...randomFormData, date: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-green-500/20 focus:border-green-500 outline-none"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                      Ruleset
+                    </label>
+                    <select
+                      value={randomFormData.ruleset_id}
+                      onChange={(e) => setRandomFormData({ ...randomFormData, ruleset_id: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-green-500/20 focus:border-green-500 outline-none"
+                    >
+                      <option value="0">osu!</option>
+                      <option value="1">osu!taiko</option>
+                      <option value="2">osu!catch</option>
+                      <option value="3">osu!mania</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                      Min Difficulty
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={randomFormData.min_difficulty}
+                      onChange={(e) => setRandomFormData({ ...randomFormData, min_difficulty: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-green-500/20 focus:border-green-500 outline-none"
+                      placeholder="Optional (e.g. 5.0)"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                      Max Difficulty
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={randomFormData.max_difficulty}
+                      onChange={(e) => setRandomFormData({ ...randomFormData, max_difficulty: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-slate-700 text-gray-900 focus:ring-2 focus:ring-green-500/20 focus:border-green-500 outline-none"
+                      placeholder="Optional (e.g. 7.0)"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                      Required Mods
+                    </label>
+                    <div className="flex flex-wrap gap-1">
+                      {['DT', 'NC', 'HD', 'HR', 'EZ', 'HT'].map((mod) => (
+                        <button
+                          key={mod}
+                          type="button"
+                          onClick={() => {
+                            const newMods = randomFormData.required_mods.includes(mod)
+                              ? randomFormData.required_mods.filter((m: string) => m !== mod)
+                              : [...randomFormData.required_mods, mod];
+                            setRandomFormData({ ...randomFormData, required_mods: newMods });
+                          }}
+                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                            randomFormData.required_mods.includes(mod)
+                              ? 'bg-green-500 text-white border-green-500'
+                              : 'bg-gray-50 text-gray-600 border-gray-300 hover:border-green-500'
+                          }`}
+                        >
+                          {mod}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {randomPreview ? (
+                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                    <h4 className="font-semibold text-green-800 dark:text-green-200 mb-2">Selected Beatmap</h4>
+                    <p className="font-medium text-gray-900 dark:text-gray-100">
+                      {randomPreview.beatmap_artist} - {randomPreview.beatmap_title}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Difficulty: {randomPreview.difficulty_rating.toFixed(2)} stars
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      Beatmap ID: {randomPreview.beatmap_id}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-dashed border-gray-300 text-center text-gray-500">
+                    {randomLoading ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-green-500"></div>
+                        Picking random beatmap...
+                      </div>
+                    ) : (
+                      'Click "Pick Random" to select a beatmap'
+                    )}
+                  </div>
+                )}
+
+                <div className="flex items-center justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={closeRandomModal}
+                    className="px-6 py-2 border border-gray-300 dark:border-white/20 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handlePickRandom}
+                    disabled={randomLoading}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-600/90 transition-colors font-medium disabled:opacity-50"
+                  >
+                    Pick Random
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCreateRandomChallenge}
+                    disabled={!randomPreview || !randomFormData.date}
+                    className="px-6 py-2 bg-green-600 text-white rounded-xl hover:bg-green-600/90 shadow-lg shadow-green-600/20 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Create Challenge
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
