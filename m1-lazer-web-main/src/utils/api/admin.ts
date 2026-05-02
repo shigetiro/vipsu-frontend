@@ -57,13 +57,13 @@ export const adminAPI = {
   },
 
   // Beatmaps
-  getBeatmaps: async (page: number = 1, limit: number = 25, search: string = '') => {
+  getBeatmaps: async (page: number = 1, limit: number = 25, search: string = '', rankStatus?: string, mode?: string) => {
     const params = new URLSearchParams();
     params.append('page', page.toString());
     params.append('limit', limit.toString());
-    if (search) {
-      params.append('search', search);
-    }
+    if (search) params.append('search', search);
+    if (rankStatus) params.append('rank_status', rankStatus);
+    if (mode) params.append('mode', mode);
     const response = await api.get(`/api/private/admin/beatmaps?${params.toString()}`);
     return response.data;
   },
@@ -469,6 +469,11 @@ export const adminAPI = {
     return response.data;
   },
 
+  getUserVersionRecords: async (timeRange: string = '7d') => {
+    const response = await api.get('/api/private/admin/logs/user-version-records', { params: { time_range: timeRange } });
+    return response.data;
+  },
+
   // Client Logs
   getClientLogs: async (params?: {
     page?: number;
@@ -500,6 +505,23 @@ export const adminAPI = {
     return response.data;
   },
 
+  // Login Audit
+  getLoginAudit: async (params?: {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    user_id?: number;
+    client_version?: string;
+    client_hash?: string;
+    os_version?: string;
+    login_success?: boolean;
+    login_method?: string;
+    time_range?: string;
+  }) => {
+    const response = await api.get('/api/private/admin/logs/login-audit', { params });
+    return response.data;
+  },
+
   // Unknown Client Hashes
   getUnknownClientHashes: async (params?: {
     page?: number;
@@ -517,6 +539,79 @@ export const adminAPI = {
     os_name?: string;
   }) => {
     const response = await api.post('/api/private/admin/client-hashes/assign', data);
+    return response.data;
+  },
+
+  // Changelog Management
+  getChangelogBuilds: async () => {
+    const response = await api.get('/api/private/changelog/admin/builds');
+    return response.data;
+  },
+
+  getChangelogEntries: async (buildId: number) => {
+    const response = await api.get(`/api/private/changelog/admin/entries/${buildId}`);
+    return response.data;
+  },
+
+  createChangelogStream: async (data: {
+    name: string;
+    display_name: string;
+    is_featured?: boolean;
+    user_count?: number;
+  }) => {
+    const response = await api.post('/api/private/changelog/streams', data);
+    return response.data;
+  },
+
+  createChangelogBuild: async (data: {
+    stream_id: number;
+    version: string;
+    display_version: string;
+    users?: number;
+    created_at?: string;
+  }) => {
+    const response = await api.post('/api/private/changelog/builds', data);
+    return response.data;
+  },
+
+  createChangelogEntry: async (data: {
+    build_id: number;
+    repository?: string;
+    github_pull_request_id?: number;
+    github_url?: string;
+    url?: string;
+    type: string;
+    category: string;
+    title: string;
+    message_html?: string;
+    major?: boolean;
+  }) => {
+    const response = await api.post('/api/private/changelog/entries', data);
+    return response.data;
+  },
+
+  deleteChangelogEntry: async (entryId: number) => {
+    const response = await api.delete(`/api/private/changelog/entries/${entryId}`);
+    return response.data;
+  },
+
+  deleteChangelogBuild: async (buildId: number) => {
+    const response = await api.delete(`/api/private/changelog/builds/${buildId}`);
+    return response.data;
+  },
+
+  getGitHubCommits: async (repo: string = 'shikkesora/torii-osu', perPage: number = 20) => {
+    const response = await api.get(`/api/private/changelog/github/commits`, { params: { repo, per_page: perPage } });
+    return response.data;
+  },
+
+  createEntryFromCommit: async (buildId: number, commitSha: string, commitMessage: string, repo: string = 'shikkesora/torii-osu') => {
+    const response = await api.post('/api/private/changelog/entries/from-commit', {
+      build_id: buildId,
+      commit_sha: commitSha,
+      commit_message: commitMessage,
+      repo,
+    });
     return response.data;
   },
 };
