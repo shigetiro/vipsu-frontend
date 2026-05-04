@@ -409,7 +409,7 @@ const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ user, countries
                   <img
                     src={user.avatar_url}
                     alt={user.username}
-                    className="h-12 w-12 rounded-full object-cover ring-2 ring-pink-500/50"
+                    className="h-12 w-12 rounded-full object-cover ring-2 ring-white/10"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = 'https://osuherz.ddns.net/default.jpg';
