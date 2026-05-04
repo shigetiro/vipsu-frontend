@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { adminAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 
@@ -26,6 +26,10 @@ const AdminBadges: React.FC = () => {
     url: '',
     user_id: '' as string | number,
   });
+  const [uploadMethod, setUploadMethod] = useState<'url' | 'file'>('url');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadBadges();
@@ -47,10 +51,18 @@ const AdminBadges: React.FC = () => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      let imageUrl = formData.image_url;
+
+      if (uploadMethod === 'file' && selectedFile) {
+        const uploadedUrl = await uploadImage();
+        if (!uploadedUrl) return;
+        imageUrl = uploadedUrl;
+      }
+
       const newBadge = {
         description: formData.description,
-        image_url: formData.image_url,
-        image_2x_url: formData.image_2x_url || formData.image_url,
+        image_url: imageUrl,
+        image_2x_url: formData.image_2x_url || imageUrl,
         url: formData.url || "",
         awarded_at: new Date().toISOString(),
         user_id: formData.user_id ? Number(formData.user_id) : null,
@@ -61,6 +73,9 @@ const AdminBadges: React.FC = () => {
       toast.success('Badge created successfully');
       setShowCreateModal(false);
       setFormData({ description: '', image_url: '', image_2x_url: '', url: '', user_id: '' });
+      setUploadMethod('url');
+      setSelectedFile(null);
+      setPreviewUrl('');
       loadBadges();
     } catch (error: any) {
       console.error('Failed to create badge:', error);
@@ -77,6 +92,9 @@ const AdminBadges: React.FC = () => {
       url: badge.url || '',
       user_id: badge.user_id || '',
     });
+    setUploadMethod('url');
+    setSelectedFile(null);
+    setPreviewUrl('');
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -84,10 +102,18 @@ const AdminBadges: React.FC = () => {
     if (!editingBadge) return;
 
     try {
+      let imageUrl = formData.image_url;
+
+      if (uploadMethod === 'file' && selectedFile) {
+        const uploadedUrl = await uploadImage();
+        if (!uploadedUrl) return;
+        imageUrl = uploadedUrl;
+      }
+
       const updatedBadge = {
         description: formData.description,
-        image_url: formData.image_url,
-        image_2x_url: formData.image_2x_url || formData.image_url,
+        image_url: imageUrl,
+        image_2x_url: formData.image_2x_url || imageUrl,
         url: formData.url || "",
         awarded_at: editingBadge.awarded_at || new Date().toISOString(),
         user_id: formData.user_id ? Number(formData.user_id) : null,
@@ -98,6 +124,9 @@ const AdminBadges: React.FC = () => {
       toast.success('Badge updated successfully');
       setEditingBadge(null);
       setFormData({ description: '', image_url: '', image_2x_url: '', url: '', user_id: '' });
+      setUploadMethod('url');
+      setSelectedFile(null);
+      setPreviewUrl('');
       loadBadges();
     } catch (error: any) {
       console.error('Failed to update badge:', error);
@@ -122,6 +151,40 @@ const AdminBadges: React.FC = () => {
     setShowCreateModal(false);
     setEditingBadge(null);
     setFormData({ description: '', image_url: '', image_2x_url: '', url: '', user_id: '' });
+    setUploadMethod('url');
+    setSelectedFile(null);
+    setPreviewUrl('');
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB');
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Only image files are allowed');
+      return;
+    }
+
+    setSelectedFile(file);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+  };
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (uploadMethod === 'url' || !selectedFile) return formData.image_url;
+
+    try {
+      const result = await adminAPI.uploadBadgeImage(selectedFile);
+      return result.url;
+    } catch (error: any) {
+      toast.error(error?.response?.data?.detail || 'Failed to upload image');
+      return null;
+    }
   };
 
   const filteredBadges = badges.filter(badge =>
@@ -341,16 +404,95 @@ const AdminBadges: React.FC = () => {
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-300">
-                  Image URL (.png or .jpg) <span className="text-red-400">*</span>
+                  Badge Image <span className="text-red-400">*</span>
                 </label>
-                <input
-                  type="url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white placeholder-gray-500 focus:border-pink-500/50 focus:outline-none focus:ring-2 focus:ring-pink-500/20"
-                  placeholder="https://example.com/badge.png"
-                  required
-                />
+
+                {/* Upload Method Toggle */}
+                <div className="flex gap-2 mb-3">
+                  <button
+                    type="button"
+                    onClick={() => setUploadMethod('url')}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      uploadMethod === 'url'
+                        ? 'bg-pink-500/30 text-pink-400 ring-2 ring-pink-500/50'
+                        : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                    }`}
+                  >
+                    <svg className="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                    </svg>
+                    URL
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUploadMethod('file')}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      uploadMethod === 'file'
+                        ? 'bg-pink-500/30 text-pink-400 ring-2 ring-pink-500/50'
+                        : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                    }`}
+                  >
+                    <svg className="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    Upload
+                  </button>
+                </div>
+
+                {/* URL Input */}
+                {uploadMethod === 'url' && (
+                  <input
+                    type="url"
+                    value={formData.image_url}
+                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white placeholder-gray-500 focus:border-pink-500/50 focus:outline-none focus:ring-2 focus:ring-pink-500/20"
+                    placeholder="https://example.com/badge.png"
+                    required
+                  />
+                )}
+
+                {/* File Upload */}
+                {uploadMethod === 'file' && (
+                  <div className="space-y-3">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full rounded-xl border-2 border-dashed border-white/20 bg-white/5 px-4 py-6 text-gray-400 hover:border-pink-500/50 hover:text-pink-400 transition-all"
+                    >
+                      <svg className="mx-auto h-8 w-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      </svg>
+                      <p className="text-sm">Click to upload image</p>
+                      <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
+                    </button>
+
+                    {/* Preview */}
+                    {previewUrl && (
+                      <div className="relative h-24 w-24 rounded-xl overflow-hidden bg-white/10 ring-2 ring-pink-500/50">
+                        <img src={previewUrl} alt="Preview" className="h-full w-full object-contain" />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedFile(null);
+                            setPreviewUrl('');
+                          }}
+                          className="absolute top-1 right-1 rounded-full bg-red-500/80 p-0.5 text-white hover:bg-red-500"
+                        >
+                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div>
