@@ -16,8 +16,9 @@ import ClientVersionsPage from './ClientVersionsPage';
 import ClientLogsPage from './ClientLogsPage';
 import AuditLogsPage from './AuditLogsPage';
 import ChangelogEditor from './ChangelogEditor';
+import AdminAnticheat from './AdminAnticheat';
 
-type AdminTab = 'dashboard' | 'users' | 'beatmaps' | 'beatmap-list' | 'badges' | 'teams' | 'daily-challenges' | 'announcements' | 'system-tools' | 'client-versions' | 'client-logs' | 'audit-logs' | 'changelog';
+type AdminTab = 'dashboard' | 'users' | 'beatmaps' | 'beatmap-list' | 'badges' | 'teams' | 'daily-challenges' | 'announcements' | 'system-tools' | 'client-versions' | 'client-logs' | 'audit-logs' | 'changelog' | 'anticheat';
 
 interface AdminStats {
   total_users: number;
@@ -351,6 +352,8 @@ const AdminPanel: React.FC = () => {
         return <AuditLogsPage key="tab-audit-logs" />;
       case 'changelog':
         return <ChangelogEditor key="tab-changelog" />;
+      case 'anticheat':
+        return <AdminAnticheat key="tab-anticheat" />;
       default:
         return <div key="tab-default">Select a tab</div>;
     }
@@ -381,13 +384,14 @@ const AdminPanel: React.FC = () => {
     { id: 'client-logs' as AdminTab, label: 'Client Logs', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
     { id: 'audit-logs' as AdminTab, label: 'Audit Logs', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m9 9v-3a1 1 0 00-1-1h-1a1 1 0 00-1 1v3a1 1 0 001 1h1a1 1 0 001-1zm-3 0h.01' },
     { id: 'changelog' as AdminTab, label: 'Changelog', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+    { id: 'anticheat' as AdminTab, label: 'Anticheat', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <main className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       {/* Header */}
       <div className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 shadow-lg shadow-pink-500/30">
@@ -413,7 +417,7 @@ const AdminPanel: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 lg:flex-row">
           {/* Sidebar Navigation */}
           <div className="lg:w-64 flex-shrink-0">
@@ -456,9 +460,9 @@ const AdminPanel: React.FC = () => {
             </div>
           </div>
 
-          {/* Content Area */}
-          <div className="flex-1">
-            <div className="rounded-2xl border border-white/10 bg-black/20 backdrop-blur-xl">
+          {/* Content Area - full width */}
+<div className="flex-1 min-w-0">
+<div className="rounded-2xl border border-white/10 bg-black/20 backdrop-blur-xl w-full">
               {/* Content Header */}
               <div className="border-b border-white/10 px-6 py-4">
                 <div className="flex items-center justify-between">
@@ -478,6 +482,7 @@ const AdminPanel: React.FC = () => {
                         'client-versions': 'Client Versions',
                         'client-logs': 'Client Logs',
                         'audit-logs': 'Audit Logs',
+                        'anticheat': 'Anticheat Detections',
                       }[activeTab] || 'Admin Panel'}
                     </h2>
                   </div>
@@ -498,7 +503,7 @@ const AdminPanel: React.FC = () => {
                 </div>
               </div>
 
-              {/* Content Body */}
+              {/* Content Body - full width */}
               <div className="px-6 py-6">
                 {loading && activeTab === 'dashboard' ? (
                   <div className="flex min-h-[400px] items-center justify-center">

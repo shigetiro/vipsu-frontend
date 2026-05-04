@@ -220,6 +220,17 @@ export const adminAPI = {
     return response.data;
   },
 
+  uploadBadgeImage: async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post('/api/private/admin/upload-badge-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
   // Daily Challenge - Enhanced to match osu.Game structure
   getDailyChallenge: async (date: string) => {
     const response = await api.get(`/api/private/admin/daily-challenge/${date}`);
@@ -515,6 +526,39 @@ export const adminAPI = {
     search?: string;
   }) => {
     const response = await api.get('/api/private/admin/logs/audit-logs', { params });
+    return response.data;
+  },
+
+  // Anticheat
+  getAnticheatDetections: async (params?: {
+    user_id?: number;
+    score_id?: number;
+    risk_level?: string;
+    flagged_only?: boolean;
+    limit?: number;
+    offset?: number;
+  }) => {
+    const response = await api.get('/api/private/anticheat/detections', { params });
+    return response.data;
+  },
+
+  getAnticheatDetection: async (detectionId: number) => {
+    const response = await api.get(`/api/private/anticheat/detections/${detectionId}`);
+    return response.data;
+  },
+
+  flagDetection: async (detectionId: number) => {
+    const response = await api.post(`/api/private/anticheat/detections/${detectionId}/flag`);
+    return response.data;
+  },
+
+  dismissDetection: async (detectionId: number) => {
+    const response = await api.post(`/api/private/anticheat/detections/${detectionId}/dismiss`);
+    return response.data;
+  },
+
+  getAnticheatStats: async () => {
+    const response = await api.get('/api/private/anticheat/stats');
     return response.data;
   },
 
