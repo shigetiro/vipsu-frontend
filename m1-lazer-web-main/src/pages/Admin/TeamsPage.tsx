@@ -263,7 +263,7 @@ const TeamsPage: React.FC = () => {
           <Form.Item
             label="Team Name"
             name="name"
-            rules=[{ required: true, message: 'Please input team name!' }]
+            rules={[{ required: true, message: 'Please input team name!' }]}
           >
             <Input />
           </Form.Item>
