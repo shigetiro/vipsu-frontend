@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend
-} from 'recharts';
 import { motion } from 'framer-motion';
-import { RefreshCw, Users, Monitor, Clock, ChevronDown } from 'lucide-react';
+import { RefreshCw, ChevronDown } from 'lucide-react';
 import { adminAPI } from '../../utils/api/admin';
 
 interface VersionStats {
@@ -19,31 +16,25 @@ interface PlatformStats {
   percentage: number;
 }
 
-interface AdoptionTrend {
-  date: string;
-  [version: string]: string | number;
+interface UserVersionRecord {
+  osu_id: number;
+  username: string;
+  version: string;
+  connect_count: number;
+  last_connected: string;
+  first_connected: string;
 }
 
 interface ClientLogStatsProps {
   timeRange?: '24h' | '7d' | '30d' | 'all';
 }
 
-interface StatsResponse {
-  total_users: number;
-  versions: VersionStats[];
-  platforms: PlatformStats[];
-  adoption_trend?: AdoptionTrend[];
-}
-
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#f97316'];
-
 const StatCard: React.FC<{
   title: string;
   value: string | number;
-  icon: React.ReactNode;
   color: string;
   suffix?: string;
-}> = ({ title, value, icon, color, suffix }) => (
+}> = ({ title, value, color, suffix }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
@@ -61,26 +52,28 @@ const ClientLogStats: React.FC<ClientLogStatsProps> = ({ timeRange: initialTimeR
   const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d' | 'all'>(initialTimeRange);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState<StatsResponse | null>(null);
+  const [versions, setVersions] = useState<VersionStats[]>([]);
+  const [platforms, setPlatforms] = useState<PlatformStats[]>([]);
+  const [userRecords, setUserRecords] = useState<UserVersionRecord[]>([]);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedVersion, setSelectedVersion] = useState<string>('all');
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const [versionData, platformData] = await Promise.all([
+      const [versionData, platformData, userData] = await Promise.all([
         adminAPI.getClientVersionStats(timeRange),
         adminAPI.getClientPlatformStats(timeRange),
+        adminAPI.getUserVersionRecords(timeRange),
       ]);
-      // API returns arrays directly, not wrapped in an object
-      const versions = Array.isArray(versionData) ? versionData : (versionData?.versions || []);
-      const platforms = Array.isArray(platformData) ? platformData : (platformData?.platforms || []);
-      setStats({
-        total_users: versions.reduce((sum: number, v: any) => sum + (v.count || 0), 0),
-        versions,
-        platforms,
-      });
+      const versionList = Array.isArray(versionData) ? versionData : (versionData?.versions || []);
+      const platformList = Array.isArray(platformData) ? platformData : (platformData?.platforms || []);
+      const records = Array.isArray(userData) ? userData : (userData?.records || []);
+      setVersions(versionList);
+      setPlatforms(platformList);
+      setUserRecords(records);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
       console.error('Error fetching client version stats:', err);
@@ -100,6 +93,7 @@ const ClientLogStats: React.FC<ClientLogStatsProps> = ({ timeRange: initialTimeR
   }, [autoRefresh, fetchStats]);
 
   const formatDate = (dateString: string) => {
+    if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
@@ -111,7 +105,7 @@ const ClientLogStats: React.FC<ClientLogStatsProps> = ({ timeRange: initialTimeR
     'all': 'All time',
   };
 
-  if (loading && !stats) {
+  if (loading && versions.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[300px]">
         <RefreshCw className="w-8 h-8 animate-spin text-blue-400" />
@@ -134,15 +128,19 @@ const ClientLogStats: React.FC<ClientLogStatsProps> = ({ timeRange: initialTimeR
     );
   }
 
-  if (!stats) {
-    return null;
-  }
+  const totalUsers = versions.reduce((sum, v) => sum + (v.count || 0), 0);
+  const totalConnections = userRecords.reduce((sum, r) => sum + r.connect_count, 0);
+  const uniqueUsers = userRecords.length;
+  const uniqueVersions = versions.length;
 
-  const pieData = stats.versions?.map((v, i) => ({ name: v.version, value: v.count, color: COLORS[i % COLORS.length] })) || [];
+  const filteredRecords = selectedVersion === 'all'
+    ? userRecords
+    : userRecords.filter(r => r.version === selectedVersion);
+
+  const versionOptions = [...new Set(userRecords.map(r => r.version))];
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-xl font-semibold text-white">Client Version Overview</h2>
         <div className="flex items-center gap-3">
@@ -192,88 +190,43 @@ const ClientLogStats: React.FC<ClientLogStatsProps> = ({ timeRange: initialTimeR
         </div>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Total Active Users"
-          value={stats.total_users}
+          value={totalUsers}
           suffix="users"
-          icon={<Users size={20} />}
           color="border-blue-500/30"
         />
         <StatCard
-          title="Unique Versions"
-          value={stats.versions?.length || 0}
-          icon={<Monitor size={20} />}
+          title="Unique Users"
+          value={uniqueUsers}
+          color="border-purple-500/30"
+        />
+        <StatCard
+          title="Total Connections"
+          value={totalConnections}
           color="border-green-500/30"
         />
         <StatCard
-          title="Most Popular"
-          value={stats.versions?.[0]?.version || 'N/A'}
-          suffix={stats.versions?.[0] ? `${stats.versions[0].count} users` : undefined}
-          icon={<Monitor size={20} />}
+          title="Unique Versions"
+          value={uniqueVersions}
           color="border-amber-500/30"
         />
-        <StatCard
-          title="Last Updated"
-          value={new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          icon={<Clock size={20} />}
-          color="border-purple-500/30"
-        />
       </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Version Distribution Pie Chart */}
-        <div className="p-6 bg-gray-800/50 border border-gray-700 rounded-xl">
-          <h3 className="text-lg font-semibold text-white mb-4">Version Distribution</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
-                outerRadius={100}
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Version Usage Bar Chart */}
-        <div className="p-6 bg-gray-800/50 border border-gray-700 rounded-xl">
-          <h3 className="text-lg font-semibold text-white mb-4">Top 10 Versions</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={stats.versions?.slice(0, 10) || []}>
-              <XAxis
-                dataKey="version"
-                angle={-45}
-                textAnchor="end"
-                height={60}
-                tick={{ fontSize: 11, fill: '#9ca3af' }}
-              />
-              <YAxis tick={{ fontSize: 11, fill: '#9ca3af' }} />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
-                itemStyle={{ color: '#f3f4f6' }}
-              />
-              <Bar dataKey="count" fill="#3b82f6" name="Users" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Version Details Table */}
       <div className="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-700">
-          <h3 className="text-lg font-semibold text-white">Version Details</h3>
+        <div className="px-6 py-4 border-b border-gray-700 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-white">Version Summary</h3>
+          <select
+            value={selectedVersion}
+            onChange={(e) => setSelectedVersion(e.target.value)}
+            className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm"
+          >
+            <option value="all">All Versions</option>
+            {versionOptions.map(v => (
+              <option key={v} value={v}>{v}</option>
+            ))}
+          </select>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -286,22 +239,17 @@ const ClientLogStats: React.FC<ClientLogStatsProps> = ({ timeRange: initialTimeR
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700/50">
-              {stats.versions?.map((version, index) => (
+              {versions.map((version) => (
                 <tr key={version.version} className="hover:bg-gray-700/30">
                   <td className="px-4 py-3">
-                    <span
-                      className="px-2 py-1 text-xs font-medium rounded"
-                      style={{ backgroundColor: COLORS[index % COLORS.length] + '30', color: COLORS[index % COLORS.length] }}
-                    >
-                      {version.version}
-                    </span>
+                    <span className="text-white font-medium">{version.version}</span>
                   </td>
-                  <td className="px-4 py-3 text-gray-300">{version.count}</td>
+                  <td className="px-4 py-3 text-gray-300">{version.count.toLocaleString()}</td>
                   <td className="px-4 py-3 text-gray-300">{version.percentage.toFixed(1)}%</td>
                   <td className="px-4 py-3 text-gray-400 text-sm">{formatDate(version.last_seen)}</td>
                 </tr>
               ))}
-              {(!stats.versions || stats.versions.length === 0) && (
+              {(versions.length === 0) && (
                 <tr>
                   <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
                     No version data available
@@ -313,50 +261,37 @@ const ClientLogStats: React.FC<ClientLogStatsProps> = ({ timeRange: initialTimeR
         </div>
       </div>
 
-      {/* Platform Distribution */}
       <div className="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-700">
-          <h3 className="text-lg font-semibold text-white">Platform Distribution</h3>
-        </div>
-        <div className="p-6">
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={stats.platforms?.slice(0, 8) || []} layout="vertical">
-              <XAxis type="number" tick={{ fontSize: 11, fill: '#9ca3af' }} />
-              <YAxis
-                dataKey="os_version"
-                type="category"
-                width={100}
-                tick={{ fontSize: 11, fill: '#9ca3af' }}
-              />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
-                itemStyle={{ color: '#f3f4f6' }}
-              />
-              <Bar dataKey="count" fill="#10b981" name="Users" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <h3 className="text-lg font-semibold text-white">User Connections by Version</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-900/50">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Platform</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Users</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">%</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">User ID</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Username</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Version</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Connections</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">First Seen</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Last Connected</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700/50">
-              {stats.platforms?.map((platform) => (
-                <tr key={platform.os_version} className="hover:bg-gray-700/30">
-                  <td className="px-4 py-3 text-gray-300">{platform.os_version}</td>
-                  <td className="px-4 py-3 text-gray-300">{platform.count}</td>
-                  <td className="px-4 py-3 text-gray-300">{platform.percentage.toFixed(1)}%</td>
+              {filteredRecords.map((record, index) => (
+                <tr key={`${record.osu_id}-${index}`} className="hover:bg-gray-700/30">
+                  <td className="px-4 py-3 text-gray-300">{record.osu_id}</td>
+                  <td className="px-4 py-3 text-white font-medium">{record.username}</td>
+                  <td className="px-4 py-3 text-gray-300">{record.version}</td>
+                  <td className="px-4 py-3 text-gray-300">{record.connect_count.toLocaleString()}</td>
+                  <td className="px-4 py-3 text-gray-400 text-sm">{formatDate(record.first_connected)}</td>
+                  <td className="px-4 py-3 text-gray-400 text-sm">{formatDate(record.last_connected)}</td>
                 </tr>
               ))}
-              {(!stats.platforms || stats.platforms.length === 0) && (
+              {(filteredRecords.length === 0) && (
                 <tr>
-                  <td colSpan={3} className="px-4 py-8 text-center text-gray-500">
-                    No platform data available
+                  <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                    No user connection data available
                   </td>
                 </tr>
               )}
@@ -364,6 +299,34 @@ const ClientLogStats: React.FC<ClientLogStatsProps> = ({ timeRange: initialTimeR
           </table>
         </div>
       </div>
+
+      {platforms.length > 0 && (
+        <div className="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-700">
+            <h3 className="text-lg font-semibold text-white">Platform Statistics</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-900/50">
+                <tr>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Platform</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Users</th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">%</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-700/50">
+                {platforms.map((platform) => (
+                  <tr key={platform.os_version} className="hover:bg-gray-700/30">
+                    <td className="px-4 py-3 text-gray-300">{platform.os_version}</td>
+                    <td className="px-4 py-3 text-gray-300">{platform.count.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-gray-300">{platform.percentage.toFixed(1)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
